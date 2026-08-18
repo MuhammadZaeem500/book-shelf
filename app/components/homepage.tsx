@@ -939,7 +939,7 @@ function ProfilePage() {
 
   const profileHero = (
     <>
-      {/* Banner */}
+      Banner
       {/* <div className="relative h-28 md:h-36 rounded-2xl overflow-hidden mb-4 md:mb-5"
         style={{ background:'linear-gradient(135deg,#3B1F00,#7A4210,#C4622D,#F4A522)' }}>
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage:'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.15), transparent 60%)' }} />
