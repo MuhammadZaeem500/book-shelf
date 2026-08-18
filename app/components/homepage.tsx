@@ -940,13 +940,13 @@ function ProfilePage() {
   const profileHero = (
     <>
       {/* Banner */}
-      <div className="relative h-28 md:h-36 rounded-2xl overflow-hidden mb-4 md:mb-5"
+      {/* <div className="relative h-28 md:h-36 rounded-2xl overflow-hidden mb-4 md:mb-5"
         style={{ background:'linear-gradient(135deg,#3B1F00,#7A4210,#C4622D,#F4A522)' }}>
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage:'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.15), transparent 60%)' }} />
-      </div>
+      </div> */}
 
       {/* Avatar + actions row */}
-      <div className="flex items-end justify-between px-1 -mt-10 md:-mt-14 mb-4">
+      <div className="flex items-end justify-between px-1  mb-4">
         <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl border-4 border-cream overflow-hidden flex-shrink-0 shadow-lg"
           style={{ background:'linear-gradient(135deg,#C4622D,#8B3A1A)' }}>
           <div className="w-full h-full flex items-center justify-center text-white font-bold text-xl">AJ</div>
