@@ -1,5 +1,5 @@
 import "../app/globals.css";
-import Sidebar from "./components/SideBar";
+import Sidebar from "./SideBar";
 import Navbar from "./Navbar";
 import RightSidebar from "./RightSideBar";
 
