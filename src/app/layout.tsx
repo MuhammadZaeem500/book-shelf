@@ -1,7 +1,7 @@
 import "../app/globals.css";
-import Sidebar from "../app/sidebar/page";
-import Navbar from "../app/navbar/page";
-import RightSidebar from "./right-sidebar/page";
+import Sidebar from "./components/SideBar";
+import Navbar from "./Navbar";
+import RightSidebar from "./RightSideBar";
 
 export default function RootLayout({
   children,

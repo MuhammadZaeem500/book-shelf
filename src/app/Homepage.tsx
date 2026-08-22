@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import BooksCard from "./_components/booksCard";
-import ContinueReadingCard from "./_components/continueReadingCard";
+import BooksCard from "./components/home/BooksCard"
+import ContinueReadingCard from "./components/home/ContinueReadingCard";
 import vercel from "../../../public/vercel.svg";
-import FriendActivityCard from "./_components/FriendActivityCard";
-import RecommendedBookCard from "./_components/RecommendedBookCard";
+import FriendActivityCard from "./components/home/FriendActivityCard";
+import RecommendedBookCard from "./components/home/RecommendedBookCard";
 
 const friendsList = [
   {
@@ -192,7 +192,7 @@ export default function Home() {
           {cardsData.map((card) => (
             <div
               key={card.id}
-              className="shrink-0 w-[200px] sm:w-[250px] md:w-auto snap-center flex flex-col gap-2"
+              className="shrink-0 w-50 sm:w-62.5 md:w-auto snap-center flex flex-col gap-2"
             >
               <BooksCard
                 imageSrc={card.imageSrc}

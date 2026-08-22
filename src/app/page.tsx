@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Homepage from "./homepage/page";
+import Homepage from "./Homepage";
 
 export default function app() {
 
