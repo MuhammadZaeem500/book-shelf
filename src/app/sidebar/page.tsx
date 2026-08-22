@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Home,
-  Search,
-  BookOpen,
-  Activity,
-  User,
-  Settings,
-} from "lucide-react";
+import { Home, Search, BookOpen, Activity, User, Settings } from "lucide-react";
 
 // Mobile items (showing key main pages)
 const mobileNavItems = [
@@ -25,9 +18,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* 
-        1. MOBILE BOTTOM BAR (Visible only on screens below lg) 
-      */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#FFFFFF] border-t border-[#EFE8DF] flex items-center justify-around px-2 z-50 shadow-lg">
         {mobileNavItems.map((item) => {
           const Icon = item.icon;
@@ -55,11 +45,7 @@ export default function Sidebar() {
         })}
       </div>
 
-      {/* 
-        2. DESKTOP VERTICAL SIDEBAR (Visible only on lg screens and up) 
-      */}
-      <aside className="hidden lg:flex fixed top-[65px] left-0 bottom-0 h-[calc(100vh-65px)] w-64 bg-[#FFFFFF] border-r border-[#EFE8DF] flex-col justify-between z-40">
-        {/* Top Section */}
+      <aside className="hidden lg:flex sticky top-[65px] left-0 bottom-0 h-[calc(100vh-65px)] w-64 bg-[#FFFFFF] border-r border-[#EFE8DF] flex-col justify-between z-40">
         <div className="p-4 space-y-4">
           <nav className="flex flex-col gap-1.5 pt-2">
             {mobileNavItems.map((item) => {
@@ -97,7 +83,6 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* Bottom Section (Settings & Profile) */}
         <div className="p-4 border-t border-[#EFE8DF] space-y-3">
           <Link
             href="/settings"

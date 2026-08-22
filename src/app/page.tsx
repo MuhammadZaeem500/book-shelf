@@ -6,7 +6,7 @@ import Homepage from "./homepage/page";
 export default function app() {
 
 return (
-  <div>
+  <div className="bg-[#FFFFFF]">
 
 <Homepage />
 

@@ -171,8 +171,7 @@ const recommendedList = [
 
 export default function Home() {
   return (
-
-<div className="p-6 lg:pl-50 space-y-8 max-w-8xl mx-auto bg-[#FFFFFF] pb-24 lg:pb-8">
+    <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] pb-24 lg:pb-8">
       <div className="text-[#1C1510] text-xl font-bold"> Continue Reading </div>
 
       <ContinueReadingCard
@@ -210,57 +209,54 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto p-4">
-      {/* 1. Friends Reading Section */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
-            Friends Reading
-          </h3>
-          <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
-            See all →
-          </button>
-        </div>
-
-        <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl overflow-hidden shadow-sm">
-          {friendsList.map((friend, index) => (
-            <FriendActivityCard key={index} {...friend} />
-          ))}
-
-          <div className="p-4 bg-[#FAF7F2] border-t border-[#EFE8DF] text-center">
-            <button className="text-sm font-medium text-[#C85A2B] hover:underline">
-              View all activity →
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto ">
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
+              Friends Reading
+            </h3>
+            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
+              See all →
             </button>
           </div>
-        </div>
-      </section>
 
-      {/* 2. Recommended for You Section */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
-              Recommended for You
-            </h3>
-            <p className="text-xs text-[#8C837A]">Based on your library</p>
+          <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl overflow-hidden shadow-sm">
+            {friendsList.map((friend, index) => (
+              <FriendActivityCard key={index} {...friend} />
+            ))}
+
+            <div className="p-4 bg-[#FAF7F2] border-t border-[#EFE8DF] text-center">
+              <button className="text-sm font-medium text-[#C85A2B] hover:underline">
+                View all activity →
+              </button>
+            </div>
           </div>
-          <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
-            See all →
-          </button>
-        </div>
+        </section>
 
-        <div className="space-y-3">
-          {recommendedList.map((book) => (
-            <RecommendedBookCard
-              key={book.id}
-              {...book}
-              onAdd={() => alert(`Added ${book.title}`)}
-            />
-          ))}
-        </div>
-      </section>
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
+                Recommended for You
+              </h3>
+              <p className="text-xs text-[#8C837A]">Based on your library</p>
+            </div>
+            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
+              See all →
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {recommendedList.map((book) => (
+              <RecommendedBookCard
+                key={book.id}
+                {...book}
+                onAdd={() => alert(`Added ${book.title}`)}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
-    </div>
-    
   );
 }

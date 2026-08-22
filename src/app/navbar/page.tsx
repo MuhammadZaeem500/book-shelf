@@ -9,10 +9,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF7F2] border-b border-[#EFE8DF] px-4 py-3 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-        
-        {/* Top Row on Mobile: Logo (Left) + Actions (Right) */}
         <div className="flex items-center justify-between w-full sm:w-auto gap-4">
-          {/* Bookshelf Brand Logo */}
           <div className="flex items-center gap-3 shrink-0">
             <div className="bg-[#C85A2B] text-white p-2 rounded-xl">
               <Book className="w-5 h-5" />
@@ -22,7 +19,6 @@ export default function Navbar() {
             </span>
           </div>
 
-          {/* Right Section Icons (Always top-right on mobile) */}
           <div className="flex items-center gap-3 shrink-0 sm:hidden">
             <button
               type="button"
@@ -54,7 +50,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Search Bar: Full width below logo on mobile, centered inline on desktop */}
         <div className="relative w-full sm:flex-1 sm:max-w-md sm:mx-2">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8C837A]">
             <svg
@@ -81,7 +76,6 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Right Section Icons (Visible on Desktop only) */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <button
             type="button"
@@ -111,7 +105,6 @@ export default function Navbar() {
             AJ
           </button>
         </div>
-
       </div>
     </header>
   );

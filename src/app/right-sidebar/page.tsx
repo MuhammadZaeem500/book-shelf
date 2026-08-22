@@ -38,9 +38,8 @@ const genres = [
 
 export default function RightSidebar() {
   return (
-    <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block">
-      {/* 1. Your Reading Stats Card */}
-      <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl p-5 space-y-4">
+    <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block bg-[#F2EDE5]">
+      <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4 ">
         <h3 className="font-serif font-bold text-xl text-[#1A1817]">
           Your Reading Stats
         </h3>
@@ -49,7 +48,9 @@ export default function RightSidebar() {
           <div className="flex items-center justify-between">
             <span className="text-[#6B5D4F]">Books read</span>
             <div>
-              <span className="font-bold text-[#1A1817] text-base mr-1">47</span>
+              <span className="font-bold text-[#1A1817] text-base mr-1">
+                47
+              </span>
               <span className="text-xs text-[#8C837A]">this year</span>
             </div>
           </div>
@@ -77,7 +78,6 @@ export default function RightSidebar() {
 
         <hr className="border-[#EFE8DF]" />
 
-        {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-[#6B5D4F] font-medium">Reading goal</span>
@@ -97,8 +97,7 @@ export default function RightSidebar() {
         </div>
       </div>
 
-      {/* 2. People to Follow Card */}
-      <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl p-5 space-y-4">
+      <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4">
         <h3 className="font-serif font-bold text-xl text-[#1A1817]">
           People to Follow
         </h3>
@@ -135,7 +134,6 @@ export default function RightSidebar() {
         </div>
       </div>
 
-      {/* 3. Browse by Genre Card */}
       <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl p-5 space-y-4">
         <h3 className="font-serif font-bold text-xl text-[#1A1817]">
           Browse by Genre
