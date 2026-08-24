@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import HomPageRightSidebar from "./components/home/HomePageSideBar";
+import HomPageRightSidebar from "../home/HomePageSideBar";
 export default function RightSidebar() {
   const pathname = usePathname();
 

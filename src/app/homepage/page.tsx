@@ -1,10 +1,7 @@
-import React from "react";
-import Image from "next/image";
-import BooksCard from "./components/home/BooksCard"
-import ContinueReadingCard from "./components/home/ContinueReadingCard";
-import vercel from "../../../public/vercel.svg";
-import FriendActivityCard from "./components/home/FriendActivityCard";
-import RecommendedBookCard from "./components/home/RecommendedBookCard";
+import BooksCard from "../../components/home/BooksCard";
+import ContinueReadingCard from "../../components/home/ContinueReadingCard";
+import FriendActivityCard from "../../components/home/FriendActivityCard";
+import RecommendedBookCard from "../../components/home/RecommendedBookCard";
 
 const friendsList = [
   {
@@ -257,7 +254,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-
     </div>
   );
 }
