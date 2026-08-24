@@ -1,3 +1,4 @@
+"use client";
 import BooksCard from "../../components/home/BooksCard";
 import ContinueReadingCard from "../../components/home/ContinueReadingCard";
 import FriendActivityCard from "../../components/home/FriendActivityCard";

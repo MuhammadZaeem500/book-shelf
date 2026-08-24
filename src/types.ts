@@ -14,3 +14,12 @@ export interface BookItem {
   totalPages: number;
   coverImage?: string;
 }
+
+export interface AccordionItemProps {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  isActive: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}

@@ -2,15 +2,7 @@
 
 import React from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
-
-interface AccordionItemProps {
-  id: string;
-  label: string;
-  icon: React.ElementType;
-  isActive: boolean;
-  onToggle: () => void;
-  children: React.ReactNode;
-}
+import { AccordionItemProps } from "../../types";
 
 export default function AccordionItem({
   label,
