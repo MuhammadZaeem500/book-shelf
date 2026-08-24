@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react"; 
+import { useState } from "react";
 import AccordionItem from "../../components/search/AccordionItem";
 import {
   Search,
@@ -65,7 +65,6 @@ export default function BookFinder() {
   const [activeSection, setActiveSection] = useState<string | null>("title");
   const [mainSearch, setMainSearch] = useState("");
 
-  // Form State
   const [titleQuery, setTitleQuery] = useState("");
   const [authorQuery, setAuthorQuery] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
@@ -90,7 +89,6 @@ export default function BookFinder() {
         </p>
       </div>
 
-      {/* Main Search Bar */}
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8C837A]">
           <Search className="w-5 h-5" />
@@ -109,14 +107,12 @@ export default function BookFinder() {
         </div>
       </div>
 
-      {/* Accordion Categories Container */}
       <div className="space-y-4 pt-2">
         <h2 className="font-serif font-bold text-lg text-[#1A1817]">
           Browse by
         </h2>
 
         <div className="border border-[#EFE8DF] rounded-2xl bg-[#FAF7F2] overflow-hidden divide-y divide-[#EFE8DF] shadow-sm">
-          {/* 1. TITLE SECTION */}
           <AccordionItem
             id="title"
             label="Title"
@@ -138,12 +134,12 @@ export default function BookFinder() {
                 />
               </div>
               <p className="text-xs text-[#8C837A]">
-                Try: &quot;The Midnight Library&quot;, &quot;Klara and the Sun&quot;
+                Try: &quot;The Midnight Library&quot;, &quot;Klara and the
+                Sun&quot;
               </p>
             </div>
           </AccordionItem>
 
-          {/* 2. AUTHOR SECTION */}
           <AccordionItem
             id="author"
             label="Author"
@@ -188,7 +184,6 @@ export default function BookFinder() {
             </div>
           </AccordionItem>
 
-          {/* 3. GENRE SECTION */}
           <AccordionItem
             id="genre"
             label="Genre"
@@ -215,7 +210,6 @@ export default function BookFinder() {
             </div>
           </AccordionItem>
 
-          {/* 4. RELEASE DATE SECTION */}
           <AccordionItem
             id="release"
             label="Release Date"
@@ -281,7 +275,6 @@ export default function BookFinder() {
             </div>
           </AccordionItem>
 
-          {/* 5. LANGUAGE SECTION */}
           <AccordionItem
             id="language"
             label="Language"
@@ -308,7 +301,6 @@ export default function BookFinder() {
             </div>
           </AccordionItem>
 
-          {/* 6. ISBN SECTION */}
           <AccordionItem
             id="isbn"
             label="ISBN"
@@ -339,4 +331,3 @@ export default function BookFinder() {
     </div>
   );
 }
-

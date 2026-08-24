@@ -1,15 +1,21 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import HomPageRightSidebar from "../home/HomePageSideBar";
+import HomePageRightSidebar from "../home/HomePageSideBar";
+import SearchRightSidebar from "../search/SearchRightSidebar";
+import LibraryRightSidebar from "../library/LibraryRightSidebar";
+import ActivityRightSidebar from "../activity/ActivityRightSidebar";
+import ProfileRightSidebar from "../profile/ProfileRightSidebar";
 export default function RightSidebar() {
   const pathname = usePathname();
 
   return (
     <aside className="">
-      {pathname === "/" && <HomPageRightSidebar />}
-      {/* {pathname.startsWith("/search") && <SearchFiltersWidget />} */}
-      {/* {pathname.startsWith("/profile") && <ProfileActivityWidget />} */}
+      {pathname === "/" && <HomePageRightSidebar />}
+      {pathname.startsWith("/search") && <SearchRightSidebar />}
+      {pathname.startsWith("/library") && <LibraryRightSidebar />}
+      {pathname.startsWith("/activity") && <ActivityRightSidebar />}
+      {pathname.startsWith("/profile") && <ProfileRightSidebar />}
     </aside>
   );
 }

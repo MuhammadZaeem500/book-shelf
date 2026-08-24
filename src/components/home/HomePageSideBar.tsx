@@ -12,7 +12,7 @@ const genres = [
   "Romance",
 ];
 
-export default function RightSidebar() {
+export default function HomePageRightSidebar() {
   return (
     <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block bg-[#F2EDE5]">
       <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4 ">
@@ -72,9 +72,8 @@ export default function RightSidebar() {
           </p>
         </div>
       </div>
-      <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4">
+       
         <PeopleToFollowCard />
-      </div>
 
       <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl p-5 space-y-4">
         <h3 className="font-serif font-bold text-xl text-[#1A1817]">

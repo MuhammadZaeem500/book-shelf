@@ -25,7 +25,7 @@ const peopleToFollow = [
 ];
 export default function PeopleToFollowCard() {
   return (
-    <>
+    <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4">
       <h3 className="font-serif font-bold text-xl text-[#1A1817]">
         People to Follow
       </h3>
@@ -60,6 +60,6 @@ export default function PeopleToFollowCard() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }

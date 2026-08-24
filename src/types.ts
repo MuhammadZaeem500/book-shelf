@@ -23,3 +23,22 @@ export interface AccordionItemProps {
   onToggle: () => void;
   children: React.ReactNode;
 }
+
+export interface ProfileStats {
+  booksRead: number;
+  reading: number;
+  wantToRead: number;
+  reviews: number;
+  friends: number;
+  followers: number;
+  following: number;
+}
+
+export interface ProfileHeaderProps {
+  name?: string;
+  handle?: string;
+  avatarInitials?: string;
+  avatarBg?: string;
+  bio?: string;
+  stats?: ProfileStats;
+}

@@ -1,7 +1,7 @@
 import "../app/globals.css";
 import Sidebar from "../components/layout/SideBar";
 import Navbar from "../components/layout/Navbar";
-import RightSidebar from "../components/home/HomePageSideBar";
+import RightSidebar from "../components/layout/RightSideBar";
 
 export default function RootLayout({
   children,
@@ -16,7 +16,7 @@ export default function RootLayout({
         <div className="flex flex-1 relative max-w-8xl mx-auto w-full">
           <Sidebar />
 
-          <main className="flex-1  min-w-0 border borderleft-[#EFE8DF]">
+          <main className="bg-[#FAF7F2] flex-1  min-w-0 border borderleft-[#EFE8DF]">
             {children}
           </main>
 
