@@ -26,7 +26,6 @@ export default function ProfilePage() {
   return (
     <div className="flex w-full min-h-full">
       <div className="flex-1 p-4 sm:p-6 space-y-8 min-w-0">
-        {/* Pass all properties to ProfileHeader */}
         <ProfileHeader {...profileData} />
         <ProfileTabsView />
       </div>

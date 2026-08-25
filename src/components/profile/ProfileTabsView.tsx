@@ -95,7 +95,6 @@ export default function ProfileTabsView() {
 
   return (
     <div className="space-y-6">
-      {/* Favorite Books Strip */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-serif font-bold text-xl text-[#1A1817]">Favorite Books</h3>
@@ -118,7 +117,6 @@ export default function ProfileTabsView() {
         </div>
       </div>
 
-      {/* Tabs Control */}
       <div className="flex items-center border-b border-[#EFE8DF] gap-8">
         {(["library", "diary", "reviews"] as const).map((tab) => (
           <button
@@ -136,8 +134,6 @@ export default function ProfileTabsView() {
         ))}
       </div>
 
-      {/* TAB CONTENTS */}
-      {/* 1. LIBRARY TAB */}
       {activeTab === "library" && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {libraryGridBooks.map((book, idx) => (
@@ -160,7 +156,6 @@ export default function ProfileTabsView() {
         </div>
       )}
 
-      {/* 2. DIARY TAB */}
       {activeTab === "diary" && (
         <div className="space-y-6">
           {diaryData.map((group) => (
@@ -197,7 +192,6 @@ export default function ProfileTabsView() {
         </div>
       )}
 
-      {/* 3. REVIEWS TAB */}
       {activeTab === "reviews" && (
         <div className="space-y-4">
           {reviewsData.map((rev) => (

@@ -6,11 +6,16 @@ import SearchRightSidebar from "../search/SearchRightSidebar";
 import LibraryRightSidebar from "../library/LibraryRightSidebar";
 import ActivityRightSidebar from "../activity/ActivityRightSidebar";
 import ProfileRightSidebar from "../profile/ProfileRightSidebar";
+
 export default function RightSidebar() {
   const pathname = usePathname();
 
+  if (pathname === "/profile/edit") {
+    return null;
+  }
+
   return (
-    <aside className="">
+    <aside>
       {pathname === "/" && <HomePageRightSidebar />}
       {pathname.startsWith("/search") && <SearchRightSidebar />}
       {pathname.startsWith("/library") && <LibraryRightSidebar />}

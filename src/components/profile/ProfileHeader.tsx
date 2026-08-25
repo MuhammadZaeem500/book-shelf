@@ -3,6 +3,7 @@
 import React from "react";
 import { Edit3, MoreHorizontal } from "lucide-react";
 import { ProfileHeaderProps } from "../../types";
+import { useRouter } from "next/dist/client/components/navigation";
 
 export default function ProfileHeader({
   name = "Alex Johnson",
@@ -20,9 +21,10 @@ export default function ProfileHeader({
     following: 34,
   },
 }: ProfileHeaderProps) {
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
-      {/* Avatar & Action Buttons */}
       <div className="flex items-start justify-between">
         <div
           className="w-20 h-20 rounded-2xl text-white font-bold text-2xl flex items-center justify-center shadow-md border border-black/10"
@@ -33,12 +35,13 @@ export default function ProfileHeader({
 
         <div className="flex items-center gap-2">
           <button
-            type="button"
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FAF7F2] border border-[#E0D8CE] rounded-full text-xs font-semibold text-[#1A1817] hover:bg-[#EFE3D8] transition-colors"
-          >
-            <Edit3 className="w-3.5 h-3.5 text-[#524B45]" />
-            Edit Profile
-          </button>
+      type="button"
+      onClick={() => router.push("/profile/edit")}
+      className="flex items-center gap-1.5 px-4 py-2 bg-[#FAF7F2] border border-[#E0D8CE] rounded-full text-xs font-semibold text-[#1A1817] hover:bg-[#EFE3D8] transition-colors"
+    >
+      <Edit3 className="w-3.5 h-3.5 text-[#524B45]" />
+      Edit Profile
+    </button>
           <button
             type="button"
             className="p-2 bg-[#FAF7F2] border border-[#E0D8CE] rounded-full text-[#524B45] hover:bg-[#EFE3D8] transition-colors"
@@ -48,7 +51,6 @@ export default function ProfileHeader({
         </div>
       </div>
 
-      {/* Name & Bio */}
       <div className="space-y-1.5">
         <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1817]">
           {name}
@@ -59,7 +61,6 @@ export default function ProfileHeader({
         </p>
       </div>
 
-      {/* Top Stat Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: "Books Read", value: stats.booksRead },
@@ -79,7 +80,6 @@ export default function ProfileHeader({
         ))}
       </div>
 
-      {/* Social Counters */}
       <div className="flex items-center gap-4 text-xs text-[#736B63]">
         <p>
           <strong className="text-[#1A1817] font-bold">{stats.friends}</strong>{" "}

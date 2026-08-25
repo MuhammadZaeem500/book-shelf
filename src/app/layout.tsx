@@ -1,4 +1,7 @@
+"use client";
+
 import "../app/globals.css";
+import { usePathname } from "next/navigation";
 import Sidebar from "../components/layout/SideBar";
 import Navbar from "../components/layout/Navbar";
 import RightSidebar from "../components/layout/RightSideBar";
@@ -8,22 +11,31 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const isAuthPage =
+    pathname?.includes("/login") ||
+    pathname?.includes("/signup") ||
+    pathname?.includes("/sign-in") ||
+    pathname?.includes("/sign-up");
+
   return (
     <html lang="en">
       <body className="bg-[#FFFFFF] min-h-screen text-[#1A1817] flex flex-col">
-        <Navbar />
+        {!isAuthPage && <Navbar />}
 
         <div className="flex flex-1 relative max-w-8xl mx-auto w-full">
-          <Sidebar />
+          {!isAuthPage && <Sidebar />}
 
-          <main className="bg-[#FAF7F2] flex-1  min-w-0 border borderleft-[#EFE8DF]">
+          <main className="bg-[#FAF7F2] flex-1 min-w-0 border-l border-[#EFE8DF]">
             {children}
           </main>
 
-          <div className="bg-[#F2EDE5]">
-            {" "}
-            <RightSidebar />
-          </div>
+          {!isAuthPage && (
+            <div className="bg-[#F2EDE5]">
+              <RightSidebar />
+            </div>
+          )}
         </div>
       </body>
     </html>

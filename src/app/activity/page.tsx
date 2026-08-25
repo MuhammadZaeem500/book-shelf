@@ -172,12 +172,10 @@ export default function ActivityPage() {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817]">
-      {/* Title */}
       <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
         Activity
       </h1>
 
-      {/* Tab Switcher */}
       <div className="p-1 bg-[#EFE8DF]/60 border border-[#E0D8CE] rounded-2xl flex items-center">
         <button
           onClick={() => setActiveTab("my")}
@@ -201,16 +199,13 @@ export default function ActivityPage() {
         </button>
       </div>
 
-      {/* Content Container */}
       <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl overflow-hidden divide-y divide-[#EFE8DF] shadow-sm">
         {activeTab === "my" ? (
-          /* MY ACTIVITY FEED */
           myActivityList.map((item) => (
             <div
               key={item.id}
               className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
             >
-              {/* Left Column: Cover & Text Details */}
               <div className="flex items-start gap-4 min-w-0">
                 <div
                   className={`relative w-12 sm:w-14 h-16 sm:h-20 rounded-md bg-gradient-to-b ${item.coverGradient} p-1.5 flex flex-col justify-between shrink-0 shadow-xs border border-black/10`}
@@ -232,7 +227,6 @@ export default function ActivityPage() {
                   </h3>
                   <p className="text-xs text-[#736B63]">{item.author}</p>
 
-                  {/* Rating Stars */}
                   {item.rating && (
                     <div className="flex items-center gap-0.5 pt-0.5">
                       {[...Array(5)].map((_, i) => (
@@ -248,7 +242,6 @@ export default function ActivityPage() {
                     </div>
                   )}
 
-                  {/* Optional Review Quote */}
                   {item.review && (
                     <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
                       {item.review}
@@ -269,7 +262,6 @@ export default function ActivityPage() {
               key={item.id}
               className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
             >
-              {/* Left Column: Avatar & Text Details */}
               <div className="flex items-start gap-3.5 min-w-0">
                 <div
                   className="w-10 h-10 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-xs"
@@ -288,7 +280,6 @@ export default function ActivityPage() {
                   </p>
                   <p className="text-xs text-[#736B63]">{item.author}</p>
 
-                  {/* Rating Stars */}
                   {item.rating && (
                     <div className="flex items-center gap-0.5 pt-0.5">
                       {[...Array(5)].map((_, i) => (
@@ -304,7 +295,6 @@ export default function ActivityPage() {
                     </div>
                   )}
 
-                  {/* Optional Review Quote */}
                   {item.review && (
                     <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
                       {item.review}
@@ -317,7 +307,6 @@ export default function ActivityPage() {
                 </div>
               </div>
 
-              {/* Right Column: Book Cover Thumbnail */}
               <div
                 className={`w-10 sm:w-12 h-14 sm:h-16 rounded-md bg-gradient-to-b ${item.coverGradient} shrink-0 shadow-xs border border-black/10`}
               />
