@@ -5,6 +5,13 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/src/components/layout/SideBar";
 import Navbar from "@/src/components/layout/Navbar";
 import RightSidebar from "@/src/components/layout/RightSideBar";
+import { DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -20,8 +27,8 @@ export default function RootLayout({
     pathname?.includes("/sign-up");
 
   return (
-    <html lang="en">
-      <body className="bg-[#FFFFFF] min-h-screen text-[#1A1817] flex flex-col">
+    <html lang="en" className={dmSans.variable}>
+      <body className="bg-[#FFFFFF] min-h-screen text-[#1A1817] flex flex-col font-sans antialiased">
         {!isAuthPage && <Navbar />}
 
         <div className="flex flex-1 relative max-w-8xl mx-auto w-full">
@@ -41,3 +48,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+
