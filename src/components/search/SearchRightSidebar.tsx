@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import RecentSearchesCard from "./RecentSearchesCard";
-import TrendingSearchesCard from "./TrendingSearchesCard";
-import PopularAuthorsCard, { AuthorItem } from "./PopularAuthorsCard";
+import RecentSearchesCard from "@/src/components/search/RecentSearchesCard";
+import TrendingSearchesCard from "@/src/components/search/TrendingSearchesCard";
+import PopularAuthorsCard, { AuthorItem } from "@/src/components/search/PopularAuthorsCard";
 
 const initialRecent = [
   "Cormac McCarthy",

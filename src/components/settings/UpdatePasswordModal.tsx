@@ -2,12 +2,7 @@
 
 import React, { useState } from "react";
 import { X, Eye, EyeOff } from "lucide-react";
-
-interface UpdatePasswordModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: () => void;
-}
+import { UpdatePasswordModalProps } from "@/src/types";
 
 export default function UpdatePasswordModal({
   isOpen,
@@ -36,7 +31,7 @@ export default function UpdatePasswordModal({
       <div className="w-full max-w-md bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl p-6 space-y-4 shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="font-serif text-xl font-bold text-[#1A1817]">
+          <h3 className="font-serif text-xl   text-[#1A1817]">
             Update Password
           </h3>
           <button
@@ -51,7 +46,7 @@ export default function UpdatePasswordModal({
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1A1817]">
+            <label className="block text-xs   text-[#1A1817]">
               Current Password
             </label>
             <input
@@ -65,7 +60,7 @@ export default function UpdatePasswordModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1A1817]">
+            <label className="block text-xs   text-[#1A1817]">
               New Password
             </label>
             <div className="relative">
@@ -82,13 +77,17 @@ export default function UpdatePasswordModal({
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#736B63]"
               >
-                {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPass ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
               </button>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1A1817]">
+            <label className="block text-xs   text-[#1A1817]">
               Confirm New Password
             </label>
             <input

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
-import { AccordionItemProps } from "../../types";
+import { AccordionItemProps } from "@/src/types";
 
 export default function AccordionItem({
   label,

@@ -1,11 +1,6 @@
 "use client";
 
-import React from "react";
-
-export interface TrendingSearchesCardProps {
-  trendingItems: string[];
-  onSelectTrending?: (term: string) => void;
-}
+import {TrendingSearchesCardProps} from "@/src/types";
 
 export default function TrendingSearchesCard({
   trendingItems,

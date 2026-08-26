@@ -1,13 +1,7 @@
 "use client";
 
-import React from "react";
 import { RotateCcw } from "lucide-react";
-
-export interface RecentSearchesCardProps {
-  searches: string[];
-  onSelectSearch?: (term: string) => void;
-  onClearAll?: () => void;
-}
+import { RecentSearchesCardProps } from "@/src/types";
 
 export default function RecentSearchesCard({
   searches,

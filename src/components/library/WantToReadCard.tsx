@@ -1,19 +1,6 @@
 "use client";
 
-import React from "react";
-
-export interface WantToReadItem {
-  id: string;
-  title: string;
-  author: string;
-  coverGradient: string;
-}
-
-export interface WantToReadProps {
-  totalCount: number;
-  books: WantToReadItem[];
-  onSeeAll?: () => void;
-}
+import {WantToReadProps} from "@/src/types";
 
 export default function WantToReadCard({
   totalCount,

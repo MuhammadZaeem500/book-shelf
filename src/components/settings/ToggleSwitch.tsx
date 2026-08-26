@@ -1,11 +1,6 @@
 "use client";
 
-import React from "react";
-
-interface ToggleSwitchProps {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}
+import { ToggleSwitchProps } from "@/src/types";
 
 export default function ToggleSwitch({ checked, onChange }: ToggleSwitchProps) {
   return (

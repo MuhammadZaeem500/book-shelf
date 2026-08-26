@@ -7,7 +7,7 @@ interface BookEntry {
   id: string;
   title: string;
   author: string;
-  rating: number; // 1 to 5
+  rating: number; 
   pages: number;
   hasReview?: boolean;
   coverBg: string;
@@ -171,15 +171,7 @@ export default function MyLibrary() {
                       <span>·</span>
                       <span>{book.pages} pages</span>
 
-                      {book.hasReview && (
-                        <>
-                          <span>·</span>
-                          <span className="flex items-center gap-1 text-[#C85A2B] font-medium">
-                            <Edit3 className="w-3.5 h-3.5" />
-                            Review written
-                          </span>
-                        </>
-                      )}
+                 
                     </div>
 
                     <div className="pt-2">

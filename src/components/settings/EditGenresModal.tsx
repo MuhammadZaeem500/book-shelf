@@ -1,16 +1,7 @@
 "use client";
 
-import React from "react";
 import { Check, X } from "lucide-react";
-
-interface EditGenresModalProps {
-  isOpen: boolean;
-  allGenres: string[];
-  tempGenres: string[];
-  onToggleGenre: (genre: string) => void;
-  onClose: () => void;
-  onSave: () => void;
-}
+import { EditGenresModalProps } from "@/src/types";
 
 export default function EditGenresModal({
   isOpen,
@@ -26,7 +17,7 @@ export default function EditGenresModal({
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl p-6 space-y-4 shadow-xl">
         <div className="flex items-center justify-between">
-          <h3 className="font-serif text-xl font-bold text-[#1A1817]">
+          <h3 className="font-serif text-xl   text-[#1A1817]">
             Edit Preferred Genres
           </h3>
           <button

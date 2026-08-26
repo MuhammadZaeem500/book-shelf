@@ -2,13 +2,7 @@
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
-
-interface ChangeEmailModalProps {
-  isOpen: boolean;
-  currentEmail: string;
-  onClose: () => void;
-  onSave: (newEmail: string) => void;
-}
+import { ChangeEmailModalProps } from "@/src/types";
 
 export default function ChangeEmailModal({
   isOpen,
@@ -35,7 +29,7 @@ export default function ChangeEmailModal({
       <div className="w-full max-w-md bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl p-6 space-y-4 shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="font-serif text-xl font-bold text-[#1A1817]">
+          <h3 className="font-serif text-xl   text-[#1A1817]">
             Change Email Address
           </h3>
           <button
@@ -54,7 +48,7 @@ export default function ChangeEmailModal({
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1A1817]">
+            <label className="block text-xs   text-[#1A1817]">
               New Email Address
             </label>
             <input
@@ -68,7 +62,7 @@ export default function ChangeEmailModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1A1817]">
+            <label className="block text-xs   text-[#1A1817]">
               Current Password
             </label>
             <input

@@ -27,10 +27,8 @@ const ALL_GENRES = [
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("account");
 
-  // User Account States
   const [email, setEmail] = useState("alex@example.com");
 
-  // Settings States
   const [privacy, setPrivacy] = useState({
     publicProfile: true,
     whoCanFollow: "Anyone",
@@ -55,13 +53,11 @@ export default function SettingsPage() {
   ]);
   const [annualGoal, setAnnualGoal] = useState("60");
 
-  // Modal States
   const [isGenreModalOpen, setIsGenreModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [tempGenres, setTempGenres] = useState<string[]>([]);
 
-  // Genre Modal Handlers
   const handleOpenGenreModal = () => {
     setTempGenres([...selectedGenres]);
     setIsGenreModalOpen(true);
@@ -98,7 +94,7 @@ export default function SettingsPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-serif text-3xl font-bold">Settings</h1>
+          <h1 className="font-serif text-3xl  ">Settings</h1>
         </div>
 
         {/* Layout Grid */}
@@ -289,7 +285,7 @@ export default function SettingsPage() {
                       <button
                         key={t}
                         onClick={() => setTheme(t)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs   capitalize transition-all ${
                           theme === t
                             ? "bg-white text-[#1A1817] shadow-2xs"
                             : "text-[#736B63]"
@@ -323,7 +319,7 @@ export default function SettingsPage() {
                 >
                   <button
                     onClick={handleOpenGenreModal}
-                    className="text-xs font-bold text-[#C85A2B] hover:underline"
+                    className="text-xs   text-[#C85A2B] hover:underline"
                   >
                     Edit &rarr;
                   </button>
@@ -334,7 +330,7 @@ export default function SettingsPage() {
                       type="number"
                       value={annualGoal}
                       onChange={(e) => setAnnualGoal(e.target.value)}
-                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] border border-[#E4DBCF] rounded-xl text-xs font-bold focus:outline-none"
+                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] border border-[#E4DBCF] rounded-xl text-xs   focus:outline-none"
                     />
                     <span className="text-xs text-[#736B63]">books</span>
                   </div>

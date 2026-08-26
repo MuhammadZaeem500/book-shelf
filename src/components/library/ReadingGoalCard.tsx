@@ -1,12 +1,6 @@
 "use client";
 
-import React from "react";
-
-export interface ReadingGoalProps {
-  year: number;
-  booksRead: number;
-  targetBooks: number;
-}
+import {ReadingGoalProps} from "@/src/types";
 
 export default function ReadingGoalCard({
   year,

@@ -1,19 +1,7 @@
 "use client";
 
-import React from "react";
 import { ChevronRight } from "lucide-react";
-
-export interface AuthorItem {
-  name: string;
-  initials: string;
-  bg: string;
-  booksCount: number;
-}
-
-export interface PopularAuthorsCardProps {
-  authors: AuthorItem[];
-  onSelectAuthor?: (author: AuthorItem) => void;
-}
+import { PopularAuthorsCardProps } from "@/src/types";
 
 export default function PopularAuthorsCard({
   authors,

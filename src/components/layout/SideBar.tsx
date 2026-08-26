@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, BookOpen, Activity, User, Settings } from "lucide-react";
 
-// Mobile items (showing key main pages)
 const mobileNavItems = [
   { label: "Home", href: "/", icon: Home },
   { label: "Search", href: "/search", icon: Search },

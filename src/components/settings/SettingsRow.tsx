@@ -1,13 +1,7 @@
 "use client";
 
 import React from "react";
-
-interface SettingsRowProps {
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-  isLast?: boolean;
-}
+import { SettingsRowProps } from "@/src/types";
 
 export default function SettingsRow({
   title,

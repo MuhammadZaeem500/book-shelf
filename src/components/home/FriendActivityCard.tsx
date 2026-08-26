@@ -1,16 +1,4 @@
-import React from "react";
-import Image from "next/image";
-
-export interface FriendActivityProps {
-  initials: string;
-  avatarBg: string;
-  name: string;
-  action: "is reading" | "finished" | "added to library";
-  bookTitle: string;
-  rating?: number;
-  timeAgo: string;
-  coverBg: string;
-}
+import {FriendActivityProps} from "@/src/types";
 
 export default function FriendActivityCard({
   initials,

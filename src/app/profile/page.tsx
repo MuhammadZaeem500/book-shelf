@@ -3,7 +3,6 @@
 import React from "react";
 import ProfileHeader from "@/src/components/profile/ProfileHeader";
 import ProfileTabsView from "@/src/components/profile/ProfileTabsView";
-import ProfileRightSidebar from "@/src/components/profile/ProfileRightSidebar";
 
 const profileData = {
   name: "Alex Johnson",

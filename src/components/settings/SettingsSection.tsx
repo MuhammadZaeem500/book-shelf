@@ -1,12 +1,6 @@
 "use client";
 
-import React from "react";
-
-interface SettingsSectionProps {
-  title: string;
-  children: React.ReactNode;
-  isDanger?: boolean;
-}
+import { SettingsSectionProps } from "@/src/types";
 
 export default function SettingsSection({
   title,
@@ -16,7 +10,7 @@ export default function SettingsSection({
   return (
     <div className="space-y-2.5">
       <h2
-        className={`text-[11px] font-bold tracking-wider uppercase px-0.5 ${
+        className={`text-[11px]   tracking-wider uppercase px-0.5 ${
           isDanger ? "text-[#9E3A34]" : "text-[#B85024]"
         }`}
       >

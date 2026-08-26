@@ -2,8 +2,8 @@
 
 import React from "react";
 import CurrentlyReadingCard from "./CurrentlyReadingCard";
-import WantToReadCard, { WantToReadItem } from "./WantToReadCard";
-import ReadingGoalCard from "./ReadingGoalCard";
+import WantToReadCard, { WantToReadItem } from "@/src/components/library/WantToReadCard";
+import ReadingGoalCard from "@/src/components/library/ReadingGoalCard";
 
 const wantToReadBooks: WantToReadItem[] = [
   {

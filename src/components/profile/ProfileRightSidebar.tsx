@@ -2,7 +2,7 @@
 
 import React from "react";
 import ReadingGoalCard from "@/src/components/library/ReadingGoalCard";
-import RecentReadingSidebarCard from "./RecentReadingSidebarCard";
+import RecentReadingSidebarCard from "@/src/components/profile/RecentReadingSidebarCard";
 
 export default function ProfileRightSidebar() {
   return (

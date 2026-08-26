@@ -1,8 +1,8 @@
 "use client";
-import BooksCard from "../../components/home/BooksCard";
-import ContinueReadingCard from "../../components/home/ContinueReadingCard";
-import FriendActivityCard from "../../components/home/FriendActivityCard";
-import RecommendedBookCard from "../../components/home/RecommendedBookCard";
+import BooksCard from "@/src/components/home/BooksCard";
+import ContinueReadingCard from "@/src/components/home/ContinueReadingCard";
+import FriendActivityCard from "@/src/components/home/FriendActivityCard";
+import RecommendedBookCard from "@/src/components/home/RecommendedBookCard";
 
 const friendsList = [
   {

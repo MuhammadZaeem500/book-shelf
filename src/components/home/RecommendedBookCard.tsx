@@ -1,13 +1,5 @@
-import React from "react";
+import { RecommendedBookProps } from "@/src/types";
 import { Plus } from "lucide-react";
-
-export interface RecommendedBookProps {
-  title: string;
-  author: string;
-  rating: number;
-  coverBg: string;
-  onAdd?: () => void;
-}
 
 export default function RecommendedBookCard({
   title,

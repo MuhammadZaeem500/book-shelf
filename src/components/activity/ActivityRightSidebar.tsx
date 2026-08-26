@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import PeopleToFollowCard from "../home/PeopleToFollowCard";
+import PeopleToFollowCard from "@/src/components/home/PeopleToFollowCard";
 import YourWeekCard from "./YourWeekCard";
 
 export default function ActivityRightSidebar() {

@@ -29,7 +29,6 @@ export default function EditProfilePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Profile updated:", formData);
-    // Redirect back to profile after saving
     router.push("/profile");
   };
 

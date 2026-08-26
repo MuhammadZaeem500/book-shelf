@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import AccordionItem from "../../components/search/AccordionItem";
+import AccordionItem from "@/src/components/search/AccordionItem";
 import {
   Search,
   Type,

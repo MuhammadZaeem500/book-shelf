@@ -133,7 +133,8 @@ const friendsActivityList: FriendActivityItem[] = [
     title: "Piranesi",
     author: "Susanna Clarke",
     rating: 5,
-    review: "“One of the strangest and most captivating books I have ever read.”",
+    review:
+      "“One of the strangest and most captivating books I have ever read.”",
     timeAgo: "2d ago",
     coverGradient: "from-[#A53860] to-[#670B2F]",
   },
@@ -200,119 +201,117 @@ export default function ActivityPage() {
       </div>
 
       <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl overflow-hidden divide-y divide-[#EFE8DF] shadow-sm">
-        {activeTab === "my" ? (
-          myActivityList.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
-            >
-              <div className="flex items-start gap-4 min-w-0">
-                <div
-                  className={`relative w-12 sm:w-14 h-16 sm:h-20 rounded-md bg-gradient-to-b ${item.coverGradient} p-1.5 flex flex-col justify-between shrink-0 shadow-xs border border-black/10`}
-                >
-                  <span className="text-[6px] font-bold tracking-widest text-white/70 uppercase">
-                    BS
-                  </span>
-                  <p className="text-[8px] font-bold text-white leading-tight line-clamp-2">
-                    {item.title}
-                  </p>
-                </div>
-
-                <div className="space-y-1 min-w-0 pt-0.5">
-                  <span className="text-[10px] font-bold tracking-widest text-[#8C837A] uppercase">
-                    {item.action}
-                  </span>
-                  <h3 className="font-serif font-bold text-base sm:text-lg text-[#1A1817] leading-tight truncate">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[#736B63]">{item.author}</p>
-
-                  {item.rating && (
-                    <div className="flex items-center gap-0.5 pt-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 ${
-                            i < item.rating!
-                              ? "text-[#C85A2B] fill-[#C85A2B]"
-                              : "text-[#E0D8CE] fill-[#E0D8CE]"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {item.review && (
-                    <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
-                      {item.review}
-                    </p>
-                  )}
-
-                  <p className="text-[11px] text-[#8C837A] pt-1">
-                    {item.timeAgo}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          /* FRIENDS' ACTIVITY FEED */
-          friendsActivityList.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
-            >
-              <div className="flex items-start gap-3.5 min-w-0">
-                <div
-                  className="w-10 h-10 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-xs"
-                  style={{ backgroundColor: item.user.avatarBg }}
-                >
-                  {item.user.initials}
-                </div>
-
-                <div className="space-y-1 min-w-0">
-                  <p className="text-sm text-[#1A1817]">
-                    <span className="font-bold">{item.user.name}</span>{" "}
-                    <span className="text-[#524B45]">{item.actionText}</span>{" "}
-                    <span className="font-serif italic font-semibold text-[#1A1817]">
-                      {item.title}
-                    </span>
-                  </p>
-                  <p className="text-xs text-[#736B63]">{item.author}</p>
-
-                  {item.rating && (
-                    <div className="flex items-center gap-0.5 pt-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 ${
-                            i < item.rating!
-                              ? "text-[#C85A2B] fill-[#C85A2B]"
-                              : "text-[#E0D8CE] fill-[#E0D8CE]"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {item.review && (
-                    <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
-                      {item.review}
-                    </p>
-                  )}
-
-                  <p className="text-[11px] text-[#8C837A] pt-1">
-                    {item.timeAgo}
-                  </p>
-                </div>
-              </div>
-
+        {activeTab === "my"
+          ? myActivityList.map((item) => (
               <div
-                className={`w-10 sm:w-12 h-14 sm:h-16 rounded-md bg-gradient-to-b ${item.coverGradient} shrink-0 shadow-xs border border-black/10`}
-              />
-            </div>
-          ))
-        )}
+                key={item.id}
+                className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
+              >
+                <div className="flex items-start gap-4 min-w-0">
+                  <div
+                    className={`relative w-12 sm:w-14 h-16 sm:h-20 rounded-md bg-gradient-to-b ${item.coverGradient} p-1.5 flex flex-col justify-between shrink-0 shadow-xs border border-black/10`}
+                  >
+                    <span className="text-[6px] font-bold tracking-widest text-white/70 uppercase">
+                      BS
+                    </span>
+                    <p className="text-[8px] font-bold text-white leading-tight line-clamp-2">
+                      {item.title}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1 min-w-0 pt-0.5">
+                    <span className="text-[10px] font-bold tracking-widest text-[#8C837A] uppercase">
+                      {item.action}
+                    </span>
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-[#1A1817] leading-tight truncate">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-[#736B63]">{item.author}</p>
+
+                    {item.rating && (
+                      <div className="flex items-center gap-0.5 pt-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < item.rating!
+                                ? "text-[#C85A2B] fill-[#C85A2B]"
+                                : "text-[#E0D8CE] fill-[#E0D8CE]"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {item.review && (
+                      <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
+                        {item.review}
+                      </p>
+                    )}
+
+                    <p className="text-[11px] text-[#8C837A] pt-1">
+                      {item.timeAgo}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          : /* FRIENDS' ACTIVITY FEED */
+            friendsActivityList.map((item) => (
+              <div
+                key={item.id}
+                className="p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-[#F2EDE5]/40 transition-colors"
+              >
+                <div className="flex items-start gap-3.5 min-w-0">
+                  <div
+                    className="w-10 h-10 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-xs"
+                    style={{ backgroundColor: item.user.avatarBg }}
+                  >
+                    {item.user.initials}
+                  </div>
+
+                  <div className="space-y-1 min-w-0">
+                    <p className="text-sm text-[#1A1817]">
+                      <span className="font-bold">{item.user.name}</span>{" "}
+                      <span className="text-[#524B45]">{item.actionText}</span>{" "}
+                      <span className="font-serif italic font-semibold text-[#1A1817]">
+                        {item.title}
+                      </span>
+                    </p>
+                    <p className="text-xs text-[#736B63]">{item.author}</p>
+
+                    {item.rating && (
+                      <div className="flex items-center gap-0.5 pt-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < item.rating!
+                                ? "text-[#C85A2B] fill-[#C85A2B]"
+                                : "text-[#E0D8CE] fill-[#E0D8CE]"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {item.review && (
+                      <p className="text-xs italic text-[#524B45] pt-1 max-w-xl leading-relaxed">
+                        {item.review}
+                      </p>
+                    )}
+
+                    <p className="text-[11px] text-[#8C837A] pt-1">
+                      {item.timeAgo}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  className={`w-10 sm:w-12 h-14 sm:h-16 rounded-md bg-gradient-to-b ${item.coverGradient} shrink-0 shadow-xs border border-black/10`}
+                />
+              </div>
+            ))}
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import { Edit3, MoreHorizontal } from "lucide-react";
-import { ProfileHeaderProps } from "../../types";
+import { ProfileHeaderProps } from "@/src/types";
 import { useRouter } from "next/dist/client/components/navigation";
 
 export default function ProfileHeader({

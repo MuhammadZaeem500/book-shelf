@@ -1,11 +1,6 @@
 import Image from "next/image";
+import { BooksCardProps } from "@/src/types";
 
-interface BooksCardProps {
-  imageSrc: string;
-  imageAlt: string;
-  title: string;
-  author: string;
-}
 
 export default function BooksCard({ imageSrc, imageAlt, title, author }: BooksCardProps) {
   return (

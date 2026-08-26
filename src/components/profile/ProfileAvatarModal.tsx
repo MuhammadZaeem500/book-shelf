@@ -1,16 +1,7 @@
 "use client";
 
-import React from "react";
 import { LogOut, UserPlus, X } from "lucide-react";
-
-interface ProfileAvatarModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSignOut: () => void;
-  onAddAccount: () => void;
-  userName?: string;
-  userEmail?: string;
-}
+import { ProfileAvatarModalProps } from "@/src/types";
 
 export default function ProfileAvatarModal({
   isOpen,

@@ -1,6 +1,6 @@
 "use client";
 
-import PeopleToFollowCard from "./PeopleToFollowCard";
+import PeopleToFollowCard from "@/src/components/home/PeopleToFollowCard";
 
 const genres = [
   "Literary Fiction",

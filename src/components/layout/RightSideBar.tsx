@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import HomePageRightSidebar from "../home/HomePageSideBar";
-import SearchRightSidebar from "../search/SearchRightSidebar";
-import LibraryRightSidebar from "../library/LibraryRightSidebar";
-import ActivityRightSidebar from "../activity/ActivityRightSidebar";
-import ProfileRightSidebar from "../profile/ProfileRightSidebar";
+import HomePageRightSidebar from "@/src/components/home/HomePageSideBar";
+import SearchRightSidebar from "@/src/components/search/SearchRightSidebar";
+import LibraryRightSidebar from "@/src/components/library/LibraryRightSidebar";
+import ActivityRightSidebar from "@/src/components/activity/ActivityRightSidebar";
+import ProfileRightSidebar from "@/src/components/profile/ProfileRightSidebar";
 
 export default function RightSidebar() {
   const pathname = usePathname();

@@ -1,10 +1,10 @@
 "use client";
 
-import "../app/globals.css";
+import "@/src/app/globals.css";
 import { usePathname } from "next/navigation";
-import Sidebar from "../components/layout/SideBar";
-import Navbar from "../components/layout/Navbar";
-import RightSidebar from "../components/layout/RightSideBar";
+import Sidebar from "@/src/components/layout/SideBar";
+import Navbar from "@/src/components/layout/Navbar";
+import RightSidebar from "@/src/components/layout/RightSideBar";
 
 export default function RootLayout({
   children,

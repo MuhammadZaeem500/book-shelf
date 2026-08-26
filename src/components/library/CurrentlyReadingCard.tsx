@@ -1,14 +1,6 @@
 "use client";
 
-import React from "react";
-
-export interface CurrentlyReadingProps {
-  title: string;
-  author: string;
-  currentPage: number;
-  totalPages: number;
-  coverGradient: string;
-}
+import { CurrentlyReadingProps } from "@/src/types";
 
 export default function CurrentlyReadingCard({
   title,

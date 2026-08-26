@@ -1,12 +1,6 @@
 "use client";
 
-import React from "react";
-
-export interface YourWeekProps {
-  booksFinished?: number;
-  pagesRead?: number;
-  reviewsWritten?: number;
-}
+import { YourWeekProps } from "@/src/types";
 
 export default function YourWeekCard({
   booksFinished = 3,

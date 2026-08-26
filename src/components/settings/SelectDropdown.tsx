@@ -1,13 +1,7 @@
 "use client";
 
-import React from "react";
 import { ChevronDown } from "lucide-react";
-
-interface SelectDropdownProps {
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
-}
+import { SelectDropdownProps } from "@/src/types";
 
 export default function SelectDropdown({
   value,
