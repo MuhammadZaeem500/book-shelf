@@ -2,9 +2,23 @@
 
 import { useState } from "react";
 import { Book } from "lucide-react";
+import { useRouter } from "next/navigation";
+import ProfileAvatarModal from "@/src/components/profile/ProfileAvatarModal";
 
 export default function Navbar() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+
+  const handleSignOut = () => {
+    setIsAvatarModalOpen(false);
+    router.push("/auth/sign-in");
+  };
+
+  const handleAddAccount = () => {
+    setIsAvatarModalOpen(false);
+    router.push("/auth/sign-up");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF7F2] border-b border-[#EFE8DF] px-4 py-3 md:px-8">
@@ -19,6 +33,7 @@ export default function Navbar() {
             </span>
           </div>
 
+          {/* Mobile Right Icons */}
           <div className="flex items-center gap-3 shrink-0 sm:hidden">
             <button
               type="button"
@@ -41,15 +56,19 @@ export default function Navbar() {
               </svg>
             </button>
 
+            {/* Mobile Avatar Button */}
             <button
               type="button"
-              className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0]"
+              onClick={() => setIsAvatarModalOpen(true)}
+              className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer"
+              aria-label="Open profile menu"
             >
               AJ
             </button>
           </div>
         </div>
 
+        {/* Search Bar */}
         <div className="relative w-full sm:flex-1 sm:max-w-md sm:mx-2">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8C837A]">
             <svg
@@ -76,6 +95,7 @@ export default function Navbar() {
           />
         </div>
 
+        {/* Desktop Right Icons */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <button
             type="button"
@@ -98,14 +118,26 @@ export default function Navbar() {
             </svg>
           </button>
 
+          {/* Desktop Avatar Button */}
           <button
             type="button"
-            className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0]"
+            onClick={() => setIsAvatarModalOpen(true)}
+            className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer"
+            aria-label="Open profile menu"
           >
             AJ
           </button>
         </div>
       </div>
+
+      {/* Profile Avatar Modal Dialog */}
+      <ProfileAvatarModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        onSignOut={handleSignOut}
+        onAddAccount={handleAddAccount}
+        userName="Alex Johnson"
+      />
     </header>
   );
 }
