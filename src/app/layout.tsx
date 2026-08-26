@@ -21,10 +21,10 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const isAuthPage =
-    pathname?.includes("/login") ||
     pathname?.includes("/signup") ||
     pathname?.includes("/sign-in") ||
-    pathname?.includes("/sign-up");
+    pathname?.includes("/sign-up")||
+    pathname?.includes("/forgot-password");
 
   return (
     <html lang="en" className={dmSans.variable}>
