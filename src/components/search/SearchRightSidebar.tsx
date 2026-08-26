@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import RecentSearchesCard from "@/src/components/search/RecentSearchesCard";
 import TrendingSearchesCard from "@/src/components/search/TrendingSearchesCard";
-import PopularAuthorsCard, { AuthorItem } from "@/src/components/search/PopularAuthorsCard";
+import PopularAuthorsCard from "@/src/components/search/PopularAuthorsCard";
+
+type AuthorItem = React.ComponentProps<typeof PopularAuthorsCard>["authors"][number];
 
 const initialRecent = [
   "Cormac McCarthy",
