@@ -1,53 +1,49 @@
-"use client";
+import type { Metadata } from "next";
+import ClientLayout from "@/src/app/clientlayout";
 
-import "@/src/app/globals.css";
-import { usePathname } from "next/navigation";
-import Sidebar from "@/src/components/layout/SideBar";
-import Navbar from "@/src/components/layout/Navbar";
-import RightSidebar from "@/src/components/layout/RightSideBar";
-import { DM_Sans } from "next/font/google";
+export const metadata: Metadata = {
+  title: "Book Shelf",
+  description: "Track, review, and discover books with Book Shelf.",
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
+  icons: {
+    icon: "/vercel.svg",
+  },
+
+  openGraph: {
+    title: "Book Shelf",
+    description: "Track, review, and discover books with Book Shelf.",
+    url: "/vercel.svg",
+    siteName: "Book Shelf",
+    images: [
+      {
+        url: "/vercel.svg",
+        width: 1200,
+        height: 630,
+        alt: "Book Shelf - Track, review, and discover books",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Book Shelf",
+    description: "Track, review, and discover books with Book Shelf.",
+    images: ["/vercel.svg"],
+  },
+};
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  const pathname = usePathname();
-
-  const isAuthPage =
-    pathname?.includes("/signup") ||
-    pathname?.includes("/sign-in") ||
-    pathname?.includes("/sign-up")||
-    pathname?.includes("/forgot-password");
-
+}>) {
   return (
-    <html lang="en" className={dmSans.variable}>
-      <body className="bg-[#FFFFFF] min-h-screen text-[#1A1817] flex flex-col font-sans antialiased">
-        {!isAuthPage && <Navbar />}
-
-        <div className="flex flex-1 relative max-w-8xl mx-auto w-full">
-          {!isAuthPage && <Sidebar />}
-
-          <main className="bg-[#FAF7F2] flex-1 min-w-0 border-l border-[#EFE8DF]">
-            {children}
-          </main>
-
-          {!isAuthPage && (
-            <div className="bg-[#F2EDE5]">
-              <RightSidebar />
-            </div>
-          )}
-        </div>
+    <html lang="en">
+      <body>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
 }
-
-
-
