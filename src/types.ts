@@ -188,3 +188,50 @@ export interface UpdatePasswordModalProps {
   onClose: () => void;
   onSave: () => void;
 }
+
+export interface ActivityUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface ActivityItem {
+  id: string;
+  userId: string;
+  type: string; // 'BECAME_FRIENDS' | 'LOGGED_BOOK' | 'REVIEW_ADDED'
+  metadata?: {
+    title?: string;
+    author?: string;
+    rating?: number;
+    review?: string;
+    friendId?: string;
+  };
+  createdAt: string;
+  user: ActivityUser;
+}
+
+export interface FriendActivityItem {
+  id: string;
+  user: {
+    name: string;
+    initials: string;
+    avatarBg: string;
+  };
+  actionText: string;
+  title: string;
+  author: string;
+  rating?: number;
+  review?: string;
+  timeAgo: string;
+  coverGradient: string;
+}
+
+export interface ActivityApiResponse {
+  data: ActivityItem[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
