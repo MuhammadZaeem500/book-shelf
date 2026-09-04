@@ -4,7 +4,6 @@ import ClientLayout from "@/src/app/clientlayout";
 export const metadata: Metadata = {
   title: "Book Shelf",
   description: "Track, review, and discover books with Book Shelf.",
-
   icons: {
     icon: "/vercel.svg",
   },

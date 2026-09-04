@@ -1,16 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Book } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProfileAvatarModal from "@/src/components/profile/ProfileAvatarModal";
 import NotificationDropdown from "@/src/components/layout/NotificationDropdown";
+import { useAuth } from "@/src/app/context/AuthContext";
 
 export default function Navbar() {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  // Dynamic values derived from authenticated user state
+  const userName = user?.name || user?.email?.split("@")[0] || "Book Reader";
+  const userEmail = user?.email || "";
+  
+  const initials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) || "U";
+
+  // Optional: Replace this with your user's avatar image URL if stored in backend/context
+  const avatarUrl = null; 
+
+  const handleSignOut = () => {
+    setIsAvatarModalOpen(false);
+    logout();
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF7F2] border-b border-[#EFE8DF] px-4 py-3 md:px-8">
@@ -49,9 +71,18 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsAvatarModalOpen(true)}
-              className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer"
+              className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer overflow-hidden relative"
             >
-              AJ
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt={userName}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                initials
+              )}
             </button>
           </div>
         </div>
@@ -91,9 +122,18 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsAvatarModalOpen(true)}
-            className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer"
+            className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm hover:opacity-90 transition-opacity focus:outline-none ring-2 ring-[#F2EAE0] cursor-pointer overflow-hidden relative"
           >
-            AJ
+            {avatarUrl ? (
+              <Image
+                src={avatarUrl}
+                alt={userName}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              initials
+            )}
           </button>
         </div>
       </div>
@@ -101,9 +141,10 @@ export default function Navbar() {
       <ProfileAvatarModal
         isOpen={isAvatarModalOpen}
         onClose={() => setIsAvatarModalOpen(false)}
-        onSignOut={() => router.push("/auth/sign-in")}
+        onSignOut={handleSignOut}
         onAddAccount={() => router.push("/auth/sign-up")}
-        userName="Alex Johnson"
+        userName={userName}
+        userEmail={userEmail}
       />
     </header>
   );

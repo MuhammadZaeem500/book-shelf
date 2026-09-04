@@ -3,9 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, BookOpen } from "lucide-react";
+import { useAuth } from "@/src/app/context/AuthContext";
+import { fetchApi } from "@/src/app/lib/api";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,9 +26,36 @@ export default function SignInPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign in submitted:", formData);
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetchApi<{
+        access_token: string;
+        user?: { id: string; email: string; name?: string };
+      }>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      // Fallback user object if backend only returns token
+      const userPayload = res.user || {
+        id: "user",
+        email: formData.email,
+        name: formData.email.split("@")[0],
+      };
+
+      login(res.access_token, userPayload);
+    } catch (err: any) {
+      setError(err.message || "Invalid email or password. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,6 +78,12 @@ export default function SignInPage() {
             Sign in to continue your reading journey.
           </p>
         </div>
+
+        {error && (
+          <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-200 rounded-xl">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -126,9 +165,10 @@ export default function SignInPage() {
 
           <button
             type="submit"
-            className="w-full py-3.5 px-4 bg-[#B85024] hover:bg-[#A3431D] active:bg-[#8F3918] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs mt-2"
+            disabled={loading}
+            className="w-full py-3.5 px-4 bg-[#B85024] hover:bg-[#A3431D] active:bg-[#8F3918] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs mt-2 disabled:opacity-50"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
@@ -165,7 +205,7 @@ export default function SignInPage() {
         </button>
 
         <p className="text-center text-xs text-[#736B63] pt-2">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/auth/sign-up"
             className="text-[#C85A2B] font-semibold hover:underline"

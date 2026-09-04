@@ -1,22 +1,71 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useAuth } from "@/src/app/context/AuthContext";
+import { fetchApi } from "@/src/app/lib/api";
+
+interface UserProfileData {
+  id: string;
+  name?: string;
+  username?: string;
+  bio?: string;
+  location?: string;
+  email?: string;
+}
 
 export default function EditProfilePage() {
   const router = useRouter();
+  const { user, token, login } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    displayName: "Alex Johnson",
-    username: "alexj",
-    bio: "Avid reader, slow finisher. Literary fiction addict. Always carrying a book I probably won't finish on time.",
-    location: "New York, NY",
-    email: "alex@example.com",
+    displayName: "",
+    username: "",
+    bio: "",
+    location: "",
+    email: "",
   });
 
   const MAX_BIO_LENGTH = 200;
+
+  useEffect(() => {
+    async function loadCurrentProfile() {
+      try {
+        setFetching(true);
+        // Load stored values from AuthContext immediately for instantaneous UI fill
+        if (user) {
+          setFormData((prev) => ({
+            ...prev,
+            displayName: user.name || "",
+            email: user.email || "",
+          }));
+        }
+
+        // Fetch fresh database profile
+        const data = await fetchApi<UserProfileData>("/users/me");
+
+        setFormData({
+          displayName: data.name || user?.name || "",
+          username: data.username || (data.email ? data.email.split("@")[0] : ""),
+          bio: data.bio || "",
+          location: data.location || "",
+          email: data.email || user?.email || "",
+        });
+      } catch (err) {
+        console.error("Failed to load backend profile data:", err);
+      } finally {
+        setFetching(false);
+      }
+    }
+
+    loadCurrentProfile();
+  }, [user]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,18 +75,61 @@ export default function EditProfilePage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Profile updated:", formData);
-    router.push("/profile");
+    setError(null);
+    setLoading(true);
+
+    try {
+      const updatedUser = await fetchApi<UserProfileData>("/users/me", {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: formData.displayName,
+          username: formData.username,
+          bio: formData.bio,
+          location: formData.location,
+          email: formData.email,
+        }),
+      });
+
+      // Synchronize updated user back into AuthContext & LocalStorage
+      if (token && user) {
+        login(token, {
+          ...user,
+          name: updatedUser.name || formData.displayName,
+          email: updatedUser.email || formData.email,
+        });
+      }
+
+      router.push("/profile");
+    } catch (err: any) {
+      setError(err.message || "Failed to update profile. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const avatarInitials = (formData.displayName || user?.name || "U")
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (fetching) {
+    return (
+      <div className="w-full max-w-3xl mx-auto p-12 text-center text-sm font-semibold text-[#8C837A]">
+        Loading profile configuration...
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 text-[#1A1817]">
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.back()}
-          className="w-10 h-10 rounded-xl bg-[#EFE8DF] hover:bg-[#E3DACD] flex items-center justify-center transition-colors text-[#524B45]"
+          className="w-10 h-10 rounded-xl bg-[#EFE8DF] hover:bg-[#E3DACD] flex items-center justify-center transition-colors text-[#524B45] cursor-pointer"
           aria-label="Go back"
         >
           <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
@@ -47,10 +139,16 @@ export default function EditProfilePage() {
         </h1>
       </div>
 
+      {error && (
+        <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-200 rounded-xl">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl p-4 sm:p-5 flex items-center gap-4 sm:gap-6 shadow-2xs">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#B85024] flex items-center justify-center text-white font-bold text-xl sm:text-2xl shrink-0">
-            AJ
+            {avatarInitials}
           </div>
           <div className="space-y-1.5 flex-1 min-w-0">
             <h3 className="font-bold text-sm text-[#1A1817]">Profile photo</h3>
@@ -59,7 +157,7 @@ export default function EditProfilePage() {
             </p>
             <button
               type="button"
-              className="px-3.5 py-1.5 bg-[#EFE8DF] hover:bg-[#E3DACD] text-[#1A1817] text-xs font-semibold rounded-xl transition-colors mt-1"
+              className="px-3.5 py-1.5 bg-[#EFE8DF] hover:bg-[#E3DACD] text-[#1A1817] text-xs font-semibold rounded-xl transition-colors mt-1 cursor-pointer"
             >
               Change Photo
             </button>
@@ -168,7 +266,7 @@ export default function EditProfilePage() {
 
             <hr className="border-[#E8E0D5] my-2" />
             <Link
-              href="/change-password"
+              href="auth/change-password"
               className="flex items-center justify-between py-1 text-sm font-semibold text-[#1A1817] hover:text-[#C85A2B] transition-colors"
             >
               <span>Change Password</span>
@@ -180,14 +278,15 @@ export default function EditProfilePage() {
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="flex-1 py-3 px-6 bg-[#B85024] hover:bg-[#A3431D] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs text-center"
+            disabled={loading}
+            className="flex-1 py-3 px-6 bg-[#B85024] hover:bg-[#A3431D] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs text-center disabled:opacity-50 cursor-pointer"
           >
-            Save Changes
+            {loading ? "Saving Changes..." : "Save Changes"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-3 bg-[#EFE8DF] hover:bg-[#E3DACD] text-[#1A1817] font-semibold text-sm rounded-xl transition-colors"
+            className="px-6 py-3 bg-[#EFE8DF] hover:bg-[#E3DACD] text-[#1A1817] font-semibold text-sm rounded-xl transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -208,7 +307,7 @@ export default function EditProfilePage() {
             </div>
             <button
               type="button"
-              className="px-4 py-2 border border-[#F87171] text-[#EF4444] hover:bg-[#FEE2E2] font-semibold text-xs rounded-xl transition-colors shrink-0"
+              className="px-4 py-2 border border-[#F87171] text-[#EF4444] hover:bg-[#FEE2E2] font-semibold text-xs rounded-xl transition-colors shrink-0 cursor-pointer"
             >
               Delete
             </button>

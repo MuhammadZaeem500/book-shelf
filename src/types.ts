@@ -70,6 +70,7 @@ export interface FriendActivityProps {
 }
 
 export interface RecommendedBookProps {
+  id?: string;
   title: string;
   author: string;
   rating: number;
@@ -234,4 +235,70 @@ export interface ActivityApiResponse {
     limit: number;
     totalPages: number;
   };
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  bio?: string;
+  stats?: ProfileStats;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string;    
+}
+
+export interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  login: (token: string, user: User) => void;
+  logout: () => void;
+  loading: boolean;
+}
+
+export interface CurrentlyReading {
+  id: string;
+  status: string;
+  currentPage?: number;
+  totalPages?: number;
+  book: {
+    id: string;
+    title: string;
+    author: string;
+    coverUrl?: string;
+  };
+}
+
+export interface PopularBook {
+  id: string;
+  title: string;
+  author: string;
+  rating?: number;
+  logCount?: number;
+}
+
+export interface ActivityItem {
+  id: string;
+  userId: string;
+  type: string;
+  metadata?: {
+    title?: string;
+    author?: string;
+    rating?: number;
+    review?: string;
+    friendId?: string;
+  };
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+export interface ActivityApiResponse {
+  data: ActivityItem[];
 }

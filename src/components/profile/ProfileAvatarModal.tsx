@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, UserPlus, X } from "lucide-react";
+import { useAuth } from "@/src/app/context/AuthContext";
 import { ProfileAvatarModalProps } from "@/src/types";
 
 export default function ProfileAvatarModal({
@@ -8,56 +8,63 @@ export default function ProfileAvatarModal({
   onClose,
   onSignOut,
   onAddAccount,
-  userName = "Alex Johnson",
-  userEmail = "alex@example.com",
+  userName: propName,
+  userEmail: propEmail,
 }: ProfileAvatarModalProps) {
+  const { user } = useAuth();
+
+  const name =
+    propName || user?.name || user?.email?.split("@")[0] || "Book Reader";
+  const email = propEmail || user?.email || "";
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl p-5 space-y-4 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#E8E0D5]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#A65B17] flex items-center justify-center text-white font-bold text-sm shadow-2xs">
-              AJ
-            </div>
-            <div className="min-w-0">
-              <h3 className="text-sm font-bold text-[#1A1817] truncate">
-                {userName}
-              </h3>
-              <p className="text-xs text-[#736B63] truncate">{userEmail}</p>
-            </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+      <div className="w-full max-w-sm rounded-2xl bg-[#FAF7F2] p-6 shadow-xl border border-[#E8DFC8]">
+
+        <div className="flex items-center gap-3 pb-4 border-b border-[#EFE8DF]">
+          <div className="w-12 h-12 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-base">
+            {name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2)}
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[#736B63] hover:text-[#1A1817] transition-colors p-1"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-bold text-sm text-[#1A1817] truncate">
+              {name}
+            </h3>
+            <p className="text-xs text-[#8C837A] truncate">{email}</p>
+          </div>
         </div>
 
-        {/* Action Options */}
-        <div className="space-y-2 pt-1">
+        {/* Modal Actions */}
+        <div className="pt-4 space-y-2">
           <button
             type="button"
             onClick={onAddAccount}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-[#F5F0EB] hover:bg-[#EFE8DF] border border-[#E8E0D5] rounded-xl text-xs font-semibold text-[#1A1817] transition-colors cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-[#1A1817] bg-[#F2EAE0] hover:bg-[#EFE3D8] transition-colors"
           >
-            <UserPlus className="w-4 h-4 text-[#C85A2B]" />
             Add another account
           </button>
-
           <button
             type="button"
             onClick={onSignOut}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-[#FFF8F7] hover:bg-[#FEF2F2] border border-[#FCD8D4] rounded-xl text-xs font-semibold text-[#DC2626] transition-colors cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
           >
-            <LogOut className="w-4 h-4 text-[#DC2626]" />
-            Sign out
+            Sign Out
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-4 w-full text-center text-xs font-medium text-[#8C837A] hover:text-[#1A1817]"
+        >
+          Close
+        </button>
       </div>
     </div>
   );

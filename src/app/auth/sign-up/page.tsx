@@ -2,11 +2,16 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, BookOpen } from "lucide-react";
+import { fetchApi } from "@/src/app/lib/api";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     displayName: "",
@@ -25,9 +30,37 @@ export default function SignUpPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign up submitted:", formData);
+    setError(null);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await fetchApi<{
+        access_token: string;
+        user: { id: string; email: string; name?: string };
+      }>("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          name: formData.displayName || formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      // Redirect directly to Sign In page upon success
+      router.push("/auth/sign-in");
+    } catch (err: any) {
+      setError(err.message || "Failed to create account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,6 +83,12 @@ export default function SignUpPage() {
             Join thousands of readers on Bookshelf.
           </p>
         </div>
+
+        {error && (
+          <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-200 rounded-xl">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -208,9 +247,10 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            className="w-full py-3.5 px-4 bg-[#B85024] hover:bg-[#A3431D] active:bg-[#8F3918] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs"
+            disabled={loading}
+            className="w-full py-3.5 px-4 bg-[#B85024] hover:bg-[#A3431D] active:bg-[#8F3918] text-white font-semibold text-sm rounded-xl transition-colors shadow-xs disabled:opacity-50"
           >
-            Create Account
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
