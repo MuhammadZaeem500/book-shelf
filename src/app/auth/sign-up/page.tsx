@@ -254,14 +254,14 @@ export default function SignUpPage() {
           </button>
         </form>
 
-        <div className="relative flex items-center justify-center my-6">
+        {/* <div className="relative flex items-center justify-center my-6">
           <div className="w-full border-t border-[#E8E0D5]" />
           <span className="absolute bg-[#F5F0EB] px-3 text-[11px] font-bold text-[#8C837A] tracking-wider uppercase">
             OR
           </span>
-        </div>
+        </div> */}
 
-        <button
+        {/* <button
           type="button"
           className="w-full py-3 px-4 bg-[#FAF7F2] hover:bg-[#EFE8DF] border border-[#E8E0D5] rounded-xl font-semibold text-xs sm:text-sm text-[#1A1817] flex items-center justify-center gap-3 transition-colors shadow-2xs"
         >
@@ -284,7 +284,7 @@ export default function SignUpPage() {
             />
           </svg>
           Sign up with Google
-        </button>
+        </button> */}
 
         <p className="text-center text-xs text-[#736B63] pt-2">
           Already have an account?{" "}

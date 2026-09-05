@@ -15,7 +15,7 @@ export default function SignInPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: false,
+    // rememberMe: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +139,7 @@ export default function SignInPage() {
           </div>
 
           <div className="flex items-center justify-between pt-1">
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 id="rememberMe"
@@ -154,7 +154,7 @@ export default function SignInPage() {
               >
                 Remember me
               </label>
-            </div>
+            </div> */}
             <Link
               href="/auth/forgot-password"
               className="text-xs text-[#C85A2B] font-semibold hover:underline"
@@ -172,14 +172,14 @@ export default function SignInPage() {
           </button>
         </form>
 
-        <div className="relative flex items-center justify-center my-6">
+        {/* <div className="relative flex items-center justify-center my-6">
           <div className="w-full border-t border-[#E8E0D5]" />
           <span className="absolute bg-[#F5F0EB] px-3 text-[11px] font-bold text-[#8C837A] tracking-wider uppercase">
             OR
           </span>
-        </div>
+        </div> */}
 
-        <button
+        {/* <button
           type="button"
           className="w-full py-3 px-4 bg-[#FAF7F2] hover:bg-[#EFE8DF] border border-[#E8E0D5] rounded-xl font-semibold text-xs sm:text-sm text-[#1A1817] flex items-center justify-center gap-3 transition-colors shadow-2xs"
         >
@@ -202,7 +202,7 @@ export default function SignInPage() {
             />
           </svg>
           Continue with Google
-        </button>
+        </button> */}
 
         <p className="text-center text-xs text-[#736B63] pt-2">
           Don&apos;t have an account?{" "}
