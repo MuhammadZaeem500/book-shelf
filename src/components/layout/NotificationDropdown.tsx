@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BookOpen, Heart, UserPlus, Bell, Check } from "lucide-react";
+import { BookOpen, Heart, UserPlus, Bell, Check, X } from "lucide-react";
 
 export interface NotificationItem {
   id: string;
@@ -46,6 +46,23 @@ const defaultNotifications: NotificationItem[] = [
     time: "3h ago",
     unread: false,
   },
+  {
+    id: "4",
+    type: "like",
+    user: "David Chen",
+    action: "liked your review on",
+    target: "Neuromancer",
+    time: "5h ago",
+    unread: false,
+  },
+  {
+    id: "5",
+    type: "follow",
+    user: "Aisha Khan",
+    action: "started following you",
+    time: "1d ago",
+    unread: false,
+  },
 ];
 
 export default function NotificationDropdown({
@@ -70,34 +87,47 @@ export default function NotificationDropdown({
 
   return (
     <>
-      {/* Invisible overlay to close dropdown on click outside */}
-      <div className="fixed inset-0 z-40" onClick={onClose} />
+      {/* Backdrop overlay */}
+      <div
+        className="fixed inset-0 z-40 bg-black/20 sm:bg-transparent backdrop-blur-[1px] sm:backdrop-blur-none transition-opacity"
+        onClick={onClose}
+      />
 
-      {/* Aligned Dropdown Card */}
-      <div className="absolute right-[-8px] sm:right-0 top-full mt-3 w-80 sm:w-88 bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl shadow-xl z-50 overflow-hidden">
+      {/* Dropdown Card: Fixed at the top (below Navbar) on mobile, Absolute dropdown on desktop */}
+      <div className="fixed inset-x-3 top-16 sm:inset-auto sm:right-0 sm:top-full sm:mt-3 w-auto sm:w-88 bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl shadow-2xl sm:shadow-xl z-50 overflow-hidden flex flex-col max-h-[80vh] sm:max-h-[420px]">
         {/* Header */}
-        <div className="flex items-center justify-between p-3.5 px-4 border-b border-[#E8E0D5] bg-[#F5F0EB]/50">
+        <div className="flex items-center justify-between p-3.5 px-4 border-b border-[#E8E0D5] bg-[#F5F0EB]/50 shrink-0">
           <div className="flex items-center gap-2">
             <h4 className="text-xs font-bold text-[#1A1817]">Notifications</h4>
             <span className="bg-[#C85A2B]/10 text-[#C85A2B] text-[10px] font-bold px-2 py-0.5 rounded-full">
               {notifications.filter((n) => n.unread).length} new
             </span>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[11px] font-semibold text-[#736B63] hover:text-[#C85A2B] transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Check className="w-3 h-3" /> Mark read
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-[11px] font-semibold text-[#736B63] hover:text-[#C85A2B] transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Check className="w-3 h-3" /> Mark read
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="sm:hidden text-[#736B63] hover:text-[#1A1817] p-1 rounded-lg"
+              aria-label="Close notifications"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
-        {/* Notifications List */}
-        <div className="divide-y divide-[#E8E0D5]/60 max-h-[300px] overflow-y-auto">
+        {/* Scrollable Notifications List with custom scrollbar styling */}
+        <div className="divide-y divide-[#E8E0D5]/60 overflow-y-auto max-h-[320px] sm:max-h-[340px] pr-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#F5F0EB] [&::-webkit-scrollbar-thumb]:bg-[#D8CFC4] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#C85A2B]/60">
           {notifications.map((item) => (
             <div
               key={item.id}
-              className={`flex items-start gap-3 p-3 transition-colors ${
+              className={`flex items-start gap-3 p-3.5 sm:p-3 transition-colors ${
                 item.unread ? "bg-[#F5F0EB]/80" : "hover:bg-[#F5F0EB]/40"
               }`}
             >

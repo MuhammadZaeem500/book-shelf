@@ -7,10 +7,10 @@ export async function fetchApi<T>(
   const token =
     typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
 
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -20,7 +20,13 @@ export async function fetchApi<T>(
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Something went wrong');
+
+    // Handle NestJS validation pipe arrays and single message strings
+    const errorMessage = Array.isArray(errorData.message)
+      ? errorData.message.join(', ')
+      : errorData.message || 'Something went wrong';
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
