@@ -126,17 +126,16 @@ export default function SettingsPage() {
             {/* Account Tab */}
             {activeTab === "account" && (
               <SettingsSection title="ACCOUNT">
-                <SettingsRow title="Email address" subtitle={email}>
+                {/* <SettingsRow title="Email address" subtitle={email}>
                   <button
                     onClick={() => setIsEmailModalOpen(true)}
                     className="text-xs font-semibold text-[#C85A2B] hover:underline"
                   >
                     Change
                   </button>
-                </SettingsRow>
+                </SettingsRow> */}
                 <SettingsRow
                   title="Password"
-                  subtitle="Last changed 3 months ago"
                 >
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}

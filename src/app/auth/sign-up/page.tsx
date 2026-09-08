@@ -54,8 +54,7 @@ export default function SignUpPage() {
         }),
       });
 
-      // Redirect directly to Sign In page upon success
-      router.push("/auth/sign-in");
+      router.push("/auth/verify-email");
     } catch (err: any) {
       setError(err.message || "Failed to create account. Please try again.");
     } finally {

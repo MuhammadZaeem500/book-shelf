@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/app/context/AuthContext";
 import { ProfileAvatarModalProps } from "@/src/types";
 
@@ -12,12 +13,21 @@ export default function ProfileAvatarModal({
   userEmail: propEmail,
 }: ProfileAvatarModalProps) {
   const { user } = useAuth();
+  const router = useRouter();
 
   const name =
     propName || user?.name || user?.email?.split("@")[0] || "Book Reader";
   const email = propEmail || user?.email || "";
 
   if (!isOpen) return null;
+
+  const handleAddAccount = () => {
+    if (onAddAccount) {
+      onAddAccount();
+    }
+    onClose();
+    router.push("/auth/sign-in");
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
@@ -44,7 +54,7 @@ export default function ProfileAvatarModal({
         <div className="pt-4 space-y-2">
           <button
             type="button"
-            onClick={onAddAccount}
+            onClick={handleAddAccount}
             className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-[#1A1817] bg-[#F2EAE0] hover:bg-[#EFE3D8] transition-colors"
           >
             Add another account

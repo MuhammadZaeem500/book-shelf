@@ -24,7 +24,7 @@ export default function ForgotPasswordPage() {
       });
 
       setSuccess(
-        "If an account exists with that email, a password reset link has been sent."
+        "a password reset link has been sent."
       );
       setEmail("");
     } catch (err: any) {
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                // placeholder="you@example.com"
                 required
                 className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#E8E0D5] text-sm text-[#1A1817] placeholder-[#A09589] focus:outline-none focus:border-[#C85A2B] focus:ring-1 focus:ring-[#C85A2B] transition-all pr-10"
               />

@@ -8,6 +8,7 @@ import RightSidebar from "@/src/components/layout/RightSideBar";
 import { DM_Sans } from "next/font/google";
 import { AuthProvider } from "@/src/app/context/AuthContext";
 import ProtectedRoute from "@/src/components/auth/ProtectedRoute";
+import path from "path";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -27,6 +28,8 @@ export default function ClientLayout({
     pathname?.includes("/sign-in") ||
     pathname?.includes("/sign-up") ||
     pathname?.includes("/forgot-password")||
+    pathname?.includes("/reset-password") ||
+    pathname?.includes("/verify-email") ||
     pathname?.includes("/change-password");
 
   return (
