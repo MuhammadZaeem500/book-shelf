@@ -24,3 +24,31 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Global Custom Terracotta Scrollbar */
+@layer utilities {
+  /* Firefox */
+  html {
+    scrollbar-color: #C85A2B #FAF7F2;
+    scrollbar-width: thin;
+  }
+
+  /* Chrome, Safari, Edge */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #FAF7F2;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #C85A2B;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #B24E23;
+  }
+}

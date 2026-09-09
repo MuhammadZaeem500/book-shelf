@@ -8,7 +8,6 @@ import RightSidebar from "@/src/components/layout/RightSideBar";
 import { DM_Sans } from "next/font/google";
 import { AuthProvider } from "@/src/app/context/AuthContext";
 import ProtectedRoute from "@/src/components/auth/ProtectedRoute";
-import path from "path";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -27,7 +26,7 @@ export default function ClientLayout({
     pathname?.includes("/signup") ||
     pathname?.includes("/sign-in") ||
     pathname?.includes("/sign-up") ||
-    pathname?.includes("/forgot-password")||
+    pathname?.includes("/forgot-password") ||
     pathname?.includes("/reset-password") ||
     pathname?.includes("/verify-email") ||
     pathname?.includes("/change-password");
@@ -35,14 +34,15 @@ export default function ClientLayout({
   return (
     <AuthProvider>
       <div
-        className={`${dmSans.variable} bg-[#FFFFFF] min-h-screen text-[#1A1817] flex flex-col font-sans antialiased`}
+        className={`${dmSans.variable} bg-[#FFFFFF] min-h-dvh text-[#1A1817] flex flex-col font-sans antialiased overflow-x-hidden`}
       >
         {!isAuthPage && <Navbar />}
 
         <div className="flex flex-1 relative max-w-8xl mx-auto w-full">
           {!isAuthPage && <Sidebar />}
 
-          <main className="bg-[#FAF7F2] flex-1 min-w-0 border-l border-[#EFE8DF]">
+          {/* Added pb-32 on mobile to push content above fixed bottom nav, lg:pb-0 for desktop */}
+          <main className="bg-[#FAF7F2] flex-1 min-w-0 border-l border-[#EFE8DF] pb-32 lg:pb-0">
             {isAuthPage ? children : <ProtectedRoute>{children}</ProtectedRoute>}
           </main>
 
