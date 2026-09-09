@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchApi } from "@/src/app/lib/api";
 
 function VerifyForm() {
   const searchParams = useSearchParams();
@@ -48,24 +49,16 @@ function VerifyForm() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-      const res = await fetch(`${apiUrl}/auth/verify-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail, code: cleanCode }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        const message = Array.isArray(data.message)
-          ? data.message[0]
-          : data.message;
-        throw new Error(message || "Verification failed");
-      }
+      const data = await fetchApi<{ access_token?: string; message?: string }>(
+        "/auth/verify-email",
+        {
+          method: "POST",
+          body: JSON.stringify({ email: cleanEmail, code: cleanCode }),
+        },
+      );
 
       if (data.access_token) {
-        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("access_token", data.access_token);
       }
 
       setStatus({
@@ -99,27 +92,16 @@ function VerifyForm() {
     setStatus({ type: "idle", message: "" });
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-      const res = await fetch(`${apiUrl}/auth/resend-otp`, {
+      await fetchApi("/auth/resend-otp", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: cleanEmail }),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        const message = Array.isArray(data.message)
-          ? data.message[0]
-          : data.message;
-        throw new Error(message || "Failed to resend code.");
-      }
 
       setStatus({
         type: "success",
         message: "A new verification code has been sent to your email.",
       });
-      setCooldown(60); // 60s cooldown timer
+      setCooldown(60);
     } catch (err: any) {
       setStatus({
         type: "error",
@@ -142,6 +124,7 @@ function VerifyForm() {
 
         {status.message && (
           <div
+            aria-live="polite"
             className={`p-3 border text-xs rounded-xl mt-4 text-center font-medium ${
               status.type === "error"
                 ? "bg-red-50 text-red-600 border-red-200"
@@ -154,10 +137,15 @@ function VerifyForm() {
 
         <form onSubmit={handleVerify} className="mt-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-[#1A1817] mb-1">
+            <label
+              htmlFor="email-input"
+              className="block text-xs font-semibold text-[#1A1817] mb-1"
+            >
               Email Address
             </label>
             <input
+              id="email-input"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -168,10 +156,15 @@ function VerifyForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#1A1817] mb-1">
+            <label
+              htmlFor="code-input"
+              className="block text-xs font-semibold text-[#1A1817] mb-1"
+            >
               Verification Code
             </label>
             <input
+              id="code-input"
+              name="code"
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
