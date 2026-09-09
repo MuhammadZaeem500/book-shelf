@@ -7,7 +7,7 @@ interface BookEntry {
   id: string;
   title: string;
   author: string;
-  rating: number; 
+  rating: number;
   pages: number;
   hasReview?: boolean;
   coverBg: string;
@@ -78,7 +78,7 @@ export default function MyLibrary() {
   const [selectedMonth, setSelectedMonth] = useState("August 2026");
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-8 text-[#1A1817]">
+    <div className="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-8 text-[#1A1817] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
@@ -170,8 +170,6 @@ export default function MyLibrary() {
 
                       <span>·</span>
                       <span>{book.pages} pages</span>
-
-                 
                     </div>
 
                     <div className="pt-2">

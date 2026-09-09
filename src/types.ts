@@ -199,7 +199,7 @@ export interface ActivityUser {
 export interface ActivityItem {
   id: string;
   userId: string;
-  type: string; // 'BECAME_FRIENDS' | 'LOGGED_BOOK' | 'REVIEW_ADDED'
+  type: string;
   metadata?: {
     title?: string;
     author?: string;
@@ -248,7 +248,7 @@ export interface UserProfile {
 export interface User {
   id: string;
   email: string;
-  name?: string;    
+  name?: string;
 }
 
 export interface AuthContextType {
@@ -301,4 +301,16 @@ export interface ActivityItem {
 
 export interface ActivityApiResponse {
   data: ActivityItem[];
+}
+
+
+export interface BookData {
+  title: string;
+  author: string;
+  description: string;
+  currentPage: number;
+  totalPages: number;
+  coverImage?: string;
+  onContinue?: () => void;
+  onDetails?: () => void;
 }

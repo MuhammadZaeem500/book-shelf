@@ -65,7 +65,7 @@ export default function SettingsPage() {
 
   const handleToggleGenre = (genre: string) => {
     setTempGenres((prev) =>
-      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre],
     );
   };
 
@@ -84,7 +84,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-[#FAF7F2] p-4 sm:p-6 lg:p-8 text-[#1A1817]">
+    <div className="h-screen w-full overflow-y-auto bg-[#FAF7F2] p-4 sm:p-6 lg:p-8 text-[#1A1817] [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -134,9 +134,7 @@ export default function SettingsPage() {
                     Change
                   </button>
                 </SettingsRow> */}
-                <SettingsRow
-                  title="Password"
-                >
+                <SettingsRow title="Password">
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}
                     className="text-xs font-semibold text-[#C85A2B] hover:underline"
@@ -146,7 +144,8 @@ export default function SettingsPage() {
                 </SettingsRow>
                 <SettingsRow title="Connected accounts" isLast>
                   <span className="text-xs text-[#524B45] flex items-center gap-1.5">
-                    Google <span className="w-2 h-2 rounded-full bg-[#10B981]" />
+                    Google{" "}
+                    <span className="w-2 h-2 rounded-full bg-[#10B981]" />
                   </span>
                 </SettingsRow>
               </SettingsSection>
@@ -304,11 +303,7 @@ export default function SettingsPage() {
                 <SettingsRow title="Default reading status">
                   <SelectDropdown
                     value={defaultStatus}
-                    options={[
-                      "Currently Reading",
-                      "Want to Read",
-                      "Finished",
-                    ]}
+                    options={["Currently Reading", "Want to Read", "Finished"]}
                     onChange={setDefaultStatus}
                   />
                 </SettingsRow>

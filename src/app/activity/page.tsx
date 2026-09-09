@@ -36,7 +36,9 @@ export default function ActivityPage() {
           }
         }
 
-        const res = await fetchApi<ActivityApiResponse>("/activity-feed?limit=20&page=1");
+        const res = await fetchApi<ActivityApiResponse>(
+          "/activity-feed?limit=20&page=1",
+        );
         setActivities(res.data || []);
       } catch (err) {
         console.error("Failed to fetch activity feed:", err);
@@ -58,7 +60,9 @@ export default function ActivityPage() {
   const formatActionText = (type: string, isMy: boolean) => {
     switch (type) {
       case "BECAME_FRIENDS":
-        return isMy ? "YOU CONNECTED WITH A NEW FRIEND" : "connected with a new friend";
+        return isMy
+          ? "YOU CONNECTED WITH A NEW FRIEND"
+          : "connected with a new friend";
       case "REVIEW_ADDED":
         return isMy ? "YOU REVIEWED" : "reviewed";
       case "LOGGED_BOOK":
@@ -85,14 +89,18 @@ export default function ActivityPage() {
   };
 
   const formatTimeAgo = (dateString: string) => {
-    const diffInSeconds = Math.floor((new Date().getTime() - new Date(dateString).getTime()) / 1000);
-    if (diffInSeconds < 3600) return `${Math.max(1, Math.floor(diffInSeconds / 60))}m ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    const diffInSeconds = Math.floor(
+      (new Date().getTime() - new Date(dateString).getTime()) / 1000,
+    );
+    if (diffInSeconds < 3600)
+      return `${Math.max(1, Math.floor(diffInSeconds / 60))}m ago`;
+    if (diffInSeconds < 86400)
+      return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817]">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
         Activity
       </h1>
@@ -166,7 +174,9 @@ export default function ActivityPage() {
                     <h3 className="font-serif font-bold text-base sm:text-lg text-[#1A1817] leading-tight truncate">
                       {title}
                     </h3>
-                    {author && <p className="text-xs text-[#736B63]">{author}</p>}
+                    {author && (
+                      <p className="text-xs text-[#736B63]">{author}</p>
+                    )}
 
                     {rating && (
                       <div className="flex items-center gap-0.5 pt-0.5">

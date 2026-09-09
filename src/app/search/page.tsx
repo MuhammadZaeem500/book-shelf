@@ -79,7 +79,7 @@ export default function BookFinder() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] bg-[#FAF7F2]">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] bg-[#FAF7F2] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#EFE8DF] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#EFE8DF] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <div className="space-y-1">
         <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#1A1817]">
           Find your next book

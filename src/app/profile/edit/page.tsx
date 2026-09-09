@@ -38,7 +38,7 @@ export default function EditProfilePage() {
     async function loadCurrentProfile() {
       try {
         setFetching(true);
-        // Load stored values from AuthContext immediately for instantaneous UI fill
+
         if (user) {
           setFormData((prev) => ({
             ...prev,
@@ -47,12 +47,12 @@ export default function EditProfilePage() {
           }));
         }
 
-        // Fetch fresh database profile
         const data = await fetchApi<UserProfileData>("/users/me");
 
         setFormData({
           displayName: data.name || user?.name || "",
-          username: data.username || (data.email ? data.email.split("@")[0] : ""),
+          username:
+            data.username || (data.email ? data.email.split("@")[0] : ""),
           bio: data.bio || "",
           location: data.location || "",
           email: data.email || user?.email || "",
@@ -68,7 +68,7 @@ export default function EditProfilePage() {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     if (name === "bio" && value.length > MAX_BIO_LENGTH) return;
@@ -92,7 +92,6 @@ export default function EditProfilePage() {
         }),
       });
 
-      // Synchronize updated user back into AuthContext & LocalStorage
       if (token && user) {
         login(token, {
           ...user,
@@ -125,7 +124,7 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 text-[#1A1817]">
+    <div className="w-full max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 text-[#1A1817] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.back()}

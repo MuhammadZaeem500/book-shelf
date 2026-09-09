@@ -1,16 +1,5 @@
-import React from "react";
 import Image from "next/image";
-
-export interface BookData {
-  title: string;
-  author: string;
-  description: string;
-  currentPage: number;
-  totalPages: number;
-  coverImage?: string;
-  onContinue?: () => void;
-  onDetails?: () => void;
-}
+import { BookData } from "@/src/types";
 
 export default function ContinueReadingCard({
   title,
@@ -26,9 +15,9 @@ export default function ContinueReadingCard({
 
   return (
     <div className="w-full max-w-4xl font-sans">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2A160A] via-[#3B1F0E] to-[#4D2710] p-6 text-[#E6D7CB] shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#2A160A] via-[#3B1F0E] to-[#4D2710] p-6 text-[#E6D7CB] shadow-xl">
         <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-          <div className="relative shrink-0 w-36 h-52 rounded-xl overflow-hidden shadow-2xl bg-gradient-to-b from-[#D4823A] to-[#6E3C14] border border-white/10 p-3 flex flex-col justify-between">
+          <div className="relative shrink-0 w-36 h-52 rounded-xl overflow-hidden shadow-2xl bg-linear-to-b from-[#D4823A] to-[#6E3C14] border border-white/10 p-3 flex flex-col justify-between">
             {coverImage ? (
               <Image
                 src={coverImage}

@@ -43,14 +43,11 @@ function ResetPasswordForm() {
     setStatus({ type: "loading", message: "Resetting password..." });
 
     try {
-      // Points to NestJS backend port (3000) as fallback
-      const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-      
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
       const response = await fetch(`${apiUrl}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Fixed: matches dto.newPassword in NestJS AuthService
         body: JSON.stringify({ token, newPassword: password }),
       });
 
@@ -111,8 +108,8 @@ function ResetPasswordForm() {
               status.type === "error"
                 ? "bg-red-50 text-red-600 border border-red-200"
                 : status.type === "success"
-                ? "bg-green-50 text-green-700 border border-green-200"
-                : "bg-amber-50 text-amber-700 border border-amber-200"
+                  ? "bg-green-50 text-green-700 border border-green-200"
+                  : "bg-amber-50 text-amber-700 border border-amber-200"
             }`}
           >
             {status.message}

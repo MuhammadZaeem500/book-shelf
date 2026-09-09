@@ -1,14 +1,14 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export async function fetchApi<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
   const token =
-    typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
 
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers as Record<string, string>),
   };
@@ -21,10 +21,9 @@ export async function fetchApi<T>(
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
 
-    // Handle NestJS validation pipe arrays and single message strings
     const errorMessage = Array.isArray(errorData.message)
-      ? errorData.message.join(', ')
-      : errorData.message || 'Something went wrong';
+      ? errorData.message.join(", ")
+      : errorData.message || "Something went wrong";
 
     throw new Error(errorMessage);
   }

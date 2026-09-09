@@ -7,7 +7,6 @@ import { useAuth } from "@/src/app/context/AuthContext";
 import { fetchApi } from "@/src/app/lib/api";
 import { ProfileHeaderProps, ProfileStats, UserProfile } from "@/src/types";
 
-
 export default function ProfilePage() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -46,9 +45,7 @@ export default function ProfilePage() {
     handle,
     avatarInitials: initials,
     avatarBg: "#A65B17",
-    bio:
-      profile?.bio ||
-      "",
+    bio: profile?.bio || "",
     stats: profile?.stats || {
       booksRead: 0,
       reading: 0,
@@ -69,7 +66,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex w-full min-h-full">
+    <div className="flex w-full h-screen overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <div className="flex-1 p-4 sm:p-6 space-y-8 min-w-0">
         <ProfileHeader {...profileData} />
         <ProfileTabsView />

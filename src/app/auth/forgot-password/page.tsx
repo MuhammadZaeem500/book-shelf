@@ -23,13 +23,11 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ email }),
       });
 
-      setSuccess(
-        "a password reset link has been sent."
-      );
+      setSuccess("a password reset link has been sent.");
       setEmail("");
     } catch (err: any) {
       setError(
-        err.message || "Failed to send reset request. Please try again."
+        err.message || "Failed to send reset request. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -53,7 +51,8 @@ export default function ForgotPasswordPage() {
             Reset Password
           </h1>
           <p className="text-sm text-[#736B63]">
-            Enter your email address and we&apos;ll send you instructions to reset your password.
+            Enter your email address and we&apos;ll send you instructions to
+            reset your password.
           </p>
         </div>
 
@@ -84,7 +83,7 @@ export default function ForgotPasswordPage() {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                // placeholder="you@example.com"
+                placeholder="you@example.com"
                 required
                 className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#E8E0D5] text-sm text-[#1A1817] placeholder-[#A09589] focus:outline-none focus:border-[#C85A2B] focus:ring-1 focus:ring-[#C85A2B] transition-all pr-10"
               />

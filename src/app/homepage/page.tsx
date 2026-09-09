@@ -6,7 +6,11 @@ import ContinueReadingCard from "@/src/components/home/ContinueReadingCard";
 import FriendActivityCard from "@/src/components/home/FriendActivityCard";
 import RecommendedBookCard from "@/src/components/home/RecommendedBookCard";
 import { fetchApi } from "@/src/app/lib/api";
-import { CurrentlyReading, PopularBook, ActivityApiResponse  } from "@/src/types";
+import {
+  CurrentlyReading,
+  PopularBook,
+  ActivityApiResponse,
+} from "@/src/types";
 
 const coverGradients = [
   "linear-gradient(135deg, #B25A00, #4A2000)",
@@ -59,7 +63,7 @@ const defaultRecommended = [
 
 export default function Home() {
   const [currentlyReading, setCurrentlyReading] =
-    useState<CurrentlyReading| null>(null);
+    useState<CurrentlyReading | null>(null);
   const [popularBooks, setPopularBooks] = useState<PopularBook[]>([]);
   const [friendsActivity, setFriendsActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -160,7 +164,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] pb-24 lg:pb-8 relative">
+    <div className="h-screen overflow-y-auto p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] pb-24 lg:pb-8 relative [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
       <ContinueReadingCard
         title={currentlyReading?.book?.title || "Atomic Habits"}
         author={currentlyReading?.book?.author || "James Clear"}
