@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, BookOpen, Activity, User, Settings } from "lucide-react";
+import { useAuth } from "@/src/app/context/AuthContext";
 
 const mobileNavItems = [
   { label: "Home", href: "/", icon: Home },
@@ -14,6 +15,27 @@ const mobileNavItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  
+  console.log(user?.username)
+  console.log(user?.name)
+// Dynamic user data processing
+  const displayName = user?.name || user?.email?.split("@")[0] || "User";
+  
+  const rawUsername = user?.username || displayName.toLowerCase().replace(/\s+/g, "");
+  const username = rawUsername.startsWith("@") ? rawUsername : `@${rawUsername}`;
+  
+  const bookCount = user?.bookCount ?? user?._count?.books ?? 0;
+
+  // Extract initials (e.g., "Muhammad Zaeem" -> "MZ")
+  const initials = displayName
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) || "U";
 
   return (
     <>
@@ -97,14 +119,14 @@ export default function Sidebar() {
 
           <div className="flex items-center gap-3 px-2 pt-2">
             <div className="w-10 h-10 rounded-full bg-[#C85A2B] text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
-              AJ
+              {initials}
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-semibold text-[#1A1817] truncate">
-                Alex Johnson
+{displayName}
               </span>
               <span className="text-xs text-[#8C837A] truncate">
-                @alexj · 47 books
+{username} · {bookCount} {bookCount === 1 ? "book" : "books"}
               </span>
             </div>
           </div>

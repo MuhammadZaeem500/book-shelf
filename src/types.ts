@@ -249,6 +249,11 @@ export interface User {
   id: string;
   email: string;
   name?: string;
+  username?: string;
+  bookCount?: number;
+  _count?: {
+    books: number;
+  };
 }
 
 export interface AuthContextType {
@@ -313,4 +318,13 @@ export interface BookData {
   coverImage?: string;
   onContinue?: () => void;
   onDetails?: () => void;
+}
+
+export interface UserProfileData {
+  id: string;
+  name?: string;
+  username?: string;
+  bio?: string;
+  location?: string;
+  email?: string;
 }

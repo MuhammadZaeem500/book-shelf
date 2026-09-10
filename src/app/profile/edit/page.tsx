@@ -6,15 +6,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/src/app/context/AuthContext";
 import { fetchApi } from "@/src/app/lib/api";
-
-interface UserProfileData {
-  id: string;
-  name?: string;
-  username?: string;
-  bio?: string;
-  location?: string;
-  email?: string;
-}
+import { UserProfileData } from "@/src/types";
 
 export default function EditProfilePage() {
   const router = useRouter();
