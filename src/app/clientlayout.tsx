@@ -42,7 +42,7 @@ export default function ClientLayout({
           {!isAuthPage && <Sidebar />}
 
           {/* Added pb-32 on mobile to push content above fixed bottom nav, lg:pb-0 for desktop */}
-          <main className="bg-[#FAF7F2] flex-1 min-w-0 border-l border-[#EFE8DF] pb-32 lg:pb-0">
+          <main className=" flex-1 min-w-0 border-l border-[#EFE8DF] pb-32 lg:pb-0">
             {isAuthPage ? children : <ProtectedRoute>{children}</ProtectedRoute>}
           </main>
 

@@ -44,7 +44,7 @@ export default function Sidebar() {
         })}
       </div>
 
-      <aside className="hidden lg:flex sticky top-[65px] left-0 bottom-0 h-[calc(100vh-65px)] w-64 bg-[#FFFFFF] border-r border-[#EFE8DF] flex-col justify-between z-40">
+      <aside className="hidden lg:flex sticky top-16.25 left-0 bottom-0 h-[calc(100vh-65px)] w-64 bg-[#FFFFFF] border-r border-[#EFE8DF] flex-col justify-between z-40">
         <div className="p-4 space-y-4">
           <nav className="flex flex-col gap-1.5 pt-2">
             {mobileNavItems.map((item) => {

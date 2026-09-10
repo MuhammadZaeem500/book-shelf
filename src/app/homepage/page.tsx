@@ -164,7 +164,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen overflow-y-auto p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] pb-24 lg:pb-8 relative [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
+    <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] relative">
       <ContinueReadingCard
         title={currentlyReading?.book?.title || "Atomic Habits"}
         author={currentlyReading?.book?.author || "James Clear"}

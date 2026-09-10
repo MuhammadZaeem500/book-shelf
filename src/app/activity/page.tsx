@@ -100,7 +100,7 @@ export default function ActivityPage() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817]">
       <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
         Activity
       </h1>

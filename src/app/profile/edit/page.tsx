@@ -124,7 +124,7 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 text-[#1A1817] max-h-[85vh] overflow-y-auto [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
+    <div className="w-full max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 text-[#1A1817]">
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.back()}

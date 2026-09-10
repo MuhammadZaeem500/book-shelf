@@ -84,7 +84,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="h-screen w-full overflow-y-auto bg-[#FAF7F2] p-4 sm:p-6 lg:p-8 text-[#1A1817] [scrollbar-color:#C85A2B_#FAF7F2] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#FAF7F2] [&::-webkit-scrollbar-thumb]:bg-[#C85A2B] [&::-webkit-scrollbar-thumb]:rounded-full">
+    <div className="w-full bg-[#FAF7F2] p-4 sm:p-6 lg:p-8 text-[#1A1817]">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">

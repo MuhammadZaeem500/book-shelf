@@ -79,7 +79,7 @@ export default function BookFinder() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] bg-[#FAF7F2]">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] bg-[#FFFFFF]">
       <div className="space-y-1">
         <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#1A1817]">
           Find your next book
