@@ -1,3 +1,4 @@
+// src/app/lib/api.ts
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export async function fetchApi<T>(
@@ -13,7 +14,9 @@ export async function fetchApi<T>(
     ...(options.headers as Record<string, string>),
   };
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const formattedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+
+  const response = await fetch(`${API_URL}${formattedEndpoint}`, {
     ...options,
     headers,
   });

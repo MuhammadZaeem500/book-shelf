@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 
 import SettingsSection from "@/src/components/settings/SettingsSection";
 import SettingsRow from "@/src/components/settings/SettingsRow";
@@ -11,6 +11,7 @@ import SelectDropdown from "@/src/components/settings/SelectDropdown";
 import EditGenresModal from "@/src/components/settings/EditGenresModal";
 import ChangeEmailModal from "@/src/components/settings/ChangeEmailModal";
 import UpdatePasswordModal from "@/src/components/settings/UpdatePasswordModal";
+import { fetchApi } from "@/src/app/lib/api";
 
 const ALL_GENRES = [
   "Literary Fiction",
@@ -58,6 +59,12 @@ export default function SettingsPage() {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [tempGenres, setTempGenres] = useState<string[]>([]);
 
+  // Delete Account Modal & Loading States
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleOpenGenreModal = () => {
     setTempGenres([...selectedGenres]);
     setIsGenreModalOpen(true);
@@ -72,6 +79,30 @@ export default function SettingsPage() {
   const handleSaveGenres = () => {
     setSelectedGenres(tempGenres);
     setIsGenreModalOpen(false);
+  };
+
+  // Execute DELETE /auth/account Request
+  const handleDeleteAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setDeleteError("");
+    setIsDeleting(true);
+
+    try {
+      await fetchApi("/auth/account", {
+        method: "DELETE",
+        body: JSON.stringify({ password: deletePassword }),
+      });
+
+      // Clear authentication state and tokens
+      localStorage.removeItem("access_token");
+
+      // Redirect to sign-in page
+      window.location.href = "/auth/sign-in";
+    } catch (err: any) {
+      setDeleteError(err.message || "Failed to delete account. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const navItems = [
@@ -94,7 +125,7 @@ export default function SettingsPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-serif text-3xl  ">Settings</h1>
+          <h1 className="font-serif text-3xl">Settings</h1>
         </div>
 
         {/* Layout Grid */}
@@ -126,14 +157,6 @@ export default function SettingsPage() {
             {/* Account Tab */}
             {activeTab === "account" && (
               <SettingsSection title="ACCOUNT">
-                {/* <SettingsRow title="Email address" subtitle={email}>
-                  <button
-                    onClick={() => setIsEmailModalOpen(true)}
-                    className="text-xs font-semibold text-[#C85A2B] hover:underline"
-                  >
-                    Change
-                  </button>
-                </SettingsRow> */}
                 <SettingsRow title="Password">
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}
@@ -283,7 +306,7 @@ export default function SettingsPage() {
                       <button
                         key={t}
                         onClick={() => setTheme(t)}
-                        className={`px-3 py-1.5 rounded-lg text-xs   capitalize transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all ${
                           theme === t
                             ? "bg-white text-[#1A1817] shadow-2xs"
                             : "text-[#736B63]"
@@ -313,7 +336,7 @@ export default function SettingsPage() {
                 >
                   <button
                     onClick={handleOpenGenreModal}
-                    className="text-xs   text-[#C85A2B] hover:underline"
+                    className="text-xs text-[#C85A2B] hover:underline"
                   >
                     Edit &rarr;
                   </button>
@@ -324,7 +347,7 @@ export default function SettingsPage() {
                       type="number"
                       value={annualGoal}
                       onChange={(e) => setAnnualGoal(e.target.value)}
-                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] border border-[#E4DBCF] rounded-xl text-xs   focus:outline-none"
+                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] border border-[#E4DBCF] rounded-xl text-xs focus:outline-none"
                     />
                     <span className="text-xs text-[#736B63]">books</span>
                   </div>
@@ -341,7 +364,13 @@ export default function SettingsPage() {
                     subtitle="Sign out from all devices"
                     isLast
                   >
-                    <button className="px-4 py-2 border border-[#E8E0D5] bg-white text-xs font-semibold rounded-xl hover:bg-[#FAF7F2]">
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("access_token");
+                        window.location.href = "/auth/sign-in";
+                      }}
+                      className="px-4 py-2 border border-[#E8E0D5] bg-white text-xs font-semibold rounded-xl hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                    >
                       Sign Out
                     </button>
                   </SettingsRow>
@@ -352,7 +381,10 @@ export default function SettingsPage() {
                     subtitle="Permanently remove all your data"
                     isLast
                   >
-                    <button className="px-4 py-2 border border-[#FCA5A5] bg-white text-[#DC2626] text-xs font-semibold rounded-xl hover:bg-[#FEF2F2]">
+                    <button
+                      onClick={() => setIsDeleteModalOpen(true)}
+                      className="px-4 py-2 border border-[#FCA5A5] bg-white text-[#DC2626] text-xs font-semibold rounded-xl hover:bg-[#FEF2F2] transition-colors cursor-pointer"
+                    >
                       Delete
                     </button>
                   </SettingsRow>
@@ -388,6 +420,68 @@ export default function SettingsPage() {
         onClose={() => setIsPasswordModalOpen(false)}
         onSave={() => setIsPasswordModalOpen(false)}
       />
+
+      {/* --- DELETE ACCOUNT CONFIRMATION MODAL --- */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 border border-[#E8E0D5] shadow-xl">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-[#DC2626]">
+                Delete Account
+              </h3>
+              <p className="text-xs text-[#736B63]">
+                This action is permanent and cannot be undone. All your books,
+                reviews, and activities will be permanently deleted.
+              </p>
+            </div>
+
+            <form onSubmit={handleDeleteAccount} className="space-y-4">
+              {deleteError && (
+                <div className="p-3 bg-[#FEF2F2] border border-[#FCA5A5] text-[#DC2626] rounded-xl text-xs font-medium">
+                  {deleteError}
+                </div>
+              )}
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#524B45]">
+                  Enter your password to confirm:
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder="Your current password"
+                  className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#E8E0D5] rounded-xl text-sm focus:outline-none focus:border-[#DC2626]"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={() => {
+                    setIsDeleteModalOpen(false);
+                    setDeletePassword("");
+                    setDeleteError("");
+                  }}
+                  className="px-4 py-2 text-xs font-semibold text-[#524B45] hover:bg-[#FAF7F2] rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-[#DC2626] text-white text-xs font-semibold rounded-xl hover:bg-[#B91C1C] disabled:opacity-50 transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  {isDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {isDeleting ? "Deleting..." : "Confirm Delete"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
