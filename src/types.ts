@@ -1,10 +1,13 @@
 import React from "react";
 
+// --- BOOK TYPES ---
 export interface Book {
   id: string;
   title: string;
-  description: string;
+  author?: string;
+  description?: string;
   coverImage?: string;
+  coverUrl?: string;
 }
 
 export interface BookItem {
@@ -17,15 +20,77 @@ export interface BookItem {
   coverImage?: string;
 }
 
-export interface AccordionItemProps {
+export interface PopularBook {
   id: string;
-  label: string;
-  icon: React.ElementType;
-  isActive: boolean;
-  onToggle: () => void;
-  children: React.ReactNode;
+  title: string;
+  author: string;
+  coverUrl?: string;
+  rating?: number;
+  logCount?: number;
 }
 
+export interface CurrentlyReading {
+  id?: string;
+  status?: string;
+  currentPage?: number;
+  totalPages?: number;
+  book: {
+    id?: string;
+    title: string;
+    author: string;
+    coverUrl?: string;
+    description?: string;
+  };
+}
+
+export interface BookData {
+  title: string;
+  author: string;
+  description: string;
+  currentPage: number;
+  totalPages: number;
+  coverImage?: string;
+  onContinue?: () => void;
+  onDetails?: () => void;
+}
+
+export interface WantToReadItem {
+  id: string;
+  title: string;
+  author: string;
+  coverGradient: string;
+}
+
+// --- USER & AUTH TYPES ---
+export interface User {
+  id: string;
+  email: string;
+  name?: string;
+  username?: string;
+  bookCount?: number;
+  _count?: {
+    books: number;
+  };
+}
+
+export interface UserProfileData {
+  id: string;
+  name?: string;
+  username?: string;
+  bio?: string;
+  location?: string;
+  email?: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  login: (token: string, user: User) => void;
+  logout: () => void;
+  loading: boolean;
+}
+
+// --- PROFILE & STATS TYPES ---
 export interface ProfileStats {
   booksRead: number;
   reading: number;
@@ -43,19 +108,79 @@ export interface ProfileHeaderProps {
   avatarBg?: string;
   bio?: string;
   stats?: ProfileStats;
+  onUpdateProfile?: (data: {
+    name?: string;
+    username?: string;
+    bio?: string;
+  }) => void;
 }
-
 export interface YourWeekProps {
   booksFinished?: number;
   pagesRead?: number;
   reviewsWritten?: number;
 }
 
-export interface BooksCardProps {
-  imageSrc: string;
-  imageAlt: string;
+export interface ReadingGoalProps {
+  year: number;
+  booksRead: number;
+  targetBooks: number;
+}
+
+export interface UserProfile {
+  id: string;
+  username?: string;
+  name: string;
+  email: string;
+  bio?: string;
+  stats?: ProfileStats;
+}
+
+// --- ACTIVITY FEED TYPES ---
+export interface ActivityUser {
+  id: string;
+  name?: string;
+  email: string;
+}
+
+export interface ActivityItem {
+  id: string;
+  userId: string;
+  type: string;
+  metadata?: {
+    title?: string;
+    author?: string;
+    rating?: number;
+    review?: string;
+    friendId?: string;
+  };
+  createdAt: string;
+  user: ActivityUser;
+}
+
+export interface ActivityApiResponse {
+  data: ActivityItem[];
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export interface FriendActivityItem {
+  id: string;
+  user: {
+    name: string;
+    initials: string;
+    avatarBg: string;
+  };
+  actionText: string;
   title: string;
   author: string;
+  rating?: number;
+  review?: string;
+  timeAgo: string;
+  coverGradient: string;
 }
 
 export interface FriendActivityProps {
@@ -67,6 +192,23 @@ export interface FriendActivityProps {
   rating?: number;
   timeAgo: string;
   coverBg: string;
+}
+
+// --- UI & CARD COMPONENT PROPS ---
+export interface AccordionItemProps {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  isActive: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}
+
+export interface BooksCardProps {
+  imageSrc: string;
+  imageAlt: string;
+  title: string;
+  author: string;
 }
 
 export interface RecommendedBookProps {
@@ -86,30 +228,10 @@ export interface CurrentlyReadingProps {
   coverGradient: string;
 }
 
-export interface ReadingGoalProps {
-  year: number;
-  booksRead: number;
-  targetBooks: number;
-}
-
-export interface WantToReadItem {
-  id: string;
-  title: string;
-  author: string;
-  coverGradient: string;
-}
-
 export interface WantToReadProps {
   totalCount: number;
   books: WantToReadItem[];
   onSeeAll?: () => void;
-}
-
-export interface WantToReadItem {
-  id: string;
-  title: string;
-  author: string;
-  coverGradient: string;
 }
 
 export interface ProfileAvatarModalProps {
@@ -144,6 +266,7 @@ export interface TrendingSearchesCardProps {
   onSelectTrending?: (term: string) => void;
 }
 
+// --- SETTINGS & MODAL PROPS ---
 export interface ChangeEmailModalProps {
   isOpen: boolean;
   currentEmail: string;
@@ -190,141 +313,12 @@ export interface UpdatePasswordModalProps {
   onSave: () => void;
 }
 
-export interface ActivityUser {
-  id: string;
-  name: string;
-  email: string;
-}
-
-export interface ActivityItem {
-  id: string;
-  userId: string;
-  type: string;
-  metadata?: {
-    title?: string;
-    author?: string;
-    rating?: number;
-    review?: string;
-    friendId?: string;
-  };
-  createdAt: string;
-  user: ActivityUser;
-}
-
-export interface FriendActivityItem {
-  id: string;
-  user: {
-    name: string;
-    initials: string;
-    avatarBg: string;
-  };
-  actionText: string;
-  title: string;
-  author: string;
-  rating?: number;
-  review?: string;
-  timeAgo: string;
-  coverGradient: string;
-}
-
-export interface ActivityApiResponse {
-  data: ActivityItem[];
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-}
-
-export interface UserProfile {
-  id: string;
-  name: string;
-  email: string;
-  bio?: string;
-  stats?: ProfileStats;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name?: string;
-  username?: string;
-  bookCount?: number;
-  _count?: {
-    books: number;
-  };
-}
-
-export interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-  loading: boolean;
-}
-
-export interface CurrentlyReading {
-  id: string;
-  status: string;
-  currentPage?: number;
-  totalPages?: number;
-  book: {
-    id: string;
-    title: string;
-    author: string;
-    coverUrl?: string;
-  };
-}
-
-export interface PopularBook {
-  id: string;
-  title: string;
-  author: string;
-  rating?: number;
-  logCount?: number;
-}
-
-export interface ActivityItem {
-  id: string;
-  userId: string;
-  type: string;
-  metadata?: {
-    title?: string;
-    author?: string;
-    rating?: number;
-    review?: string;
-    friendId?: string;
-  };
-  createdAt: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
-export interface ActivityApiResponse {
-  data: ActivityItem[];
-}
-
-
-export interface BookData {
-  title: string;
-  author: string;
-  description: string;
-  currentPage: number;
-  totalPages: number;
-  coverImage?: string;
-  onContinue?: () => void;
-  onDetails?: () => void;
-}
-
-export interface UserProfileData {
-  id: string;
-  name?: string;
-  username?: string;
-  bio?: string;
-  location?: string;
-  email?: string;
+export interface UserStats {
+  booksRead: number;
+  reading: number;
+  wantToRead: number;
+  reviews: number;
+  friends: number;
+  followers: number;
+  following: number;
 }

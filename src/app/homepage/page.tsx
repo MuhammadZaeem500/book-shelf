@@ -30,44 +30,12 @@ const avatarColors = [
   "#9E2A2B",
 ];
 
-const defaultPopularBooks = [
-  { id: "1", title: "Middlemarch", author: "George Eliot" },
-  { id: "2", title: "Piranesi", author: "Susanna Clarke" },
-  { id: "3", title: "Dune", author: "Frank Herbert" },
-  { id: "4", title: "Pachinko", author: "Min Jin Lee" },
-];
-
-const defaultRecommended = [
-  {
-    id: "1",
-    title: "The Night Circus",
-    author: "Erin Morgenstern",
-    rating: 4,
-    coverBg: "linear-gradient(135deg, #0F2027, #203A43, #2C5364)",
-  },
-  {
-    id: "2",
-    title: "Pachinko",
-    author: "Min Jin Lee",
-    rating: 4,
-    coverBg: "linear-gradient(135deg, #11998E, #38EF7D)",
-  },
-  {
-    id: "3",
-    title: "Piranesi",
-    author: "Susanna Clarke",
-    rating: 4,
-    coverBg: "linear-gradient(135deg, #8A2387, #E94057, #F27121)",
-  },
-];
-
 export default function Home() {
   const [currentlyReading, setCurrentlyReading] =
     useState<CurrentlyReading | null>(null);
   const [popularBooks, setPopularBooks] = useState<PopularBook[]>([]);
   const [friendsActivity, setFriendsActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const loadDashboardData = async () => {
     try {
@@ -81,6 +49,8 @@ export default function Home() {
 
       if (readingRes.status === "fulfilled" && readingRes.value) {
         setCurrentlyReading(readingRes.value);
+      } else {
+        setCurrentlyReading(null);
       }
 
       if (
@@ -94,14 +64,14 @@ export default function Home() {
         const rawActivities = activityRes.value.data;
 
         const formattedFriends = rawActivities.map((act, index) => {
-          const initials = act.user.name
+          const initials = act.user?.name
             ? act.user.name
                 .split(" ")
                 .map((n) => n[0])
                 .join("")
                 .toUpperCase()
                 .slice(0, 2)
-            : act.user.email
+            : act.user?.email
               ? act.user.email[0].toUpperCase()
               : "U";
 
@@ -114,7 +84,7 @@ export default function Home() {
           return {
             initials,
             avatarBg: avatarColors[index % avatarColors.length],
-            name: act.user.name || act.user.email,
+            name: act.user?.name || act.user?.email || "Anonymous",
             action: actionText,
             bookTitle: act.metadata?.title || "Untitled Book",
             rating: act.metadata?.rating,
@@ -141,7 +111,7 @@ export default function Home() {
       (new Date().getTime() - new Date(dateString).getTime()) / 1000,
     );
     if (diffInSeconds < 3600)
-      return `${Math.max(1, Math.floor(diffInSeconds / 60))}h ago`;
+      return `${Math.max(1, Math.floor(diffInSeconds / 60))}m ago`;
     if (diffInSeconds < 86400)
       return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
@@ -158,20 +128,38 @@ export default function Home() {
       });
       alert(`Added "${bookTitle}" to your Want to Read shelf!`);
       loadDashboardData();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to add book:", err);
+      alert(err.message || "Failed to add book to library.");
     }
   };
 
   return (
     <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] relative">
-      <ContinueReadingCard
-        title={currentlyReading?.book?.title || "Atomic Habits"}
-        author={currentlyReading?.book?.author || "James Clear"}
-        description="Build better habits and routines that stick with small, consistent changes."
-        currentPage={currentlyReading?.currentPage || 32}
-        totalPages={currentlyReading?.totalPages || 320}
-      />
+      {/* 1. Continue Reading Section */}
+      {currentlyReading ? (
+        <ContinueReadingCard
+          title={currentlyReading.book?.title || "Currently Reading"}
+          author={currentlyReading.book?.author || "Unknown Author"}
+          description={
+            currentlyReading.book?.description ||
+            "Keep up your reading momentum!"
+          }
+          currentPage={currentlyReading.currentPage || 0}
+          totalPages={currentlyReading.totalPages || 100}
+        />
+      ) : (
+        !loading && (
+          <div className="bg-[#FAF7F2] border border-[#EFE8DF] p-6 rounded-3xl text-center space-y-2">
+            <h3 className="font-serif font-bold text-lg text-[#1A1817]">
+              No active book right now
+            </h3>
+            <p className="text-xs text-[#8C837A]">
+              Explore popular titles below to start logging your reading progress.
+            </p>
+          </div>
+        )
+      )}
 
       {/* 2. Popular This Week Section */}
       <section>
@@ -180,28 +168,43 @@ export default function Home() {
           Trending across your network
         </p>
 
-        <div className="flex md:grid md:grid-cols-4 gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-thin">
-          {(popularBooks.length > 0 ? popularBooks : defaultPopularBooks).map(
-            (card, index) => (
+        {loading ? (
+          <div className="flex gap-5 overflow-x-auto pb-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="shrink-0 w-48 h-64 bg-[#FAF7F2] animate-pulse rounded-2xl"
+              />
+            ))}
+          </div>
+        ) : popularBooks.length === 0 ? (
+          <p className="text-xs text-[#8C837A]">No popular books found.</p>
+        ) : (
+          <div className="flex md:grid md:grid-cols-4 gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-thin">
+            {popularBooks.map((card, index) => (
               <div
                 key={card.id || index}
                 className="shrink-0 w-50 sm:w-62.5 md:w-auto snap-center flex flex-col gap-2"
               >
                 <BooksCard
-                  imageSrc="/next.svg"
+                  imageSrc={card.coverUrl || "/next.svg"}
                   imageAlt={card.title}
                   title={card.title}
                   author={card.author}
                 />
 
                 <div className="text-sm">
-                  <p className="font-semibold text-[#1C1510]">{card.title}</p>
-                  <p className="text-[#6B5D4F] text-xs">By {card.author}</p>
+                  <p className="font-semibold text-[#1C1510] truncate">
+                    {card.title}
+                  </p>
+                  <p className="text-[#6B5D4F] text-xs truncate">
+                    By {card.author}
+                  </p>
                 </div>
               </div>
-            ),
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* 3. Main Grid: Friends Reading & Recommended */}
@@ -212,7 +215,7 @@ export default function Home() {
             <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
               Friends Reading
             </h3>
-            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
+            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1 cursor-pointer">
               See all →
             </button>
           </div>
@@ -233,7 +236,7 @@ export default function Home() {
             )}
 
             <div className="p-4 bg-[#FAF7F2] border-t border-[#EFE8DF] text-center">
-              <button className="text-sm font-medium text-[#C85A2B] hover:underline">
+              <button className="text-sm font-medium text-[#C85A2B] hover:underline cursor-pointer">
                 View all activity →
               </button>
             </div>
@@ -249,25 +252,37 @@ export default function Home() {
               </h3>
               <p className="text-xs text-[#8C837A]">Based on popular reads</p>
             </div>
-            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1">
+            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1 cursor-pointer">
               See all →
             </button>
           </div>
 
           <div className="space-y-3">
-            {(popularBooks.length > 0
-              ? popularBooks.slice(0, 5)
-              : defaultRecommended
-            ).map((book, index) => (
-              <RecommendedBookCard
-                key={book.id || index}
-                title={book.title}
-                author={book.author}
-                rating={book.rating || 4}
-                coverBg={coverGradients[index % coverGradients.length]}
-                onAdd={() => handleAddRecommended(book.title)}
-              />
-            ))}
+            {loading ? (
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-20 bg-[#FAF7F2] animate-pulse rounded-2xl"
+                  />
+                ))}
+              </div>
+            ) : popularBooks.length === 0 ? (
+              <p className="text-xs text-[#8C837A]">
+                No recommendations available right now.
+              </p>
+            ) : (
+              popularBooks.slice(0, 5).map((book, index) => (
+                <RecommendedBookCard
+                  key={book.id || index}
+                  title={book.title}
+                  author={book.author}
+                  rating={book.rating || 4}
+                  coverBg={coverGradients[index % coverGradients.length]}
+                  onAdd={() => handleAddRecommended(book.title)}
+                />
+              ))
+            )}
           </div>
         </section>
       </div>
