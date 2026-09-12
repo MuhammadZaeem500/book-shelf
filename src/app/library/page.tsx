@@ -197,7 +197,7 @@ export default function MyLibrary() {
                 <span className="text-xs font-bold tracking-wider text-[#C85A2B] uppercase shrink-0">
                   {group.dateLabel}
                 </span>
-                <div className="h-[1px] w-full bg-[#EFE8DF]" />
+                <div className="h-px w-full bg-[#EFE8DF]" />
               </div>
 
               <div className="space-y-6">
@@ -215,7 +215,7 @@ export default function MyLibrary() {
                       />
                     ) : (
                       <div
-                        className={`relative w-16 sm:w-20 h-24 sm:h-28 rounded-md bg-gradient-to-b ${book.coverBg} p-2 flex flex-col justify-between shrink-0 shadow-sm border border-black/10`}
+                        className={`relative w-16 sm:w-20 h-24 sm:h-28 rounded-md bg-linear-to-b ${book.coverBg} p-2 flex flex-col justify-between shrink-0 shadow-sm border border-black/10`}
                       >
                         <span className="text-[7px] sm:text-[8px] font-bold tracking-widest text-white/70 uppercase">
                           BOOKSHELF

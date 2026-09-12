@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import SettingsSection from "@/src/components/settings/SettingsSection";
 import SettingsRow from "@/src/components/settings/SettingsRow";
@@ -27,8 +28,15 @@ const ALL_GENRES = [
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("account");
-
   const [email, setEmail] = useState("alex@example.com");
+
+  // Theme support
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [privacy, setPrivacy] = useState({
     publicProfile: true,
@@ -45,7 +53,6 @@ export default function SettingsPage() {
     emailNotifications: false,
   });
 
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("light");
   const [defaultStatus, setDefaultStatus] = useState("Currently Reading");
   const [selectedGenres, setSelectedGenres] = useState([
     "Literary Fiction",
@@ -94,17 +101,17 @@ export default function SettingsPage() {
         body: JSON.stringify({ password: deletePassword }),
       });
 
-      // Clear authentication state and tokens
       localStorage.removeItem("access_token");
       localStorage.removeItem("token");
       setIsDeletedSuccess(true);
 
-      // Redirect to sign-in page after brief pause for feedback
       setTimeout(() => {
         window.location.href = "/auth/sign-in?deleted=true";
       }, 2000);
     } catch (err: any) {
-      setDeleteError(err.message || "Failed to delete account. Please try again.");
+      setDeleteError(
+        err.message || "Failed to delete account. Please try again."
+      );
       setIsDeleting(false);
     }
   };
@@ -119,13 +126,13 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="w-full bg-[#FFFFFF] p-4 sm:p-6 lg:p-8 text-[#1A1817]">
+    <div className="w-full bg-[#FFFFFF] dark:bg-[#141211] p-4 sm:p-6 lg:p-8 text-[#1A1817] dark:text-[#F5F2EB] transition-colors">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link
             href="/profile"
-            className="w-10 h-10 rounded-xl bg-[#EFE8DF] flex items-center justify-center text-[#524B45] hover:bg-[#E4DBCF] transition-colors"
+            className="w-10 h-10 rounded-xl bg-[#EFE8DF] dark:bg-[#2E2926] flex items-center justify-center text-[#524B45] dark:text-[#A0958B] hover:bg-[#E4DBCF] dark:hover:bg-[#3D3733] transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
@@ -142,8 +149,8 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(item.id)}
                 className={`shrink-0 text-left px-3 py-1.5 md:px-4 md:py-3 rounded-xl md:rounded-2xl text-xs md:text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer ${
                   activeTab === item.id
-                    ? "bg-[#EFE8DF] text-[#C85A2B] border border-[#C85A2B]/20"
-                    : "text-[#524B45] hover:bg-[#EFE8DF]/50"
+                    ? "bg-[#EFE8DF] dark:bg-[#2E2926] text-[#C85A2B] border border-[#C85A2B]/20"
+                    : "text-[#524B45] dark:text-[#A0958B] hover:bg-[#EFE8DF]/50 dark:hover:bg-[#2E2926]/50"
                 }`}
               >
                 {activeTab === item.id && (
@@ -159,18 +166,13 @@ export default function SettingsPage() {
             {/* Account Tab */}
             {activeTab === "account" && (
               <SettingsSection title="ACCOUNT">
-                <SettingsRow title="Password">
+                <SettingsRow title="Password" isLast>
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}
                     className="text-xs font-semibold text-[#C85A2B] hover:underline cursor-pointer"
                   >
                     Update
                   </button>
-                </SettingsRow>
-                <SettingsRow title="Connected accounts" isLast>
-                  <span className="text-xs text-[#524B45] flex items-center gap-1.5">
-                    Google <span className="w-2 h-2 rounded-full bg-[#10B981]" />
-                  </span>
                 </SettingsRow>
               </SettingsSection>
             )}
@@ -302,21 +304,25 @@ export default function SettingsPage() {
             {activeTab === "appearance" && (
               <SettingsSection title="APPEARANCE">
                 <SettingsRow title="Theme" isLast>
-                  <div className="bg-[#EFE8DF] p-1 rounded-xl flex gap-1">
-                    {(["light", "dark", "system"] as const).map((t) => (
-                      <button
-                        key={t}
-                        onClick={() => setTheme(t)}
-                        className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all cursor-pointer ${
-                          theme === t
-                            ? "bg-white text-[#1A1817] shadow-2xs"
-                            : "text-[#736B63]"
-                        }`}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
+                  {!mounted ? (
+                    <div className="bg-[#EFE8DF] dark:bg-[#2E2926] p-1 rounded-xl flex gap-1 h-8 w-44 animate-pulse" />
+                  ) : (
+                    <div className="bg-[#EFE8DF] dark:bg-[#2E2926] p-1 rounded-xl flex gap-1 border border-[#E4DBCF] dark:border-[#3D3733]">
+                      {(["light", "dark", "system"] as const).map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setTheme(t)}
+                          className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all cursor-pointer font-medium ${
+                            theme === t
+                              ? "bg-white dark:bg-[#1D1A18] text-[#1A1817] dark:text-[#F5F2EB] shadow-xs"
+                              : "text-[#736B63] dark:text-[#A0958B] hover:text-[#1A1817] dark:hover:text-[#F5F2EB]"
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </SettingsRow>
               </SettingsSection>
             )}
@@ -348,9 +354,9 @@ export default function SettingsPage() {
                       type="number"
                       value={annualGoal}
                       onChange={(e) => setAnnualGoal(e.target.value)}
-                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] border border-[#E4DBCF] rounded-xl text-xs focus:outline-none"
+                      className="w-16 px-3 py-1.5 text-center bg-[#EFE8DF] dark:bg-[#2E2926] border border-[#E4DBCF] dark:border-[#3D3733] rounded-xl text-xs focus:outline-none"
                     />
-                    <span className="text-xs text-[#736B63]">books</span>
+                    <span className="text-xs text-[#736B63] dark:text-[#A0958B]">books</span>
                   </div>
                 </SettingsRow>
               </SettingsSection>
@@ -371,7 +377,7 @@ export default function SettingsPage() {
                         localStorage.removeItem("token");
                         window.location.href = "/auth/sign-in";
                       }}
-                      className="px-4 py-2 border border-[#E8E0D5] bg-white text-xs font-semibold rounded-xl hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+                      className="px-4 py-2 border border-[#E8E0D5] dark:border-[#2E2926] bg-white dark:bg-[#1D1A18] text-xs font-semibold rounded-xl hover:bg-[#FAF7F2] dark:hover:bg-[#2E2926] transition-colors cursor-pointer"
                     >
                       Sign Out
                     </button>
@@ -385,7 +391,7 @@ export default function SettingsPage() {
                   >
                     <button
                       onClick={() => setIsDeleteModalOpen(true)}
-                      className="px-4 py-2 border border-[#FCA5A5] bg-white text-[#DC2626] text-xs font-semibold rounded-xl hover:bg-[#FEF2F2] transition-colors cursor-pointer"
+                      className="px-4 py-2 border border-[#FCA5A5] bg-white dark:bg-[#1D1A18] text-[#DC2626] text-xs font-semibold rounded-xl hover:bg-[#FEF2F2] dark:hover:bg-[#381616] transition-colors cursor-pointer"
                     >
                       Delete
                     </button>
@@ -426,16 +432,16 @@ export default function SettingsPage() {
       {/* --- DELETE ACCOUNT CONFIRMATION MODAL --- */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 border border-[#E8E0D5] shadow-xl">
+          <div className="bg-white dark:bg-[#1D1A18] rounded-2xl max-w-md w-full p-6 space-y-4 border border-[#E8E0D5] dark:border-[#2E2926] shadow-xl">
             {isDeletedSuccess ? (
               <div className="py-6 text-center space-y-3">
                 <CheckCircle2 className="w-12 h-12 text-[#10B981] mx-auto" />
-                <h3 className="text-lg font-bold text-[#1A1817]">
+                <h3 className="text-lg font-bold text-[#1A1817] dark:text-[#F5F2EB]">
                   Account Deleted
                 </h3>
-                <p className="text-xs text-[#736B63]">
-                  Your account and all associated data have been permanently removed.
-                  Redirecting to sign in...
+                <p className="text-xs text-[#736B63] dark:text-[#A0958B]">
+                  Your account and all associated data have been permanently
+                  removed. Redirecting to sign in...
                 </p>
               </div>
             ) : (
@@ -444,21 +450,21 @@ export default function SettingsPage() {
                   <h3 className="text-lg font-bold text-[#DC2626]">
                     Delete Account
                   </h3>
-                  <p className="text-xs text-[#736B63]">
-                    This action is permanent and cannot be undone. All your books,
-                    reviews, and activities will be permanently deleted.
+                  <p className="text-xs text-[#736B63] dark:text-[#A0958B]">
+                    This action is permanent and cannot be undone. All your
+                    books, reviews, and activities will be permanently deleted.
                   </p>
                 </div>
 
                 <form onSubmit={handleDeleteAccount} className="space-y-4">
                   {deleteError && (
-                    <div className="p-3 bg-[#FEF2F2] border border-[#FCA5A5] text-[#DC2626] rounded-xl text-xs font-medium">
+                    <div className="p-3 bg-[#FEF2F2] dark:bg-[#381616] border border-[#FCA5A5] text-[#DC2626] rounded-xl text-xs font-medium">
                       {deleteError}
                     </div>
                   )}
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-[#524B45]">
+                    <label className="text-xs font-semibold text-[#524B45] dark:text-[#A0958B]">
                       Enter your password to confirm:
                     </label>
                     <input
@@ -467,7 +473,7 @@ export default function SettingsPage() {
                       value={deletePassword}
                       onChange={(e) => setDeletePassword(e.target.value)}
                       placeholder="Your current password"
-                      className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#E8E0D5] rounded-xl text-sm focus:outline-none focus:border-[#DC2626]"
+                      className="w-full px-3.5 py-2.5 bg-[#FAF7F2] dark:bg-[#2E2926] border border-[#E8E0D5] dark:border-[#3D3733] rounded-xl text-sm focus:outline-none focus:border-[#DC2626]"
                     />
                   </div>
 
@@ -480,7 +486,7 @@ export default function SettingsPage() {
                         setDeletePassword("");
                         setDeleteError("");
                       }}
-                      className="px-4 py-2 text-xs font-semibold text-[#524B45] hover:bg-[#FAF7F2] rounded-xl transition-colors cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold text-[#524B45] dark:text-[#A0958B] hover:bg-[#FAF7F2] dark:hover:bg-[#2E2926] rounded-xl transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -489,7 +495,9 @@ export default function SettingsPage() {
                       disabled={isDeleting}
                       className="px-4 py-2 bg-[#DC2626] text-white text-xs font-semibold rounded-xl hover:bg-[#B91C1C] disabled:opacity-50 transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      {isDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      {isDeleting && (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      )}
                       {isDeleting ? "Deleting..." : "Confirm Delete"}
                     </button>
                   </div>

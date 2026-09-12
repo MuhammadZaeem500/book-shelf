@@ -47,7 +47,7 @@ export default function EditGenresModal({
                     : "bg-[#EFE8DF] text-[#524B45] hover:bg-[#E4DBCF]"
                 }`}
               >
-                {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                {isSelected && <Check className="w-3.5 h-3.5 stroke-3" />}
                 {genre}
               </button>
             );

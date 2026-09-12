@@ -69,7 +69,7 @@ export default function ContinueReadingCard({
 
               <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#D4823A] to-[#E0A86A] transition-all duration-300 rounded-full"
+                  className="h-full bg-linear-to-r from-[#D4823A] to-[#E0A86A] transition-all duration-300 rounded-full"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

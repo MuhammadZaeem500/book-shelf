@@ -15,7 +15,7 @@ export default function RightSidebar() {
   }
 
   return (
-    <aside>
+    <aside className="bg-[#F2EDE5] dark:bg-[#1A1816] text-[#1A1817] dark:text-[#F5F2EB] transition-colors min-h-full">
       {pathname === "/" && <HomePageRightSidebar />}
       {pathname.startsWith("/search") && <SearchRightSidebar />}
       {pathname.startsWith("/library") && <LibraryRightSidebar />}

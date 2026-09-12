@@ -1,31 +1,46 @@
 @import "tailwindcss";
 
+/* 1. Define Tailwind v4 Dark Mode Variant using .dark class */
+@variant dark (&:where(.dark, .dark *));
+
+/* 2. Light Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAF7F2;
+  --foreground: #1A1817;
+  --card: #FFFFFF;
+  --card-border: #E8E0D5;
+  --muted-text: #736B63;
 }
 
+/* 3. Dark Theme Variables */
+.dark {
+  --background: #141211;
+  --foreground: #F5F2EB;
+  --card: #1D1A18;
+  --card-border: #2E2926;
+  --muted-text: #A0958B;
+}
+
+/* 4. Map Variables to Tailwind Utilities */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-muted-text: var(--muted-text);
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 5. Base Styles */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Hide scrollbars on mobile touch screens, apply custom rounded scrollbars on desktop */
+/* 6. Custom Desktop Scrollbars */
 @media (hover: hover) and (pointer: fine) {
   html {
     scrollbar-color: #C85A2B transparent;
@@ -55,12 +70,12 @@ body {
   }
 }
 
-/* Hide native scrollbar on touch devices */
+/* 7. Hide Scrollbar on Touch Devices */
 @media (pointer: coarse) {
   html {
-    scrollbar-width: none; /* Firefox Mobile */
+    scrollbar-width: none;
   }
   ::-webkit-scrollbar {
-    display: none; /* iOS Safari & Android Chrome */
+    display: none;
   }
 }

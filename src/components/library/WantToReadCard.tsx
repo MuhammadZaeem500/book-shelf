@@ -22,7 +22,7 @@ export default function WantToReadCard({
         {books.map((book) => (
           <div key={book.id} className="flex items-center gap-3">
             <div
-              className={`w-10 h-14 rounded-md bg-gradient-to-b ${book.coverGradient} shrink-0 shadow-2xs border border-black/10`}
+              className={`w-10 h-14 rounded-md bg-linear-to-b ${book.coverGradient} shrink-0 shadow-2xs border border-black/10`}
             />
             <div className="min-w-0">
               <p className="font-serif font-bold text-sm text-[#1A1817] truncate">

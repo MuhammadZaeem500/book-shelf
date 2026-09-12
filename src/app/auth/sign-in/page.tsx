@@ -44,6 +44,10 @@ export default function SignInPage() {
         }),
       });
 
+      if (!res?.access_token) {
+        throw new Error("Invalid response from server. Missing token.");
+      }
+
       const userPayload = res.user || {
         id: "user",
         email: formData.email,

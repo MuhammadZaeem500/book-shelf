@@ -41,14 +41,16 @@ export default function EditProfilePage() {
 
         const data = await fetchApi<UserProfileData>("/users/me");
 
-        setFormData({
-          displayName: data.name || user?.name || "",
-          username:
-            data.username || (data.email ? data.email.split("@")[0] : ""),
-          bio: data.bio || "",
-          location: data.location || "",
-          email: data.email || user?.email || "",
-        });
+        if (data) {
+          setFormData({
+            displayName: data.name || user?.name || "",
+            username:
+              data.username || (data.email ? data.email.split("@")[0] : ""),
+            bio: data.bio || "",
+            location: data.location || "",
+            email: data.email || user?.email || "",
+          });
+        }
       } catch (err) {
         console.error("Failed to load backend profile data:", err);
       } finally {
@@ -87,8 +89,8 @@ export default function EditProfilePage() {
       if (token && user) {
         login(token, {
           ...user,
-          name: updatedUser.name || formData.displayName,
-          email: updatedUser.email || formData.email,
+          name: updatedUser?.name || formData.displayName,
+          email: updatedUser?.email || formData.email,
         });
       }
 
@@ -257,7 +259,7 @@ export default function EditProfilePage() {
 
             <hr className="border-[#E8E0D5] my-2" />
             <Link
-              href="auth/change-password"
+              href="/auth/change-password"
               className="flex items-center justify-between py-1 text-sm font-semibold text-[#1A1817] hover:text-[#C85A2B] transition-colors"
             >
               <span>Change Password</span>
