@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Book } from "lucide-react";
+import Link from "next/link";
+import { Book, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProfileAvatarModal from "@/src/components/profile/ProfileAvatarModal";
 import NotificationDropdown from "@/src/components/layout/NotificationDropdown";
@@ -38,7 +39,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         {/* Brand Header */}
         <div className="flex items-center justify-between w-full sm:w-auto gap-4">
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 cursor-pointer" onClick={() => router.push("/")}>
             <div className="bg-[#C85A2B] text-white p-2 rounded-xl">
               <Book className="w-5 h-5" />
             </div>
@@ -48,7 +49,15 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Actions */}
-          <div className="flex items-center gap-3 shrink-0 sm:hidden">
+          <div className="flex items-center gap-2 shrink-0 sm:hidden">
+            <Link
+              href="/settings"
+              className="p-2.5 rounded-full bg-[#F2EAE0]/80 hover:bg-[#EFE3D8] text-[#524B45] transition-colors focus:outline-none cursor-pointer"
+              aria-label="Settings"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
+
             <div className="relative">
               <button
                 type="button"
@@ -109,6 +118,14 @@ export default function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <Link
+            href="/settings"
+            className="p-2.5 rounded-full bg-[#F2EAE0]/80 hover:bg-[#EFE3D8] text-[#524B45] transition-colors focus:outline-none cursor-pointer"
+            aria-label="Settings"
+          >
+            <Settings className="w-5 h-5" />
+          </Link>
+
           <div className="relative">
             <button
               type="button"

@@ -15,10 +15,10 @@ const genres = [
 ];
 
 interface ReadingStats {
-  booksReadThisYear: number;
-  pagesReadLifetime: number;
-  readingStreakDays: number;
-  annualGoal: number;
+  booksReadThisYear?: number;
+  pagesReadLifetime?: number;
+  readingStreakDays?: number;
+  annualGoal?: number;
 }
 
 export default function HomePageRightSidebar() {
@@ -34,7 +34,9 @@ export default function HomePageRightSidebar() {
     const loadStats = async () => {
       try {
         const data = await fetchApi<ReadingStats>("/users/me/stats");
-        setStats(data);
+        if (data) {
+          setStats(data);
+        }
       } catch (err) {
         console.error("Failed to load reading stats:", err);
       } finally {
@@ -45,11 +47,17 @@ export default function HomePageRightSidebar() {
     loadStats();
   }, []);
 
+  // Safe evaluations using nullish coalescing
+  const booksRead = stats?.booksReadThisYear ?? 0;
+  const annualGoal = stats?.annualGoal ?? 60;
+  const pagesRead = stats?.pagesReadLifetime ?? 0;
+  const streakDays = stats?.readingStreakDays ?? 0;
+
   const progressPercentage = Math.min(
     100,
-    Math.round((stats.booksReadThisYear / (stats.annualGoal || 1)) * 100),
+    Math.round((booksRead / (annualGoal || 1)) * 100)
   );
-  const booksRemaining = Math.max(0, stats.annualGoal - stats.booksReadThisYear);
+  const booksRemaining = Math.max(0, annualGoal - booksRead);
 
   return (
     <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block bg-[#F2EDE5]">
@@ -70,7 +78,7 @@ export default function HomePageRightSidebar() {
               <span className="text-[#6B5D4F]">Books read</span>
               <div>
                 <span className="font-bold text-[#1A1817] text-base mr-1">
-                  {stats.booksReadThisYear}
+                  {booksRead.toLocaleString()}
                 </span>
                 <span className="text-xs text-[#8C837A]">this year</span>
               </div>
@@ -80,7 +88,7 @@ export default function HomePageRightSidebar() {
               <span className="text-[#6B5D4F]">Pages read</span>
               <div>
                 <span className="font-bold text-[#1A1817] text-base mr-1">
-                  {stats.pagesReadLifetime.toLocaleString()}
+                  {pagesRead.toLocaleString()}
                 </span>
                 <span className="text-xs text-[#8C837A]">lifetime</span>
               </div>
@@ -90,7 +98,7 @@ export default function HomePageRightSidebar() {
               <span className="text-[#6B5D4F]">Reading streak</span>
               <div>
                 <span className="font-bold text-[#1A1817] text-base mr-1">
-                  {stats.readingStreakDays} days
+                  {streakDays} days
                 </span>
                 <span className="text-xs text-[#8C837A]">current</span>
               </div>
@@ -104,7 +112,7 @@ export default function HomePageRightSidebar() {
           <div className="flex items-center justify-between text-xs">
             <span className="text-[#6B5D4F] font-medium">Reading goal</span>
             <span className="font-bold text-[#C85A2B]">
-              {stats.booksReadThisYear} / {stats.annualGoal}
+              {booksRead} / {annualGoal}
             </span>
           </div>
 

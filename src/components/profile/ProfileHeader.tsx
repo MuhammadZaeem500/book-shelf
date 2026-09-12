@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Edit3, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { Edit3, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ProfileHeaderProps } from "@/src/types";
 
@@ -34,13 +35,15 @@ export default function ProfileHeader({
             <Edit3 className="w-3.5 h-3.5 text-[#524B45]" />
             Edit Profile
           </button>
-          <button
-            type="button"
-            className="p-2 bg-[#FAF7F2] border border-[#E0D8CE] rounded-full text-[#524B45] hover:bg-[#EFE3D8] transition-colors cursor-pointer"
-            aria-label="More options"
+          
+          {/* Settings link for both Mobile and Desktop */}
+          <Link
+            href="/settings"
+            className="p-2 bg-[#FAF7F2] border border-[#E0D8CE] rounded-full text-[#524B45] hover:bg-[#EFE3D8] transition-colors cursor-pointer flex items-center justify-center"
+            aria-label="Settings"
           >
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
+            <Settings className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 
