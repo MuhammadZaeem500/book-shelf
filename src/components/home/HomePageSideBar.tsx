@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PeopleToFollowCard from "@/src/components/home/PeopleToFollowCard";
 import { fetchApi } from "@/src/app/lib/api";
+import BrowseByGenreCard from "../library/BrowseByGenreCard";
 
 const genres = [
   "Literary Fiction",
@@ -29,6 +30,12 @@ export default function HomePageRightSidebar() {
     annualGoal: 60,
   });
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleGenreClick = (genre: string) => {
+    console.log("Selected genre:", genre);
+    // Add router navigation or filter logic here, e.g.:
+    // router.push(`/library?genre=${encodeURIComponent(genre)}`);
+  };
 
   useEffect(() => {
     const loadStats = async () => {
@@ -133,22 +140,10 @@ export default function HomePageRightSidebar() {
 
       <PeopleToFollowCard />
 
-      <div className="bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl p-5 space-y-4">
-        <h3 className="font-serif font-bold text-xl text-[#1A1817]">
-          Browse by Genre
-        </h3>
-
-        <div className="flex flex-wrap gap-2">
-          {genres.map((genre) => (
-            <button
-              key={genre}
-              className="px-3.5 py-1.5 rounded-full border border-[#E0D8CE] bg-white/60 text-[#524B45] text-xs font-medium hover:bg-[#EFE3D8] hover:text-[#C85A2B] hover:border-[#C85A2B] transition-colors cursor-pointer"
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-      </div>
+      <BrowseByGenreCard
+        genres={genres}
+        onSelectGenre={handleGenreClick}
+      />
     </aside>
   );
 }
