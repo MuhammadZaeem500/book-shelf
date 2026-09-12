@@ -108,6 +108,7 @@ export interface ProfileHeaderProps {
   avatarBg?: string;
   bio?: string;
   stats?: ProfileStats;
+  onStatClick?: (type: "followers" | "following") => void; 
   onUpdateProfile?: (data: {
     name?: string;
     username?: string;

@@ -130,7 +130,7 @@ export default function ActivityPage() {
       </div>
 
       {/* Activity List Container */}
-      <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl overflow-hidden divide-y divide-[#EFE8DF] shadow-sm min-h-[200px]">
+      <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl overflow-hidden divide-y divide-[#EFE8DF] shadow-sm min-h-50">
         {loading ? (
           <div className="p-12 text-center text-sm text-[#8C837A]">
             Loading activities...
@@ -157,7 +157,7 @@ export default function ActivityPage() {
               >
                 <div className="flex items-start gap-4 min-w-0">
                   <div
-                    className={`relative w-12 sm:w-14 h-16 sm:h-20 rounded-md bg-gradient-to-b ${gradient} p-1.5 flex flex-col justify-between shrink-0 shadow-xs border border-black/10`}
+                    className={`relative w-12 sm:w-14 h-16 sm:h-20 rounded-md bg-linear-to-b ${gradient} p-1.5 flex flex-col justify-between shrink-0 shadow-xs border border-black/10`}
                   >
                     <span className="text-[6px] font-bold tracking-widest text-white/70 uppercase">
                       BS
@@ -263,7 +263,7 @@ export default function ActivityPage() {
 
                 {item.type !== "BECAME_FRIENDS" && (
                   <div
-                    className={`w-10 sm:w-12 h-14 sm:h-16 rounded-md bg-gradient-to-b ${gradient} shrink-0 shadow-xs border border-black/10`}
+                    className={`w-10 sm:w-12 h-14 sm:h-16 rounded-md bg-linear-to-b ${gradient} shrink-0 shadow-xs border border-black/10`}
                   />
                 )}
               </div>
