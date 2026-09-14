@@ -33,7 +33,7 @@ export default function ClientLayout({
     pathname?.includes("/change-password");
 
   return (
-    <ThemeProvider>
+    // <ThemeProvider>
       <AuthProvider>
         <div
           className={`${dmSans.variable} bg-[#FFFFFF] dark:bg-[#141211] min-h-dvh text-[#1A1817] dark:text-[#F5F2EB] flex flex-col font-sans antialiased overflow-x-hidden transition-colors duration-200`}
@@ -55,6 +55,6 @@ export default function ClientLayout({
           </div>
         </div>
       </AuthProvider>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
