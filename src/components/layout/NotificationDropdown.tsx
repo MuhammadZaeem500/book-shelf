@@ -94,7 +94,7 @@ export default function NotificationDropdown({
       />
 
       {/* Dropdown Card */}
-      <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 w-auto sm:w-88 bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl shadow-2xl sm:shadow-xl z-50 overflow-hidden flex flex-col max-h-[80vh] sm:max-h-[420px]">
+      <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 w-auto sm:w-88 bg-[#FAF7F2] border border-[#E8E0D5] rounded-2xl shadow-2xl sm:shadow-xl z-50 overflow-hidden flex flex-col max-h-[80vh] sm:max-h-105">
         {/* Header */}
         <div className="flex items-center justify-between p-3.5 px-4 border-b border-[#E8E0D5] bg-[#F5F0EB]/50 shrink-0">
           <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function NotificationDropdown({
         </div>
 
         {/* Scrollable Notifications List */}
-        <div className="divide-y divide-[#E8E0D5]/60 overflow-y-auto max-h-[320px] sm:max-h-[340px] pr-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#F5F0EB] [&::-webkit-scrollbar-thumb]:bg-[#D8CFC4] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#C85A2B]/60">
+        <div className="divide-y divide-[#E8E0D5]/60 overflow-y-auto max-h-80 sm:max-h-85 pr-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#F5F0EB] [&::-webkit-scrollbar-thumb]:bg-[#D8CFC4] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#C85A2B]/60">
           {notifications.map((item) => (
             <div
               key={item.id}
