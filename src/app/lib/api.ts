@@ -1,10 +1,23 @@
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 export async function fetchApi<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T | null> {
   const token =
     typeof window !== "undefined"
-      ? localStorage.getItem("access_token") || localStorage.getItem("token")
+      ? localStorage.getItem("token") ||
+        localStorage.getItem("access_token") ||
+        localStorage.getItem("accessToken") ||
+        localStorage.getItem("jwt")
       : null;
 
   const response = await fetch(
@@ -21,12 +34,12 @@ export async function fetchApi<T>(
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const errorMessage =
-      Array.isArray(errorData.message)
-        ? errorData.message[0]
-        : errorData.message || "Something went wrong";
+    const errorMessage = Array.isArray(errorData.message)
+      ? errorData.message[0]
+      : errorData.message || "Something went wrong";
 
-    throw new Error(errorMessage);
+    // Throw custom error holding the exact HTTP status (401, 403, 500, etc.)
+    throw new ApiError(errorMessage, response.status);
   }
 
   const text = await response.text();

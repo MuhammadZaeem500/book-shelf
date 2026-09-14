@@ -54,11 +54,20 @@ export interface BookData {
   onDetails?: () => void;
 }
 
-export interface WantToReadItem {
+export interface WantToReadBook {
   id: string;
   title: string;
   author: string;
+  coverUrl?: string | null;
   coverGradient: string;
+}
+
+export interface WantToReadProps {
+  totalCount: number;
+  books: WantToReadBook[];
+  isLoading?: boolean;
+  onSeeAll?: () => void;
+  onBookClick?: (id: string) => void;
 }
 
 // --- USER & AUTH TYPES ---
@@ -108,13 +117,14 @@ export interface ProfileHeaderProps {
   avatarBg?: string;
   bio?: string;
   stats?: ProfileStats;
-  onStatClick?: (type: "followers" | "following") => void; 
+  onStatClick?: (type: "followers" | "following") => void;
   onUpdateProfile?: (data: {
     name?: string;
     username?: string;
     bio?: string;
   }) => void;
 }
+
 export interface YourWeekProps {
   booksFinished?: number;
   pagesRead?: number;
@@ -134,6 +144,16 @@ export interface UserProfile {
   email: string;
   bio?: string;
   stats?: ProfileStats;
+}
+
+export interface UserStats {
+  booksRead: number;
+  reading: number;
+  wantToRead: number;
+  reviews: number;
+  friends: number;
+  followers: number;
+  following: number;
 }
 
 // --- ACTIVITY FEED TYPES ---
@@ -229,12 +249,6 @@ export interface CurrentlyReadingProps {
   coverGradient: string;
 }
 
-export interface WantToReadProps {
-  totalCount: number;
-  books: WantToReadItem[];
-  onSeeAll?: () => void;
-}
-
 export interface ProfileAvatarModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -312,14 +326,4 @@ export interface UpdatePasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: () => void;
-}
-
-export interface UserStats {
-  booksRead: number;
-  reading: number;
-  wantToRead: number;
-  reviews: number;
-  friends: number;
-  followers: number;
-  following: number;
 }
