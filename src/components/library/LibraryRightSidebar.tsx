@@ -70,14 +70,14 @@ export default function LibraryRightSidebar() {
     fetchWantToRead();
   }, [fetchWantToRead]);
 
-  // 3. Fetch Dynamic Reading Goal Stats
+  // 3. Fetch Dynamic Reading Goal Stats (Updated path to /users/me/reading-goal)
   useEffect(() => {
     const fetchReadingGoal = async () => {
       try {
         setLoadingGoal(true);
         const currentYear = new Date().getFullYear();
         const data = await fetchApi<ReadingGoalResponse>(
-          `/users/reading-goal?year=${currentYear}`
+          `/users/me/reading-goal?year=${currentYear}`
         );
         if (data) {
           setReadingGoal(data);
