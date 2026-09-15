@@ -12,6 +12,12 @@ interface WantToReadResponse {
   books: WantToReadBook[];
 }
 
+interface ReadingGoalResponse {
+  year: number;
+  booksRead: number;
+  targetBooks: number;
+}
+
 export default function LibraryRightSidebar() {
   const [currentlyReading, setCurrentlyReading] =
     useState<CurrentlyReading | null>(null);
@@ -19,8 +25,15 @@ export default function LibraryRightSidebar() {
     totalCount: 0,
     books: [],
   });
+  const [readingGoal, setReadingGoal] = useState<ReadingGoalResponse>({
+    year: new Date().getFullYear(),
+    booksRead: 0,
+    targetBooks: 60,
+  });
+
   const [loadingCurrent, setLoadingCurrent] = useState(true);
   const [loadingWantToRead, setLoadingWantToRead] = useState(true);
+  const [loadingGoal, setLoadingGoal] = useState(true);
 
   // 1. Fetch Currently Reading Book
   useEffect(() => {
@@ -37,21 +50,17 @@ export default function LibraryRightSidebar() {
         setLoadingCurrent(false);
       }
     };
-
     fetchCurrentlyReading();
   }, []);
 
-  // 2. Fetch Real-time Want to Read Books
+  // 2. Fetch Want to Read Books
   const fetchWantToRead = useCallback(async () => {
     try {
       setLoadingWantToRead(true);
-      const data = await fetchApi<WantToReadResponse>(
-        "/books/want-to-read?limit=3"
-      );
+      const data = await fetchApi<WantToReadResponse>("/books/want-to-read?limit=3");
       setWantToReadData(data || { totalCount: 0, books: [] });
     } catch (err) {
       console.error("Failed to fetch want to read books:", err);
-      setWantToReadData({ totalCount: 0, books: [] });
     } finally {
       setLoadingWantToRead(false);
     }
@@ -61,11 +70,30 @@ export default function LibraryRightSidebar() {
     fetchWantToRead();
   }, [fetchWantToRead]);
 
-  // 3. Handle Item Deletion
+  // 3. Fetch Dynamic Reading Goal Stats
+  useEffect(() => {
+    const fetchReadingGoal = async () => {
+      try {
+        setLoadingGoal(true);
+        const currentYear = new Date().getFullYear();
+        const data = await fetchApi<ReadingGoalResponse>(
+          `/users/reading-goal?year=${currentYear}`
+        );
+        if (data) {
+          setReadingGoal(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch reading goal:", err);
+      } finally {
+        setLoadingGoal(false);
+      }
+    };
+    fetchReadingGoal();
+  }, []);
+
   const handleRemoveBook = async (bookId: string) => {
     try {
       await fetchApi(`/books/${bookId}`, { method: "DELETE" });
-      // Re-fetch list to sync totalCount and items instantly
       await fetchWantToRead();
     } catch (err) {
       console.error("Failed to remove book:", err);
@@ -76,17 +104,7 @@ export default function LibraryRightSidebar() {
     <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block bg-[#F2EDE5]/30 border-l border-[#EFE8DF]">
       {/* 1. Currently Reading Section */}
       {loadingCurrent ? (
-        <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4 animate-pulse">
-          <div className="h-5 bg-[#EFE8DF] rounded-md w-1/2" />
-          <div className="flex gap-4 items-center">
-            <div className="w-14 h-20 bg-[#EFE8DF] rounded-lg shrink-0" />
-            <div className="space-y-2 flex-1">
-              <div className="h-4 bg-[#EFE8DF] rounded-md w-3/4" />
-              <div className="h-3 bg-[#EFE8DF] rounded-md w-1/2" />
-              <div className="h-2 bg-[#EFE8DF] rounded-full w-full" />
-            </div>
-          </div>
-        </div>
+        <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 h-36 animate-pulse" />
       ) : currentlyReading ? (
         <CurrentlyReadingCard
           title={currentlyReading.book?.title || "Untitled"}
@@ -97,12 +115,8 @@ export default function LibraryRightSidebar() {
         />
       ) : (
         <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 text-center space-y-1">
-          <h4 className="font-serif font-bold text-sm text-[#1A1817]">
-            No active reading
-          </h4>
-          <p className="text-xs text-[#736B63]">
-            Start logging a book to track page progress here.
-          </p>
+          <h4 className="font-serif font-bold text-sm text-[#1A1817]">No active reading</h4>
+          <p className="text-xs text-[#736B63]">Start logging a book to track progress.</p>
         </div>
       )}
 
@@ -116,8 +130,16 @@ export default function LibraryRightSidebar() {
         onRemoveBook={handleRemoveBook}
       />
 
-      {/* 3. Reading Goal Progress */}
-      <ReadingGoalCard year={2026} booksRead={47} targetBooks={60} />
+      {/* 3. Reading Goal Progress (Dynamic) */}
+      {loadingGoal ? (
+        <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 h-36 animate-pulse" />
+      ) : (
+        <ReadingGoalCard
+          year={readingGoal.year}
+          booksRead={readingGoal.booksRead}
+          targetBooks={readingGoal.targetBooks}
+        />
+      )}
     </aside>
   );
 }
