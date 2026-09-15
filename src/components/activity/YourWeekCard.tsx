@@ -10,7 +10,6 @@ export interface YourWeekProps {
 }
 
 export default function YourWeekCard(props: YourWeekProps) {
-  // Fix TS2345: Allow 'YourWeekProps | null' in state
   const [stats, setStats] = useState<YourWeekProps | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +17,8 @@ export default function YourWeekCard(props: YourWeekProps) {
     async function loadStats() {
       try {
         setLoading(true);
-        const data = await fetchApi<YourWeekProps>("/users/weekly-stats");
+        // Updated to match NestJS controller route: GET /users/me/stats/weekly
+        const data = await fetchApi<YourWeekProps>("/users/me/stats/weekly");
         setStats(data);
       } catch (err) {
         console.error("Failed to load weekly stats:", err);
@@ -28,7 +28,6 @@ export default function YourWeekCard(props: YourWeekProps) {
       }
     }
 
-    // If props are explicitly passed, use them; otherwise fetch from backend
     if (props.booksFinished !== undefined || props.pagesRead !== undefined) {
       setStats(props);
       setLoading(false);
