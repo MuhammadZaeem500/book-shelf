@@ -7,7 +7,6 @@ import FriendActivityCard from "@/src/components/home/FriendActivityCard";
 import RecommendedBookCard from "@/src/components/home/RecommendedBookCard";
 import { fetchApi } from "@/src/app/lib/api";
 import {
-  CurrentlyReading,
   PopularBook,
   ActivityApiResponse,
 } from "@/src/types";
@@ -31,8 +30,7 @@ const avatarColors = [
 ];
 
 export default function Home() {
-  const [currentlyReading, setCurrentlyReading] =
-    useState<CurrentlyReading | null>(null);
+  const [currentlyReading, setCurrentlyReading] = useState<any>(null);
   const [popularBooks, setPopularBooks] = useState<PopularBook[]>([]);
   const [friendsActivity, setFriendsActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -42,7 +40,7 @@ export default function Home() {
       setLoading(true);
 
       const [readingRes, popularRes, activityRes] = await Promise.allSettled([
-        fetchApi<CurrentlyReading>("/reviews/currently-reading"),
+        fetchApi<any>("/users/me/currently-reading"), // Updated to user-specific active reading endpoint
         fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
         fetchApi<ActivityApiResponse>("/activity-feed?limit=10&page=1"),
       ]);
@@ -136,9 +134,10 @@ export default function Home() {
 
   return (
     <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] relative">
-      {/* 1. Continue Reading Section */}
+      {/* 1. Continue Reading Section (Fully Dynamic) */}
       {currentlyReading ? (
         <ContinueReadingCard
+          bookId={currentlyReading.book?.id}
           title={currentlyReading.book?.title || "Currently Reading"}
           author={currentlyReading.book?.author || "Unknown Author"}
           description={
@@ -146,7 +145,8 @@ export default function Home() {
             "Keep up your reading momentum!"
           }
           currentPage={currentlyReading.currentPage || 0}
-          totalPages={currentlyReading.totalPages || 100}
+          totalPages={currentlyReading.totalPages || 300}
+          onProgressUpdated={loadDashboardData}
         />
       ) : (
         !loading && (
@@ -155,7 +155,7 @@ export default function Home() {
               No active book right now
             </h3>
             <p className="text-xs text-[#8C837A]">
-              Explore popular titles below to start logging your reading progress.
+              Explore popular titles below or update a book's status to start tracking.
             </p>
           </div>
         )
