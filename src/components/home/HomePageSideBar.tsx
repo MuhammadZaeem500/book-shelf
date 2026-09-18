@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PeopleToFollowCard from "@/src/components/home/PeopleToFollowCard";
 import { fetchApi } from "@/src/app/lib/api";
 import BrowseByGenreCard from "../library/BrowseByGenreCard";
+import { ReadingStats } from "@/src/types";
 
 const genres = [
   "Literary Fiction",
@@ -15,12 +16,7 @@ const genres = [
   "Romance",
 ];
 
-interface ReadingStats {
-  booksReadThisYear?: number;
-  pagesReadLifetime?: number;
-  readingStreakDays?: number;
-  annualGoal?: number;
-}
+
 
 export default function HomePageRightSidebar() {
   const [stats, setStats] = useState<ReadingStats>({

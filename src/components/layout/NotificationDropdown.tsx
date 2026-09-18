@@ -3,22 +3,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BookOpen, Heart, UserPlus, Bell, Check, X, Loader2 } from "lucide-react";
 import { fetchApi } from "@/src/app/lib/api";
+import { NotificationDropdownProps, NotificationItem } from "@/src/types";
 
-export interface NotificationItem {
-  id: string;
-  type: "like" | "follow" | "read";
-  user: string;
-  action: string;
-  target?: string;
-  time: string;
-  unread: boolean;
-}
-
-interface NotificationDropdownProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onUnreadCountChange?: (count: number) => void;
-}
 
 export default function NotificationDropdown({
   isOpen,

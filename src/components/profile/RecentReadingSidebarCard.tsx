@@ -3,15 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { fetchApi } from "@/src/app/lib/api";
+import { RecentReadingItem } from "@/src/types";
 
-export interface RecentReadingItem {
-  id: string;
-  title: string;
-  author: string;
-  rating: number;
-  dateLabel: string;
-  coverGradient: string;
-}
 
 export default function RecentReadingSidebarCard() {
   const [items, setItems] = useState<RecentReadingItem[]>([]);

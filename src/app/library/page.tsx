@@ -1,36 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SlidersHorizontal, ArrowRight, Star, Loader2 } from "lucide-react";
 import { fetchApi } from "@/src/app/lib/api";
+import { LoggedBook, DateGroup } from "@/src/types";
 
-interface LoggedBook {
-  id: string;
-  status: string;
-  rating?: number;
-  updatedAt: string;
-  createdAt: string;
-  book: {
-    id: string;
-    title: string;
-    author: string;
-    pages?: number;
-    coverUrl?: string;
-  };
-}
-
-interface DateGroup {
-  dateLabel: string;
-  books: {
-    id: string;
-    title: string;
-    author: string;
-    rating: number;
-    pages: number;
-    coverUrl?: string;
-    coverBg: string;
-  }[];
-}
 
 const coverGradients = [
   "from-[#8B4513] to-[#5C2E0B]",

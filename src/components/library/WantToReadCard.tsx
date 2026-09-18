@@ -3,14 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Trash2, Plus, Bookmark } from "lucide-react";
-import { WantToReadProps, WantToReadBook } from "@/src/types";
+import { EnhancedWantToReadProps } from "@/src/types";
 
-interface EnhancedWantToReadProps extends WantToReadProps {
-  isLoading?: boolean;
-  onBookClick?: (id: string) => void;
-  onRemoveBook?: (id: string) => Promise<void> | void;
-  onAddClick?: () => void;
-}
 
 export default function WantToReadCard({
   totalCount,

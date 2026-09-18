@@ -2,12 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { fetchApi } from "@/src/app/lib/api";
+import { YourWeekProps } from "@/src/types";
 
-export interface YourWeekProps {
-  booksFinished?: number;
-  pagesRead?: number;
-  reviewsWritten?: number;
-}
 
 export default function YourWeekCard(props: YourWeekProps) {
   const [stats, setStats] = useState<YourWeekProps | null>(null);

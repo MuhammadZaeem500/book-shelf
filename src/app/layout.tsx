@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ClientLayout from "@/src/app/clientlayout";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/src/app/providers/ThemeProvider";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Book Shelf",

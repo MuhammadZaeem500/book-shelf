@@ -2,20 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { fetchApi } from "@/src/app/lib/api";
+import { BrowseByGenreCardProps, Book } from "@/src/types";
 
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  coverImage?: string;
-  genre?: string;
-  isbn?: string;
-}
-
-export interface BrowseByGenreCardProps {
-  genres?: string[];
-  onSelectGenre?: (genre: string) => void;
-}
 
 const DEFAULT_GENRES = [
   "Fiction",

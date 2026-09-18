@@ -8,6 +8,8 @@ export interface Book {
   description?: string;
   coverImage?: string;
   coverUrl?: string;
+  genre?: string;
+  isbn?: string;
 }
 
 export interface BookItem {
@@ -320,6 +322,164 @@ export interface SettingsSectionProps {
 export interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
+}
+
+export interface UpdatePasswordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: () => void;
+}
+
+export interface LoggedBook {
+  id: string;
+  status: string;
+  rating?: number;
+  updatedAt: string;
+  createdAt: string;
+  book: {
+    id: string;
+    title: string;
+    author: string;
+    pages?: number;
+    coverUrl?: string;
+  };
+}
+
+export interface DateGroup {
+  dateLabel: string;
+  books: {
+    id: string;
+    title: string;
+    author: string;
+    rating: number;
+    pages: number;
+    coverUrl?: string;
+    coverBg: string;
+  }[];
+}
+
+export interface ConnectionUser {
+  id: string;
+  name?: string;
+  username?: string;
+  email: string;
+  bio?: string;
+}
+
+export interface YourWeekProps {
+  booksFinished?: number;
+  pagesRead?: number;
+  reviewsWritten?: number;
+}
+
+export interface DynamicContinueReadingProps {
+  bookId?: string;
+  title: string;
+  author: string;
+  description?: string;
+  currentPage?: number;
+  totalPages?: number;
+  coverImage?: string | null;
+  coverGradient?: string;
+  onDetails?: () => void;
+  onProgressUpdated?: () => void;
+}
+
+export interface ReadingStats {
+  booksReadThisYear?: number;
+  pagesReadLifetime?: number;
+  readingStreakDays?: number;
+  annualGoal?: number;
+}
+
+export interface NotificationItem {
+  id: string;
+  type: "like" | "follow" | "read";
+  user: string;
+  action: string;
+  target?: string;
+  time: string;
+  unread: boolean;
+}
+
+export interface NotificationDropdownProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onUnreadCountChange?: (count: number) => void;
+}
+
+export interface AddBookModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onBookAdded: () => void; // Callback to trigger parent dashboard refetch
+}
+
+export interface BrowseByGenreCardProps {
+  genres?: string[];
+  onSelectGenre?: (genre: string) => void;
+}
+
+export interface WantToReadResponse {
+  totalCount: number;
+  books: WantToReadBook[];
+}
+
+export interface ReadingGoalResponse {
+  year: number;
+  booksRead: number;
+  targetBooks: number;
+}
+
+export interface EnhancedWantToReadProps extends WantToReadProps {
+  isLoading?: boolean;
+  onBookClick?: (id: string) => void;
+  onRemoveBook?: (id: string) => Promise<void> | void;
+  onAddClick?: () => void;
+}
+
+export interface UserProfileStats {
+  annualGoal?: number;
+  booksReadThisYear?: number;
+  booksRead?: number;
+}
+
+export interface BookGridItem {
+  id: string;
+  title: string;
+  author: string;
+  coverGradient: string;
+}
+
+export interface DiaryGroupItem {
+  dateLabel: string;
+  books: Array<{
+    id: string;
+    title: string;
+    author: string;
+    rating: number;
+    pages: number;
+    hasReview: boolean;
+    coverGradient: string;
+  }>;
+}
+
+export interface ReviewItem {
+  id: string;
+  title: string;
+  author: string;
+  rating: number;
+  dateLabel: string;
+  reviewText: string;
+  coverGradient: string;
+}
+
+export interface RecentReadingItem {
+  id: string;
+  title: string;
+  author: string;
+  rating: number;
+  dateLabel: string;
+  coverGradient: string;
 }
 
 export interface UpdatePasswordModalProps {

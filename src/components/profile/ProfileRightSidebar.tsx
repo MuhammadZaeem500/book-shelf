@@ -4,12 +4,7 @@ import React, { useEffect, useState } from "react";
 import ReadingGoalCard from "@/src/components/library/ReadingGoalCard";
 import RecentReadingSidebarCard from "@/src/components/profile/RecentReadingSidebarCard";
 import { fetchApi } from "@/src/app/lib/api";
-
-interface UserProfileStats {
-  annualGoal?: number;
-  booksReadThisYear?: number;
-  booksRead?: number;
-}
+import { UserProfileStats } from "@/src/types";
 
 export default function ProfileRightSidebar() {
   const [stats, setStats] = useState<UserProfileStats>({

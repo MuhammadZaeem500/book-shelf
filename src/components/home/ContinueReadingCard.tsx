@@ -3,19 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { fetchApi } from "@/src/app/lib/api";
-
-interface DynamicContinueReadingProps {
-  bookId?: string;
-  title: string;
-  author: string;
-  description?: string;
-  currentPage?: number;
-  totalPages?: number;
-  coverImage?: string | null;
-  coverGradient?: string;
-  onDetails?: () => void;
-  onProgressUpdated?: () => void;
-}
+import { DynamicContinueReadingProps } from "@/src/types";
 
 export default function ContinueReadingCard({
   bookId,
@@ -36,10 +24,7 @@ export default function ContinueReadingCard({
   // Safe math evaluation
   const safeCurrent = Math.max(0, pages ?? 0);
   const safeTotal = Math.max(1, totalPages ?? 100);
-  const percentage = Math.min(
-    100,
-    Math.round((safeCurrent / safeTotal) * 100)
-  );
+  const percentage = Math.min(100, Math.round((safeCurrent / safeTotal) * 100));
 
   const handleUpdatePages = async (newPages: number) => {
     if (!bookId) return;
@@ -69,7 +54,6 @@ export default function ContinueReadingCard({
     <div className="w-full max-w-4xl font-sans">
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#2A160A] via-[#3B1F0E] to-[#4D2710] p-6 text-[#E6D7CB] shadow-xl">
         <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-          
           {/* Cover Image / Placeholder Box */}
           <div className="relative shrink-0 w-36 h-52 rounded-xl overflow-hidden shadow-2xl bg-linear-to-b from-[#D4823A] to-[#6E3C14] border border-white/10 p-3 flex flex-col justify-between">
             {coverImage ? (
@@ -127,7 +111,8 @@ export default function ContinueReadingCard({
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span className="text-[#8C7463]">
-                  Page {safeCurrent.toLocaleString()} of {safeTotal.toLocaleString()}
+                  Page {safeCurrent.toLocaleString()} of{" "}
+                  {safeTotal.toLocaleString()}
                 </span>
                 <span className="text-sm font-bold text-[#E0A86A]">
                   {percentage}%

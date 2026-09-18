@@ -1,38 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { fetchApi } from "@/src/app/lib/api";
+import { BookGridItem, DiaryGroupItem, ReviewItem } from "@/src/types";
 
-interface BookGridItem {
-  id: string;
-  title: string;
-  author: string;
-  coverGradient: string;
-}
-
-interface DiaryGroupItem {
-  dateLabel: string;
-  books: Array<{
-    id: string;
-    title: string;
-    author: string;
-    rating: number;
-    pages: number;
-    hasReview: boolean;
-    coverGradient: string;
-  }>;
-}
-
-interface ReviewItem {
-  id: string;
-  title: string;
-  author: string;
-  rating: number;
-  dateLabel: string;
-  reviewText: string;
-  coverGradient: string;
-}
 
 export default function ProfileTabsView() {
   const [activeTab, setActiveTab] = useState<"library" | "diary" | "reviews">("library");

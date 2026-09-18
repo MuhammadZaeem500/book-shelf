@@ -1,12 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
-interface AddBookModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onBookAdded: () => void; // Callback to trigger parent dashboard refetch
-}
+import { AddBookModalProps } from "@/src/types";
 
 export default function AddBookModal({
   isOpen,

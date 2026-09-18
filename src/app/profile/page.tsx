@@ -6,14 +6,8 @@ import ProfileTabsView from "@/src/components/profile/ProfileTabsView";
 import { useAuth } from "@/src/app/context/AuthContext";
 import { fetchApi } from "@/src/app/lib/api";
 import { ProfileHeaderProps, ProfileStats, UserProfile } from "@/src/types";
+import { ConnectionUser } from "@/src/types";
 
-interface ConnectionUser {
-  id: string;
-  name?: string;
-  username?: string;
-  email: string;
-  bio?: string;
-}
 
 export default function ProfilePage() {
   const { user } = useAuth();

@@ -5,18 +5,9 @@ import CurrentlyReadingCard from "@/src/components/library/CurrentlyReadingCard"
 import WantToReadCard from "@/src/components/library/WantToReadCard";
 import ReadingGoalCard from "@/src/components/library/ReadingGoalCard";
 import { fetchApi } from "@/src/app/lib/api";
-import { CurrentlyReading, WantToReadBook } from "@/src/types";
+import { CurrentlyReading} from "@/src/types";
+import { WantToReadResponse, ReadingGoalResponse } from "@/src/types";
 
-interface WantToReadResponse {
-  totalCount: number;
-  books: WantToReadBook[];
-}
-
-interface ReadingGoalResponse {
-  year: number;
-  booksRead: number;
-  targetBooks: number;
-}
 
 export default function LibraryRightSidebar() {
   const [currentlyReading, setCurrentlyReading] =

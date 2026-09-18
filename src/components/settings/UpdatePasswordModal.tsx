@@ -2,12 +2,7 @@
 
 import React, { useState } from "react";
 import { X, Eye, EyeOff } from "lucide-react";
-
-interface UpdatePasswordModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: () => void;
-}
+import { UpdatePasswordModalProps } from "@/src/types";
 
 export default function UpdatePasswordModal({
   isOpen,
