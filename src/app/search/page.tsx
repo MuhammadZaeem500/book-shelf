@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccordionItem from "@/src/components/search/AccordionItem";
 import {
   Search,
@@ -10,8 +10,6 @@ import {
   Calendar,
   Globe,
   Hash,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 
 const popularAuthors = [
@@ -20,6 +18,8 @@ const popularAuthors = [
   "Kazuo Ishiguro",
   "Zadie Smith",
   "Colson Whitehead",
+  "James Clear",
+  "Frank Herbert",
 ];
 
 const genres = [
@@ -38,6 +38,7 @@ const genres = [
   "Science",
   "Philosophy",
   "Graphic Novel",
+  "Sci-Fi",
 ];
 
 const quickSelectEras = [
@@ -63,8 +64,9 @@ const languages = [
 
 export default function BookFinder() {
   const [activeSection, setActiveSection] = useState<string | null>("title");
+  
+  // Search & Filter States
   const [mainSearch, setMainSearch] = useState("");
-
   const [titleQuery, setTitleQuery] = useState("");
   const [authorQuery, setAuthorQuery] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
@@ -74,9 +76,63 @@ export default function BookFinder() {
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [isbnQuery, setIsbnQuery] = useState("");
 
+  // Results and Loading States
+  const [books, setBooks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const toggleSection = (section: string) => {
     setActiveSection(activeSection === section ? null : section);
   };
+
+  // Debounced Effect to fetch results from backend API
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const searchParams = new URLSearchParams();
+
+        // Map inputs to backend query parameters
+        if (mainSearch.trim()) searchParams.append("q", mainSearch.trim());
+        if (titleQuery.trim()) searchParams.append("title", titleQuery.trim());
+        
+        // Prioritize typed author or selected chip author
+        const activeAuthor = authorQuery.trim() || selectedAuthor;
+        if (activeAuthor) searchParams.append("author", activeAuthor);
+
+        if (selectedGenre) searchParams.append("genre", selectedGenre);
+        if (selectedLanguage) searchParams.append("language", selectedLanguage);
+        if (isbnQuery.trim()) searchParams.append("isbn", isbnQuery.trim());
+
+        // Handle Release Date / Year mapping if needed
+        if (fromYear) {
+          searchParams.append("releaseDate", `${fromYear}-01-01`);
+        }
+
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
+        const token = typeof window !== "undefined" ? localStorage.getItem("access_token") || "" : "";
+
+        const res = await fetch(`${backendUrl}/books/search?${searchParams.toString()}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          // Handles both direct array returns or paginated { data: [...] } objects
+          setBooks(Array.isArray(result) ? result : result.data || []);
+        } else {
+          console.error("Failed to fetch search results");
+        }
+      } catch (error) {
+        console.error("Error connecting to backend search:", error);
+      } finally {
+        setLoading(false);
+      }
+    }, 300); // 300ms debounce to prevent spamming requests
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [mainSearch, titleQuery, authorQuery, selectedAuthor, selectedGenre, fromYear, selectedLanguage, isbnQuery]);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-6 text-[#1A1817] bg-[#FFFFFF]">
@@ -89,6 +145,7 @@ export default function BookFinder() {
         </p>
       </div>
 
+      {/* Main Global Search Bar */}
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8C837A]">
           <Search className="w-5 h-5" />
@@ -107,6 +164,7 @@ export default function BookFinder() {
         </div>
       </div>
 
+      {/* Accordion Filter Sections */}
       <div className="space-y-4 pt-2">
         <h2 className="font-serif font-bold text-lg text-[#1A1817]">
           Browse by
@@ -133,10 +191,6 @@ export default function BookFinder() {
                   className="w-full pl-10 pr-4 py-3 bg-[#EFE8DF]/60 border border-[#E0D8CE] rounded-xl text-sm text-[#1A1817] placeholder-[#8C837A] focus:outline-none focus:border-[#C85A2B]"
                 />
               </div>
-              <p className="text-xs text-[#8C837A]">
-                Try: &quot;The Midnight Library&quot;, &quot;Klara and the
-                Sun&quot;
-              </p>
             </div>
           </AccordionItem>
 
@@ -155,7 +209,10 @@ export default function BookFinder() {
                 <input
                   type="text"
                   value={authorQuery}
-                  onChange={(e) => setAuthorQuery(e.target.value)}
+                  onChange={(e) => {
+                    setAuthorQuery(e.target.value);
+                    setSelectedAuthor(""); // Reset chip selection on type
+                  }}
                   placeholder="Search by author name..."
                   className="w-full pl-10 pr-4 py-3 bg-[#EFE8DF]/60 border border-[#E0D8CE] rounded-xl text-sm text-[#1A1817] placeholder-[#8C837A] focus:outline-none focus:border-[#C85A2B]"
                 />
@@ -169,7 +226,10 @@ export default function BookFinder() {
                   {popularAuthors.map((author) => (
                     <button
                       key={author}
-                      onClick={() => setSelectedAuthor(author)}
+                      onClick={() => {
+                        setSelectedAuthor(selectedAuthor === author ? "" : author);
+                        setAuthorQuery("");
+                      }}
                       className={`px-3.5 py-1.5 rounded-full border text-xs font-medium transition-all ${
                         selectedAuthor === author
                           ? "bg-[#C85A2B] text-white border-[#C85A2B]"
@@ -196,7 +256,7 @@ export default function BookFinder() {
                 {genres.map((genre) => (
                   <button
                     key={genre}
-                    onClick={() => setSelectedGenre(genre)}
+                    onClick={() => setSelectedGenre(selectedGenre === genre ? "" : genre)}
                     className={`px-3.5 py-1.5 rounded-full border text-xs font-medium transition-all ${
                       selectedGenre === genre
                         ? "bg-[#C85A2B] text-white border-[#C85A2B]"
@@ -287,7 +347,7 @@ export default function BookFinder() {
                 {languages.map((lang) => (
                   <button
                     key={lang}
-                    onClick={() => setSelectedLanguage(lang)}
+                    onClick={() => setSelectedLanguage(selectedLanguage === lang ? "" : lang)}
                     className={`px-3.5 py-1.5 rounded-full border text-xs font-medium transition-all ${
                       selectedLanguage === lang
                         ? "bg-[#C85A2B] text-white border-[#C85A2B]"
@@ -321,12 +381,42 @@ export default function BookFinder() {
                   className="w-full pl-10 pr-4 py-3 bg-[#EFE8DF]/60 border border-[#E0D8CE] rounded-xl text-sm text-[#1A1817] placeholder-[#8C837A] focus:outline-none focus:border-[#C85A2B]"
                 />
               </div>
-              <p className="text-xs text-[#8C837A]">
-                Example: 978-0-06-112008-4
-              </p>
             </div>
           </AccordionItem>
         </div>
+      </div>
+
+      {/* Dynamic Results Grid Display */}
+      <div className="space-y-3 pt-4">
+        <h3 className="font-serif font-bold text-lg text-[#1A1817]">
+          Results ({books.length})
+        </h3>
+        {loading ? (
+          <p className="text-sm text-[#8C837A]">Searching books...</p>
+        ) : books.length === 0 ? (
+          <p className="text-sm text-[#8C837A]">No books found matching your criteria.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {books.map((book) => (
+              <div key={book.id} className="p-4 bg-[#FAF7F2] border border-[#EFE8DF] rounded-2xl shadow-sm space-y-2">
+                <h4 className="font-bold text-sm text-[#1A1817] line-clamp-1">{book.title}</h4>
+                <p className="text-xs text-[#736B63]">By {book.author}</p>
+                <div className="flex gap-2 pt-1">
+                  {book.genre && (
+                    <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
+                      {book.genre}
+                    </span>
+                  )}
+                  {book.language && (
+                    <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
+                      {book.language}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
