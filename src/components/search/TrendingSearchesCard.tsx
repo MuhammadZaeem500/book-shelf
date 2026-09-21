@@ -1,16 +1,31 @@
 "use client";
 
-import {TrendingSearchesCardProps} from "@/src/types";
+import { TrendingSearchesCardProps } from "@/src/types";
+
+interface ExtendedTrendingProps extends TrendingSearchesCardProps {
+  onClearTrending?: () => void;
+}
 
 export default function TrendingSearchesCard({
   trendingItems,
   onSelectTrending,
-}: TrendingSearchesCardProps) {
+  onClearTrending,
+}: ExtendedTrendingProps) {
   return (
     <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4">
-      <h3 className="font-serif font-bold text-xl text-[#1A1817]">
-        Trending Searches
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="font-serif font-bold text-xl text-[#1A1817]">
+          Trending Searches
+        </h3>
+        {onClearTrending && trendingItems.length > 0 && (
+          <button
+            onClick={onClearTrending}
+            className="text-xs font-medium text-[#8C8275] hover:text-[#C85A2B] transition-colors"
+          >
+            Clear
+          </button>
+        )}
+      </div>
 
       <div className="space-y-3">
         {trendingItems.map((item, index) => {
@@ -21,7 +36,7 @@ export default function TrendingSearchesCard({
             <button
               key={index}
               onClick={() => onSelectTrending?.(item)}
-              className="w-full flex items-center gap-4 text-left group"
+              className="w-full flex items-center gap-4 text-left group cursor-pointer p-1 rounded-xl hover:bg-[#EFE8DF]/40 transition-colors"
             >
               <span
                 className={`font-bold text-base w-4 text-center shrink-0 ${
