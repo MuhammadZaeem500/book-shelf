@@ -64,8 +64,6 @@ const languages = [
 
 export default function BookFinder() {
   const [activeSection, setActiveSection] = useState<string | null>("title");
-  
-  // Search & Filter States
   const [mainSearch, setMainSearch] = useState("");
   const [titleQuery, setTitleQuery] = useState("");
   const [authorQuery, setAuthorQuery] = useState("");
@@ -75,27 +73,39 @@ export default function BookFinder() {
   const [toYear, setToYear] = useState("2026");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [isbnQuery, setIsbnQuery] = useState("");
-
-  // Results and Loading States
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const hasActiveQuery = Boolean(
+    mainSearch.trim() ||
+    titleQuery.trim() ||
+    authorQuery.trim() ||
+    selectedAuthor ||
+    selectedGenre ||
+    selectedLanguage ||
+    isbnQuery.trim() ||
+    (fromYear && fromYear !== "1900")
+  );
 
   const toggleSection = (section: string) => {
     setActiveSection(activeSection === section ? null : section);
   };
 
-  // Debounced Effect to fetch results from backend API
   useEffect(() => {
+
+    if (!hasActiveQuery) {
+      setBooks([]);
+      setLoading(false);
+      return;
+    }
+
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
       try {
         const searchParams = new URLSearchParams();
 
-        // Map inputs to backend query parameters
         if (mainSearch.trim()) searchParams.append("q", mainSearch.trim());
         if (titleQuery.trim()) searchParams.append("title", titleQuery.trim());
         
-        // Prioritize typed author or selected chip author
         const activeAuthor = authorQuery.trim() || selectedAuthor;
         if (activeAuthor) searchParams.append("author", activeAuthor);
 
@@ -103,8 +113,7 @@ export default function BookFinder() {
         if (selectedLanguage) searchParams.append("language", selectedLanguage);
         if (isbnQuery.trim()) searchParams.append("isbn", isbnQuery.trim());
 
-        // Handle Release Date / Year mapping if needed
-        if (fromYear) {
+        if (fromYear && fromYear !== "1900") {
           searchParams.append("releaseDate", `${fromYear}-01-01`);
         }
 
@@ -119,7 +128,6 @@ export default function BookFinder() {
 
         if (res.ok) {
           const result = await res.json();
-          // Handles both direct array returns or paginated { data: [...] } objects
           setBooks(Array.isArray(result) ? result : result.data || []);
         } else {
           console.error("Failed to fetch search results");
@@ -129,7 +137,7 @@ export default function BookFinder() {
       } finally {
         setLoading(false);
       }
-    }, 300); // 300ms debounce to prevent spamming requests
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [mainSearch, titleQuery, authorQuery, selectedAuthor, selectedGenre, fromYear, selectedLanguage, isbnQuery]);
@@ -145,7 +153,6 @@ export default function BookFinder() {
         </p>
       </div>
 
-      {/* Main Global Search Bar */}
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8C837A]">
           <Search className="w-5 h-5" />
@@ -164,7 +171,6 @@ export default function BookFinder() {
         </div>
       </div>
 
-      {/* Accordion Filter Sections */}
       <div className="space-y-4 pt-2">
         <h2 className="font-serif font-bold text-lg text-[#1A1817]">
           Browse by
@@ -211,7 +217,7 @@ export default function BookFinder() {
                   value={authorQuery}
                   onChange={(e) => {
                     setAuthorQuery(e.target.value);
-                    setSelectedAuthor(""); // Reset chip selection on type
+                    setSelectedAuthor("");
                   }}
                   placeholder="Search by author name..."
                   className="w-full pl-10 pr-4 py-3 bg-[#EFE8DF]/60 border border-[#E0D8CE] rounded-xl text-sm text-[#1A1817] placeholder-[#8C837A] focus:outline-none focus:border-[#C85A2B]"
@@ -386,38 +392,39 @@ export default function BookFinder() {
         </div>
       </div>
 
-      {/* Dynamic Results Grid Display */}
-      <div className="space-y-3 pt-4">
-        <h3 className="font-serif font-bold text-lg text-[#1A1817]">
-          Results ({books.length})
-        </h3>
-        {loading ? (
-          <p className="text-sm text-[#8C837A]">Searching books...</p>
-        ) : books.length === 0 ? (
-          <p className="text-sm text-[#8C837A]">No books found matching your criteria.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {books.map((book) => (
-              <div key={book.id} className="p-4 bg-[#FAF7F2] border border-[#EFE8DF] rounded-2xl shadow-sm space-y-2">
-                <h4 className="font-bold text-sm text-[#1A1817] line-clamp-1">{book.title}</h4>
-                <p className="text-xs text-[#736B63]">By {book.author}</p>
-                <div className="flex gap-2 pt-1">
-                  {book.genre && (
-                    <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
-                      {book.genre}
-                    </span>
-                  )}
-                  {book.language && (
-                    <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
-                      {book.language}
-                    </span>
-                  )}
+      {hasActiveQuery && (
+        <div className="space-y-3 pt-4">
+          <h3 className="font-serif font-bold text-lg text-[#1A1817]">
+            Results ({books.length})
+          </h3>
+          {loading ? (
+            <p className="text-sm text-[#8C837A]">Searching books...</p>
+          ) : books.length === 0 ? (
+            <p className="text-sm text-[#8C837A]">No books found matching your criteria.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {books.map((book) => (
+                <div key={book.id} className="p-4 bg-[#FAF7F2] border border-[#EFE8DF] rounded-2xl shadow-sm space-y-2">
+                  <h4 className="font-bold text-sm text-[#1A1817] line-klamp-1">{book.title}</h4>
+                  <p className="text-xs text-[#736B63]">By {book.author}</p>
+                  <div className="flex gap-2 pt-1">
+                    {book.genre && (
+                      <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
+                        {book.genre}
+                      </span>
+                    )}
+                    {book.language && (
+                      <span className="px-2 py-0.5 bg-[#EFE8DF] text-[#524B45] text-[10px] font-semibold rounded-md">
+                        {book.language}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

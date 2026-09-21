@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { fetchApi } from "@/src/app/lib/api";
 import { BrowseByGenreCardProps, Book } from "@/src/types";
 
-
 const DEFAULT_GENRES = [
   "Fiction",
   "Non-Fiction",
@@ -63,10 +62,12 @@ export default function BrowseByGenreCard({
     }
 
     try {
-      const results = await fetchApi<Book[]>(
+      const response = await fetchApi<any>(
         `/books/search?genre=${encodeURIComponent(genre)}`
       );
-      setBooks(results || []);
+      // Handles both paginated { data: [...] } objects and direct array responses safely
+      const bookList = Array.isArray(response) ? response : response?.data || [];
+      setBooks(bookList);
     } catch (err) {
       console.error("Failed to fetch books for genre:", err);
       setBooks([]);
@@ -78,7 +79,7 @@ export default function BrowseByGenreCard({
   const handleAddToBookshelf = async (book: Book) => {
     setAddingBookId(book.id);
     try {
-      await fetchApi("/books", {
+      await fetchApi("/books/add", {
         method: "POST",
         body: JSON.stringify({
           title: book.title,

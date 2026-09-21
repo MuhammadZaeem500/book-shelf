@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import RecentSearchesCard from "@/src/components/search/RecentSearchesCard";
+// import RecentSearchesCard from "@/src/components/search/RecentSearchesCard";
 import TrendingSearchesCard from "@/src/components/search/TrendingSearchesCard";
 import PopularAuthorsCard from "@/src/components/search/PopularAuthorsCard";
 
@@ -48,13 +48,13 @@ export default function SearchRightSidebar() {
 
   return (
     <aside className="w-80 shrink-0 p-4 space-y-5 hidden xl:block bg-[#F2EDE5]/30 border-l border-[#EFE8DF]">
-      {recentSearches.length > 0 && (
+      {/* {recentSearches.length > 0 && (
         <RecentSearchesCard
           searches={recentSearches}
           onClearAll={handleClearAll}
           onSelectSearch={handleSearchSelect}
         />
-      )}
+      )} */}
 
       <TrendingSearchesCard
         trendingItems={trendingData}
