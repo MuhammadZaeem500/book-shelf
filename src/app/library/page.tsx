@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { SlidersHorizontal, ArrowRight, Star, Loader2 } from "lucide-react";
 import { fetchApi } from "@/src/app/lib/api";
-import { LoggedBook, DateGroup } from "@/src/types";
-
 
 const coverGradients = [
   "from-[#8B4513] to-[#5C2E0B]",
@@ -16,84 +14,38 @@ const coverGradients = [
 
 export default function MyLibrary() {
   const [selectedMonth, setSelectedMonth] = useState<string>("All");
-  const [libraryGroups, setLibraryGroups] = useState<DateGroup[]>([]);
+  const [libraryGroups, setLibraryGroups] = useState<any[]>([]);
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
   const [totalBooksRead, setTotalBooksRead] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Fetch logged books from NestJS backend
   const loadLibraryData = async () => {
     try {
       setLoading(true);
-      const response = await fetchApi<LoggedBook[]>("/reviews/library");
-      const loggedBooks = Array.isArray(response) ? response : [];
+      const response = await fetchApi<any[]>("/users/me/diary");
+      const diaryGroups = Array.isArray(response) ? response : [];
 
-      setTotalBooksRead(loggedBooks.length);
+      let count = 0;
+      diaryGroups.forEach((group) => {
+        if (group.books) count += group.books.length;
+      });
+      setTotalBooksRead(count);
 
-      // Extract unique "Month Year" strings dynamically
       const monthsSet = new Set<string>();
-      loggedBooks.forEach((item) => {
-        const date = new Date(item.updatedAt || item.createdAt);
-        const monthYear = date.toLocaleDateString("en-US", {
-          month: "long",
-          year: "numeric",
-        });
-        monthsSet.add(monthYear);
-      });
-
-      const sortedMonths = Array.from(monthsSet);
-      setAvailableMonths(["All", ...sortedMonths]);
-
-      // Filter and group books by date
-      const filteredBooks =
-        selectedMonth === "All"
-          ? loggedBooks
-          : loggedBooks.filter((item) => {
-              const monthYear = new Date(
-                item.updatedAt || item.createdAt,
-              ).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              });
-              return monthYear === selectedMonth;
-            });
-
-      // Group books by DAY label (e.g., "AUGUST 17")
-      const groupedMap = new Map<string, DateGroup["books"]>();
-
-      filteredBooks.forEach((item, index) => {
-        const date = new Date(item.updatedAt || item.createdAt);
-        const dayLabel = date
-          .toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })
-          .toUpperCase();
-
-        const formattedBook = {
-          id: item.id,
-          title: item.book?.title || "Untitled Book",
-          author: item.book?.author || "Unknown Author",
-          rating: item.rating || 0,
-          pages: item.book?.pages || 250,
-          coverUrl: item.book?.coverUrl,
-          coverBg: coverGradients[index % coverGradients.length],
-        };
-
-        if (!groupedMap.has(dayLabel)) {
-          groupedMap.set(dayLabel, []);
+      diaryGroups.forEach((group) => {
+        if (group.dateLabel) {
+          monthsSet.add(group.dateLabel);
         }
-        groupedMap.get(dayLabel)!.push(formattedBook);
       });
 
-      const groupsArray: DateGroup[] = Array.from(
-        groupedMap.entries(),
-      ).map(([dateLabel, books]) => ({
-        dateLabel,
-        books,
-      }));
+      setAvailableMonths(["All", ...Array.from(monthsSet)]);
 
-      setLibraryGroups(groupsArray);
+      const filteredGroups =
+        selectedMonth === "All"
+          ? diaryGroups
+          : diaryGroups.filter((group) => group.dateLabel === selectedMonth);
+
+      setLibraryGroups(filteredGroups);
     } catch (err) {
       console.error("Failed to fetch library data:", err);
       setLibraryGroups([]);
@@ -108,7 +60,6 @@ export default function MyLibrary() {
 
   return (
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-8 text-[#1A1817]">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
@@ -129,8 +80,7 @@ export default function MyLibrary() {
         </button>
       </div>
 
-      {/* Month Filters */}
-      {availableMonths.length > 0 && (
+      {availableMonths.length > 1 && (
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {availableMonths.map((month) => (
             <button
@@ -148,11 +98,12 @@ export default function MyLibrary() {
         </div>
       )}
 
-      {/* Main Content Area */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-16 space-y-3">
           <Loader2 className="w-8 h-8 animate-spin text-[#C85A2B]" />
-          <p className="text-xs text-[#8C837A]">Loading your reading history...</p>
+          <p className="text-xs text-[#8C837A]">
+            Loading your reading history...
+          </p>
         </div>
       ) : libraryGroups.length === 0 ? (
         <div className="p-12 text-center bg-[#FAF7F2] border border-[#EFE8DF] rounded-3xl space-y-2">
@@ -165,8 +116,8 @@ export default function MyLibrary() {
         </div>
       ) : (
         <div className="space-y-8 pt-2">
-          {libraryGroups.map((group) => (
-            <div key={group.dateLabel} className="space-y-4">
+          {libraryGroups.map((group, groupIndex) => (
+            <div key={group.dateLabel || groupIndex} className="space-y-4">
               <div className="flex items-center gap-4">
                 <span className="text-xs font-bold tracking-wider text-[#C85A2B] uppercase shrink-0">
                   {group.dateLabel}
@@ -175,12 +126,11 @@ export default function MyLibrary() {
               </div>
 
               <div className="space-y-6">
-                {group.books.map((book) => (
+                {group.books?.map((book: any, bookIndex: number) => (
                   <div
-                    key={book.id}
+                    key={book.id || bookIndex}
                     className="flex items-start gap-4 sm:gap-6 group"
                   >
-                    {/* Cover Image or Gradient Placeholder */}
                     {book.coverUrl ? (
                       <img
                         src={book.coverUrl}
@@ -189,7 +139,9 @@ export default function MyLibrary() {
                       />
                     ) : (
                       <div
-                        className={`relative w-16 sm:w-20 h-24 sm:h-28 rounded-md bg-linear-to-b ${book.coverBg} p-2 flex flex-col justify-between shrink-0 shadow-sm border border-black/10`}
+                        className={`relative w-16 sm:w-20 h-24 sm:h-28 rounded-md bg-linear-to-b ${
+                          coverGradients[bookIndex % coverGradients.length]
+                        } p-2 flex flex-col justify-between shrink-0 shadow-sm border border-black/10`}
                       >
                         <span className="text-[7px] sm:text-[8px] font-bold tracking-widest text-white/70 uppercase">
                           BOOKSHELF
@@ -205,7 +157,6 @@ export default function MyLibrary() {
                       </div>
                     )}
 
-                    {/* Book Metadata */}
                     <div className="flex-1 min-w-0 space-y-1.5 pt-1">
                       <h3 className="font-serif font-bold text-lg sm:text-xl text-[#1A1817] group-hover:text-[#C85A2B] transition-colors leading-tight">
                         {book.title}
@@ -220,7 +171,7 @@ export default function MyLibrary() {
                             <Star
                               key={i}
                               className={`w-3.5 h-3.5 ${
-                                i < book.rating
+                                i < (book.rating || 0)
                                   ? "text-[#C85A2B] fill-[#C85A2B]"
                                   : "text-[#E0D8CE] fill-[#E0D8CE]"
                               }`}
@@ -229,7 +180,7 @@ export default function MyLibrary() {
                         </div>
 
                         <span>·</span>
-                        <span>{book.pages} pages</span>
+                        <span>{book.pages || 250} pages</span>
                       </div>
 
                       <div className="pt-2">

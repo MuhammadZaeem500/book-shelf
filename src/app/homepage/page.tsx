@@ -35,12 +35,18 @@ export default function Home() {
   const [friendsActivity, setFriendsActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // States for PRH search modal/drawer
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searching, setSearching] = useState<boolean>(false);
+
   const loadDashboardData = async () => {
     try {
       setLoading(true);
 
       const [readingRes, popularRes, activityRes] = await Promise.allSettled([
-        fetchApi<any>("/users/me/currently-reading"), // Updated to user-specific active reading endpoint
+        fetchApi<any>("/users/me/currently-reading"),
         fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
         fetchApi<ActivityApiResponse>("/activity-feed?limit=10&page=1"),
       ]);
@@ -132,9 +138,50 @@ export default function Home() {
     }
   };
 
+  // Search Penguin Random House API via backend proxy
+  const handlePRHSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    try {
+      setSearching(true);
+      const results = await fetchApi<any[]>(`/books/external-search?q=${encodeURIComponent(searchQuery)}`);
+      setSearchResults(results || []);
+    } catch (err) {
+      console.error("Failed to search book catalog:", err);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  // Import and set book as currently reading
+  const handleSelectBook = async (book: { title: string; author: string; coverImage?: string; genre?: string; isbn?: string }) => {
+    try {
+      await fetchApi("/books/import", {
+        method: "POST",
+        body: JSON.stringify({
+          title: book.title,
+          author: book.author,
+          coverImage: book.coverImage,
+          genre: book.genre,
+          isbn: book.isbn,
+          status: "CURRENTLY_READING", // Sets it as active
+        }),
+      });
+      alert(`Set "${book.title}" as your currently reading book!`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+      setSearchResults([]);
+      loadDashboardData();
+    } catch (err: any) {
+      console.error("Failed to set active book:", err);
+      alert(err.message || "Failed to add active book.");
+    }
+  };
+
   return (
     <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] relative">
-      {/* 1. Continue Reading Section (Fully Dynamic) */}
+      {/* 1. Continue Reading Section / Add Trigger */}
       {currentlyReading ? (
         <ContinueReadingCard
           bookId={currentlyReading.book?.id}
@@ -150,15 +197,87 @@ export default function Home() {
         />
       ) : (
         !loading && (
-          <div className="bg-[#FAF7F2] border border-[#EFE8DF] p-6 rounded-3xl text-center space-y-2">
-            <h3 className="font-serif font-bold text-lg text-[#1A1817]">
+          <div className="bg-[#FAF7F2] border border-[#EFE8DF] p-8 rounded-3xl text-center space-y-4">
+            <h3 className="font-serif font-bold text-xl text-[#1A1817]">
               No active book right now
             </h3>
-            <p className="text-xs text-[#8C837A]">
-              Explore popular titles below or update a book's status to start tracking.
+            <p className="text-xs text-[#8C837A] max-w-sm mx-auto">
+              Track your daily reading progress by picking a book you are currently reading from the catalog.
             </p>
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="px-5 py-2.5 bg-[#C85A2B] text-white text-sm font-semibold rounded-2xl hover:bg-[#b04d22] transition-colors cursor-pointer"
+            >
+              + Add Active Book
+            </button>
           </div>
         )
+      )}
+
+      {/* PRH Search Modal/Drawer for Active Reading */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[85vh] flex flex-col shadow-xl">
+            <div className="flex items-center justify-between">
+              <h3 className="font-serif font-bold text-xl text-[#1A1817]">
+                Search Book Catalog
+              </h3>
+              <button
+                onClick={() => setIsSearchOpen(false)}
+                className="text-gray-400 hover:text-gray-600 font-bold text-lg"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handlePRHSearch} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Search by title, author, or keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C85A2B]"
+              />
+              <button
+                type="submit"
+                disabled={searching}
+                className="px-4 py-2 bg-[#C85A2B] text-white text-sm font-semibold rounded-xl hover:bg-[#b04d22] transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {searching ? "Searching..." : "Search"}
+              </button>
+            </form>
+
+            <div className="flex-1 overflow-y-auto space-y-3 divide-y divide-gray-100 pr-1">
+              {searchResults.length === 0 && !searching ? (
+                <p className="text-center text-xs text-gray-400 py-8">
+                  Type a query above to look up books.
+                </p>
+              ) : (
+                searchResults.map((book) => (
+                  <div key={book.id} className="pt-3 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      {book.coverImage ? (
+                        <img src={book.coverImage} alt={book.title} className="w-10 h-14 object-cover rounded-md shrink-0" />
+                      ) : (
+                        <div className="w-10 h-14 bg-gray-200 rounded-md shrink-0 flex items-center justify-center text-[10px] text-gray-500">No cover</div>
+                      )}
+                      <div className="truncate">
+                        <p className="text-sm font-semibold text-[#1A1817] truncate">{book.title}</p>
+                        <p className="text-xs text-gray-500 truncate">{book.author}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleSelectBook(book)}
+                      className="px-3 py-1.5 bg-[#FAF7F2] border border-[#E8E0D5] text-xs font-semibold text-[#C85A2B] rounded-lg hover:bg-[#C85A2B] hover:text-white transition-colors shrink-0 cursor-pointer"
+                    >
+                      Start Reading
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* 2. Popular This Week Section */}
