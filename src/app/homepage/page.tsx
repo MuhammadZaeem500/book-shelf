@@ -32,8 +32,12 @@ const avatarColors = [
 export default function Home() {
   const [currentlyReading, setCurrentlyReading] = useState<any>(null);
   const [popularBooks, setPopularBooks] = useState<PopularBook[]>([]);
+  const [recommendedBooks, setRecommendedBooks] = useState<any[]>([]);
   const [friendsActivity, setFriendsActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Toggle state for See All recommendations
+  const [showAllRecommended, setShowAllRecommended] = useState<boolean>(false);
 
   // States for PRH search modal/drawer
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -45,10 +49,11 @@ export default function Home() {
     try {
       setLoading(true);
 
-      const [readingRes, popularRes, activityRes] = await Promise.allSettled([
+      const [readingRes, popularRes, activityRes, recommendedRes] = await Promise.allSettled([
         fetchApi<any>("/users/me/currently-reading"),
         fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
         fetchApi<ActivityApiResponse>("/activity-feed?limit=10&page=1"),
+        fetchApi<any[]>("/books/recommended"),
       ]);
 
       if (readingRes.status === "fulfilled" && readingRes.value) {
@@ -62,6 +67,13 @@ export default function Home() {
         Array.isArray(popularRes.value)
       ) {
         setPopularBooks(popularRes.value);
+      }
+
+      if (
+        recommendedRes.status === "fulfilled" &&
+        Array.isArray(recommendedRes.value)
+      ) {
+        setRecommendedBooks(recommendedRes.value);
       }
 
       if (activityRes.status === "fulfilled" && activityRes.value?.data) {
@@ -165,7 +177,7 @@ export default function Home() {
           coverImage: book.coverImage,
           genre: book.genre,
           isbn: book.isbn,
-          status: "CURRENTLY_READING", // Sets it as active
+          status: "CURRENTLY_READING",
         }),
       });
       alert(`Set "${book.title}" as your currently reading book!`);
@@ -178,6 +190,11 @@ export default function Home() {
       alert(err.message || "Failed to add active book.");
     }
   };
+
+  // Slice recommendations based on toggle state
+  const displayedRecommendations = showAllRecommended
+    ? recommendedBooks
+    : recommendedBooks.slice(0, 4);
 
   return (
     <div className="p-6 space-y-8 max-w-auto mx-auto bg-[#FFFFFF] relative">
@@ -369,29 +386,32 @@ export default function Home() {
               <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
                 Recommended for You
               </h3>
-              <p className="text-xs text-[#8C837A]">Based on popular reads</p>
+              <p className="text-xs text-[#8C837A]">New books to explore</p>
             </div>
-            <button className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1 cursor-pointer">
-              See all →
+            <button
+              onClick={() => setShowAllRecommended(!showAllRecommended)}
+              className="text-sm font-medium text-[#C85A2B] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              {showAllRecommended ? "Show less" : "See all"} →
             </button>
           </div>
 
           <div className="space-y-3">
             {loading ? (
               <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
+                {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
                     className="h-20 bg-[#FAF7F2] animate-pulse rounded-2xl"
                   />
                 ))}
               </div>
-            ) : popularBooks.length === 0 ? (
+            ) : recommendedBooks.length === 0 ? (
               <p className="text-xs text-[#8C837A]">
-                No recommendations available right now.
+                No new recommendations available. You've explored everything!
               </p>
             ) : (
-              popularBooks.slice(0, 5).map((book, index) => (
+              displayedRecommendations.map((book, index) => (
                 <RecommendedBookCard
                   key={book.id || index}
                   title={book.title}
