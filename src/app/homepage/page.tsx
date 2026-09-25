@@ -149,12 +149,10 @@ export default function Home() {
     }
   };
 
-  // Fetch books directly from the internal database catalog
   const handleOpenDatabaseBooks = async () => {
     setIsSearchOpen(true);
     try {
       setLoadingBooks(true);
-      // Uses the advanced search or generic book endpoint to get local records
       const response = await fetchApi<any>("/books/search?limit=50");
       const booksList = Array.isArray(response) ? response : response?.data || [];
       setDatabaseBooks(booksList);
@@ -165,7 +163,6 @@ export default function Home() {
     }
   };
 
-  // Set an existing database book as currently reading via PATCH status
   const handleSelectBook = async (book: { id: string; title: string; author: string }) => {
     try {
       await fetchApi(`/users/me/books/${book.id}/status`, {
@@ -183,7 +180,6 @@ export default function Home() {
     }
   };
 
-  // Slice recommendations based on toggle state
   const displayedRecommendations = showAllRecommended
     ? recommendedBooks
     : recommendedBooks.slice(0, 4);
@@ -363,7 +359,7 @@ export default function Home() {
               <h3 className="font-serif font-bold text-2xl text-[#1A1817]">
                 Recommended for You
               </h3>
-              <p className="text-xs text-[#8C837A]">New books to explore</p>
+              <p className="text-xs text-[#8C837A]">From your database</p>
             </div>
             <button
               onClick={() => setShowAllRecommended(!showAllRecommended)}
@@ -385,7 +381,7 @@ export default function Home() {
               </div>
             ) : recommendedBooks.length === 0 ? (
               <p className="text-xs text-[#8C837A]">
-                No new recommendations available. You've explored everything!
+                No new recommendations available from database.
               </p>
             ) : (
               displayedRecommendations.map((book, index) => (

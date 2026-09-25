@@ -28,7 +28,7 @@
   --color-card: var(--card);
   --color-card-border: var(--card-border);
   --color-muted-text: var(--muted-text);
-  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-dm-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -40,7 +40,20 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* 6. Custom Desktop Scrollbars */
+/* 6. Custom Font Utility Classes */
+.font-montserrat-alt {
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+.font-surfer {
+  font-family: 'Original Surfer', cursive;
+}
+
+.font-ubuntu {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+/* 7. Custom Desktop Scrollbars */
 @media (hover: hover) and (pointer: fine) {
   html {
     scrollbar-color: #C85A2B transparent;
@@ -70,7 +83,7 @@ body {
   }
 }
 
-/* 7. Hide Scrollbar on Touch Devices */
+/* 8. Hide Scrollbar on Touch Devices */
 @media (pointer: coarse) {
   html {
     scrollbar-width: none;
