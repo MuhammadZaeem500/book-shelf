@@ -36,9 +36,7 @@ export default function ActivityPage() {
           }
         }
 
-        const res = await fetchApi<ActivityApiResponse>(
-          "/activity-feed?limit=20&page=1",
-        );
+       const res = await fetchApi<ActivityApiResponse>("/activity-feed?limit=20&page=1");
         setActivities(res?.data || []);
       } catch (err) {
         console.error("Failed to fetch activity feed:", err);
