@@ -22,24 +22,34 @@ export default function ActivityPage() {
 
   useEffect(() => {
     async function loadFeed() {
+      console.log("-> ActivityPage useEffect triggered!");
       try {
         setLoading(true);
-        const token = localStorage.getItem("access_token");
+        const token =
+          localStorage.getItem("token") ||
+          localStorage.getItem("access_token") ||
+          localStorage.getItem("accessToken") ||
+          localStorage.getItem("jwt");
+
+        console.log("-> Found token in localStorage:", token ? "YES" : "NO");
 
         if (token) {
           try {
             const payloadBase64 = token.split(".")[1];
             const decoded = JSON.parse(atob(payloadBase64));
             setCurrentUserId(decoded.sub || decoded.userId || decoded.id);
+            console.log("-> Decoded currentUserId:", decoded.sub || decoded.userId || decoded.id);
           } catch (e) {
-            console.error("Error decoding token:", e);
+            console.error("-> Error decoding token:", e);
           }
         }
 
-       const res = await fetchApi<ActivityApiResponse>("/activity-feed?limit=20&page=1");
+        console.log("-> Fetching from /activities...");
+        const res = await fetchApi<ActivityApiResponse>("/activities?limit=20&page=1");
+        console.log("-> API Response received:", res);
         setActivities(res?.data || []);
       } catch (err) {
-        console.error("Failed to fetch activity feed:", err);
+        console.error("-> Failed to fetch activity feed:", err);
       } finally {
         setLoading(false);
       }
@@ -50,21 +60,27 @@ export default function ActivityPage() {
 
   const filteredActivities = activities.filter((item) => {
     if (activeTab === "my") {
-      return item.userId === currentUserId;
+      return currentUserId ? item.userId === currentUserId : true;
     }
-    return item.userId !== currentUserId;
+    return currentUserId ? item.userId !== currentUserId : true;
   });
 
-  const formatActionText = (type: string, isMy: boolean) => {
+  const formatActionText = (type: string, isMy: boolean, metadata?: any) => {
+    if (type === "LOGGED_BOOK" && metadata?.actionText) {
+      return isMy
+        ? `YOU ${metadata.actionText.toUpperCase()}`
+        : metadata.actionText;
+    }
     switch (type) {
       case "BECAME_FRIENDS":
         return isMy
           ? "YOU CONNECTED WITH A NEW FRIEND"
           : "connected with a new friend";
       case "REVIEW_ADDED":
+      case "WRITTEN_REVIEW":
         return isMy ? "YOU REVIEWED" : "reviewed";
       case "LOGGED_BOOK":
-        return isMy ? "YOU FINISHED READING" : "finished reading";
+        return isMy ? "YOU UPDATED READING STATUS" : "updated reading status";
       default:
         return isMy ? "UPDATED ACTIVITY" : "updated activity";
     }
@@ -144,7 +160,8 @@ export default function ActivityPage() {
             const title = item.metadata?.title || "Untitled Book";
             const author = item.metadata?.author || "Unknown Author";
             const rating = item.metadata?.rating;
-            const review = item.metadata?.review;
+            const review =
+              item.metadata?.review || (item.metadata as any)?.contentSnippet;
             const gradient = getGradient(index);
 
             return activeTab === "my" ? (
@@ -167,7 +184,7 @@ export default function ActivityPage() {
 
                   <div className="space-y-1 min-w-0 pt-0.5">
                     <span className="text-[10px] font-bold tracking-widest text-[#8C837A] uppercase">
-                      {formatActionText(item.type, true)}
+                      {formatActionText(item.type, true, item.metadata)}
                     </span>
                     <h3 className="font-serif font-bold text-base sm:text-lg text-[#1A1817] leading-tight truncate">
                       {title}
@@ -211,16 +228,16 @@ export default function ActivityPage() {
               >
                 <div className="flex items-start gap-3.5 min-w-0">
                   <div className="w-10 h-10 rounded-full bg-[#8B4513] text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                    {getInitials(item.user.name, item.user.email)}
+                    {getInitials(item.user?.name, item.user?.email)}
                   </div>
 
                   <div className="space-y-1 min-w-0">
                     <p className="text-sm text-[#1A1817]">
                       <span className="font-bold">
-                        {item.user.name || item.user.email}
+                        {item.user?.name || item.user?.email || "User"}
                       </span>{" "}
                       <span className="text-[#524B45]">
-                        {formatActionText(item.type, false)}
+                        {formatActionText(item.type, false, item.metadata)}
                       </span>{" "}
                       {item.type !== "BECAME_FRIENDS" && (
                         <span className="font-serif italic font-semibold text-[#1A1817]">

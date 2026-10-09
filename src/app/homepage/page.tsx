@@ -51,7 +51,7 @@ export default function Home() {
       const [readingRes, popularRes, activityRes, recommendedRes] = await Promise.allSettled([
         fetchApi<any>("/users/me/currently-reading"),
         fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
-        fetchApi<ActivityApiResponse>("/activity-feed?limit=10&page=1"),
+        fetchApi<ActivityApiResponse>("/activities?limit=10&page=1"),
         fetchApi<any[]>("/books/recommended"),
       ]);
 

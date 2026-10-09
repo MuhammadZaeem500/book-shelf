@@ -1,28 +1,78 @@
 "use client";
 
-import React from "react";
-import { CurrentlyReadingProps } from "@/src/types";
+import React, { useState, useEffect } from "react";
+import { fetchApi } from "@/src/app/lib/api";
+
+interface CurrentlyReadingCardProps {
+  bookId: string;
+  title: string;
+  author: string;
+  currentPage: number;
+  totalPages: number;
+  coverGradient?: string;
+  onProgressUpdated?: () => void;
+}
 
 export default function CurrentlyReadingCard({
+  bookId,
   title,
   author,
   currentPage = 0,
   totalPages = 100,
   coverGradient = "from-[#C85A2B] to-[#8C4611]",
-}: CurrentlyReadingProps) {
-  // Safe math evaluation
-  const safeCurrent = Math.max(0, currentPage ?? 0);
+  onProgressUpdated,
+}: CurrentlyReadingCardProps) {
+  const [loading, setLoading] = useState(false);
+  const [displayPages, setDisplayPages] = useState(currentPage);
+
+  // Keep local state in sync when parent data reloads
+  useEffect(() => {
+    setDisplayPages(currentPage);
+  }, [currentPage]);
+
   const safeTotal = Math.max(1, totalPages ?? 100);
   const percentage = Math.min(
     100,
-    Math.round((safeCurrent / safeTotal) * 100)
+    Math.round((displayPages / safeTotal) * 100),
   );
+
+  const handleAddPages = async (amount: number) => {
+    const newPages = Math.min(safeTotal, displayPages + amount);
+    setDisplayPages(newPages); // ⚡ Instant local UI update
+
+    try {
+      setLoading(true);
+      await fetchApi(`/users/me/books/${bookId}/progress`, {
+        method: "PATCH",
+        body: JSON.stringify({ pagesRead: newPages }),
+      });
+      if (onProgressUpdated) {
+        onProgressUpdated();
+      }
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+      setDisplayPages(currentPage); // Revert if network fails
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 space-y-4">
-      <h3 className="font-serif font-bold text-xl text-[#1A1817]">
-        Currently Reading
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="font-serif font-bold text-xl text-[#1A1817]">
+          Currently Reading
+        </h3>
+        <div className="flex gap-2">
+          <button
+            disabled={loading}
+            onClick={() => handleAddPages(10)}
+            className="px-2.5 py-1 bg-white border border-[#E0D8CE] text-xs font-semibold text-[#C85A2B] rounded-lg hover:bg-[#C85A2B] hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+          >
+            +10 Pages
+          </button>
+        </div>
+      </div>
 
       <div className="flex items-center gap-4">
         <div
@@ -47,7 +97,8 @@ export default function CurrentlyReadingCard({
               />
             </div>
             <p className="text-[11px] text-[#8C837A]">
-              Page {safeCurrent.toLocaleString()} of {safeTotal.toLocaleString()} · {percentage}%
+              Page {displayPages.toLocaleString()} of{" "}
+              {safeTotal.toLocaleString()} · {percentage}%
             </p>
           </div>
         </div>
