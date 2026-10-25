@@ -5,9 +5,8 @@ import CurrentlyReadingCard from "@/src/components/library/CurrentlyReadingCard"
 import WantToReadCard from "@/src/components/library/WantToReadCard";
 import ReadingGoalCard from "@/src/components/library/ReadingGoalCard";
 import { fetchApi } from "@/src/app/lib/api";
-import { CurrentlyReading} from "@/src/types";
+import { CurrentlyReading } from "@/src/types";
 import { WantToReadResponse, ReadingGoalResponse } from "@/src/types";
-
 
 export default function LibraryRightSidebar() {
   const [currentlyReading, setCurrentlyReading] =
@@ -48,7 +47,9 @@ export default function LibraryRightSidebar() {
   const fetchWantToRead = useCallback(async () => {
     try {
       setLoadingWantToRead(true);
-      const data = await fetchApi<WantToReadResponse>("/books/want-to-read?limit=3");
+      const data = await fetchApi<WantToReadResponse>(
+        "/books/want-to-read?limit=3",
+      );
       setWantToReadData(data || { totalCount: 0, books: [] });
     } catch (err) {
       console.error("Failed to fetch want to read books:", err);
@@ -68,7 +69,7 @@ export default function LibraryRightSidebar() {
         setLoadingGoal(true);
         const currentYear = new Date().getFullYear();
         const data = await fetchApi<ReadingGoalResponse>(
-          `/users/me/reading-goal?year=${currentYear}`
+          `/users/me/reading-goal?year=${currentYear}`,
         );
         if (data) {
           setReadingGoal(data);
@@ -98,6 +99,7 @@ export default function LibraryRightSidebar() {
         <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 h-36 animate-pulse" />
       ) : currentlyReading ? (
         <CurrentlyReadingCard
+          bookId={currentlyReading.book?.id || ""} // 👈 Safely fallback to empty string if undefined
           title={currentlyReading.book?.title || "Untitled"}
           author={currentlyReading.book?.author || "Unknown Author"}
           currentPage={currentlyReading.currentPage ?? 0}
@@ -106,8 +108,12 @@ export default function LibraryRightSidebar() {
         />
       ) : (
         <div className="bg-[#FAF7F2] border border-[#E8E0D5] rounded-3xl p-5 text-center space-y-1">
-          <h4 className="font-serif font-bold text-sm text-[#1A1817]">No active reading</h4>
-          <p className="text-xs text-[#736B63]">Start logging a book to track progress.</p>
+          <h4 className="font-serif font-bold text-sm text-[#1A1817]">
+            No active reading
+          </h4>
+          <p className="text-xs text-[#736B63]">
+            Start logging a book to track progress.
+          </p>
         </div>
       )}
 
