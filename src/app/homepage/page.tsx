@@ -6,10 +6,7 @@ import ContinueReadingCard from "@/src/components/home/ContinueReadingCard";
 import FriendActivityCard from "@/src/components/home/FriendActivityCard";
 import RecommendedBookCard from "@/src/components/home/RecommendedBookCard";
 import { fetchApi } from "@/src/app/lib/api";
-import {
-  PopularBook,
-  ActivityApiResponse,
-} from "@/src/types";
+import { PopularBook, ActivityApiResponse } from "@/src/types";
 
 const coverGradients = [
   "linear-gradient(135deg, #B25A00, #4A2000)",
@@ -48,12 +45,13 @@ export default function Home() {
     try {
       setLoading(true);
 
-      const [readingRes, popularRes, activityRes, recommendedRes] = await Promise.allSettled([
-        fetchApi<any>("/users/me/currently-reading"),
-        fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
-        fetchApi<ActivityApiResponse>("/activities?limit=10&page=1"),
-        fetchApi<any[]>("/books/recommended"),
-      ]);
+      const [readingRes, popularRes, activityRes, recommendedRes] =
+        await Promise.allSettled([
+          fetchApi<any>("/users/me/currently-reading"),
+          fetchApi<PopularBook[]>("/reviews/popular?limit=8"),
+          fetchApi<ActivityApiResponse>("/activities?limit=10&page=1"),
+          fetchApi<any[]>("/books/recommended"),
+        ]);
 
       if (readingRes.status === "fulfilled" && readingRes.value) {
         setCurrentlyReading(readingRes.value);
@@ -154,7 +152,9 @@ export default function Home() {
     try {
       setLoadingBooks(true);
       const response = await fetchApi<any>("/books/search?limit=50");
-      const booksList = Array.isArray(response) ? response : response?.data || [];
+      const booksList = Array.isArray(response)
+        ? response
+        : response?.data || [];
       setDatabaseBooks(booksList);
     } catch (err) {
       console.error("Failed to fetch database books:", err);
@@ -163,7 +163,11 @@ export default function Home() {
     }
   };
 
-  const handleSelectBook = async (book: { id: string; title: string; author: string }) => {
+  const handleSelectBook = async (book: {
+    id: string;
+    title: string;
+    author: string;
+  }) => {
     try {
       await fetchApi(`/users/me/books/${book.id}/status`, {
         method: "PATCH",
@@ -193,8 +197,9 @@ export default function Home() {
           title={currentlyReading.book?.title || "Currently Reading"}
           author={currentlyReading.book?.author || "Unknown Author"}
           description={
-            currentlyReading.book?.description ||
-            "Keep up your reading momentum!"
+            currentlyReading.book?.description || currentlyReading.book?.genre
+              ? `Genre: ${currentlyReading.book.genre}`
+              : "Keep up your reading momentum!"
           }
           currentPage={currentlyReading.currentPage || 0}
           totalPages={currentlyReading.totalPages || 300}
@@ -207,7 +212,8 @@ export default function Home() {
               No active book right now
             </h3>
             <p className="text-xs text-[#8C837A] max-w-sm mx-auto">
-              Track your daily reading progress by picking a book from your database collection.
+              Track your daily reading progress by picking a book from your
+              database collection.
             </p>
             <button
               onClick={handleOpenDatabaseBooks}
@@ -237,27 +243,48 @@ export default function Home() {
 
             <div className="flex-1 overflow-y-auto space-y-3 divide-y divide-gray-100 pr-1">
               {loadingBooks ? (
-                <p className="text-center text-xs text-gray-400 py-8">Loading database books...</p>
+                <p className="text-center text-xs text-gray-400 py-8">
+                  Loading database books...
+                </p>
               ) : databaseBooks.length === 0 ? (
                 <p className="text-center text-xs text-gray-400 py-8">
                   No books found in the database.
                 </p>
               ) : (
                 databaseBooks.map((book) => (
-                  <div key={book.id} className="pt-3 flex items-center justify-between gap-4">
+                  <div
+                    key={book.id}
+                    className="pt-3 flex items-center justify-between gap-4"
+                  >
                     <div className="flex items-center gap-3 overflow-hidden">
                       {book.coverImage ? (
-                        <img src={book.coverImage} alt={book.title} className="w-10 h-14 object-cover rounded-md shrink-0" />
+                        <img
+                          src={book.coverImage}
+                          alt={book.title}
+                          className="w-10 h-14 object-cover rounded-md shrink-0"
+                        />
                       ) : (
-                        <div className="w-10 h-14 bg-gray-200 rounded-md shrink-0 flex items-center justify-center text-[10px] text-gray-500">No cover</div>
+                        <div className="w-10 h-14 bg-gray-200 rounded-md shrink-0 flex items-center justify-center text-[10px] text-gray-500">
+                          No cover
+                        </div>
                       )}
                       <div className="truncate">
-                        <p className="text-sm font-semibold text-[#1A1817] truncate">{book.title}</p>
-                        <p className="text-xs text-gray-500 truncate">{book.author}</p>
+                        <p className="text-sm font-semibold text-[#1A1817] truncate">
+                          {book.title}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {book.author}
+                        </p>
                       </div>
                     </div>
                     <button
-                      onClick={() => handleSelectBook({ id: book.id, title: book.title, author: book.author })}
+                      onClick={() =>
+                        handleSelectBook({
+                          id: book.id,
+                          title: book.title,
+                          author: book.author,
+                        })
+                      }
                       className="px-3 py-1.5 bg-[#FAF7F2] border border-[#E8E0D5] text-xs font-semibold text-[#C85A2B] rounded-lg hover:bg-[#C85A2B] hover:text-white transition-colors shrink-0 cursor-pointer"
                     >
                       Start Reading

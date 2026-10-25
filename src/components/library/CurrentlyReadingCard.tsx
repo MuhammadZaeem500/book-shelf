@@ -25,7 +25,6 @@ export default function CurrentlyReadingCard({
   const [loading, setLoading] = useState(false);
   const [displayPages, setDisplayPages] = useState(currentPage);
 
-  // Keep local state in sync when parent data reloads
   useEffect(() => {
     setDisplayPages(currentPage);
   }, [currentPage]);

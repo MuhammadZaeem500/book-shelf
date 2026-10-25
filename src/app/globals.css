@@ -28,7 +28,7 @@
   --color-card: var(--card);
   --color-card-border: var(--card-border);
   --color-muted-text: var(--muted-text);
-  --font-sans: var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --font-sans: "Montserrat Alternates", sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
